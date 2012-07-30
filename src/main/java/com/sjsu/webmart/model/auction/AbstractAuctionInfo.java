@@ -22,16 +22,30 @@ public abstract class AbstractAuctionInfo {
     List<Bid> bidList;
     private AuctionProcessor auctionProcessor;
 
-    public void setupAuction(){
-        //TODO: add implementation
+    private AuctionState auctionState;
+
+    public AuctionState getAuctionState() {
+        return auctionState;
     }
 
+    public void setAuctionState(AuctionState auctionState) {
+        this.auctionState = auctionState;
+    }
+
+    public void setupAuction(){
+        //set all attributes
+        System.out.println("Auction Scheduled");
+        auctionState = new Scheduled(this);
+    }
+    protected void checkBid(){
+
+    }
     public void updateAuction(){
         //TODO: add implementation
 
     }
     public void cancelAuction(){
-        //TODO: add implementation
+        auctionState.endAuction();
     }
     public void getWinner(){
         //TODO: add implementation

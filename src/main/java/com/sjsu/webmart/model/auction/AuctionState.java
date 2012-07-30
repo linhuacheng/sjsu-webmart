@@ -21,7 +21,7 @@ public interface AuctionState {
     /**
      * closes an auction
      */
-    public void closeAuction();
+//    public void closeAuction();
 
     /**
      * places bid

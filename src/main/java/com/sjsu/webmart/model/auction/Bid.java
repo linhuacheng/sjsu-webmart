@@ -1,5 +1,8 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.item.Item;
+
 import java.util.Date;
 
 /**
@@ -11,14 +14,11 @@ import java.util.Date;
  */
 public class Bid {
 
-    int bidId;
-    Date timeOfBid;
-    //TODO: replace with account
-    String bidder;
-
-    // TODO: replace with item
-    String item;
-    float bidPrice;
+    private int bidId;
+    private Date timeOfBid;
+    private Account bidder;
+    private Item item;
+    private float bidPrice;
 
     public int getBidId() {
         return bidId;
@@ -36,27 +36,27 @@ public class Bid {
         this.timeOfBid = timeOfBid;
     }
 
-    public String getBidder() {
-        return bidder;
-    }
-
-    public void setBidder(String bidder) {
-        this.bidder = bidder;
-    }
-
-    public String getItem() {
-        return item;
-    }
-
-    public void setItem(String item) {
-        this.item = item;
-    }
-
     public float getBidPrice() {
         return bidPrice;
     }
 
     public void setBidPrice(float bidPrice) {
         this.bidPrice = bidPrice;
+    }
+
+    public Account getBidder() {
+        return bidder;
+    }
+
+    public void setBidder(Account bidder) {
+        this.bidder = bidder;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }
