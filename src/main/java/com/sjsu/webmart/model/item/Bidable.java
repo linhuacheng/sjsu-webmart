@@ -1,4 +1,4 @@
-package com.sjsu.webmart.item;
+package com.sjsu.webmart.model.item;
 
 public class Bidable extends ItemDecorator{
 

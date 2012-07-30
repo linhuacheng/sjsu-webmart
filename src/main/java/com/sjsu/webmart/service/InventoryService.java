@@ -1,4 +1,6 @@
-package com.sjsu.webmart.item;
+package com.sjsu.webmart.service;
+
+import com.sjsu.webmart.model.item.Item;
 
 public class InventoryService {
 

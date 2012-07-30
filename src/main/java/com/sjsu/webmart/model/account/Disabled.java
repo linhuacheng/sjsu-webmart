@@ -1,10 +1,10 @@
-package com.sjsu.webmart;
+package com.sjsu.webmart.model.account;
 
-public class Suspended implements AccountState{
+public class Disabled implements AccountState{
 
 	private Account account;
 	
-	public Suspended(Account acc)
+	public Disabled(Account acc)
 	{
 		account = acc;
 	}
@@ -13,15 +13,12 @@ public class Suspended implements AccountState{
 	public void register() {
 		// TODO Auto-generated method stub
 		
-		/* Store account object details in the database */
-		
 	}
 
 	@Override
 	public void suspend() {
 		// TODO Auto-generated method stub
 		
-		/* Make the state of the account in database with account details suspended */
 	}
 
 	@Override

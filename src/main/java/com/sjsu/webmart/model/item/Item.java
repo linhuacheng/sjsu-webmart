@@ -1,4 +1,4 @@
-package com.sjsu.webmart.item;
+package com.sjsu.webmart.model.item;
 
 import java.util.Date;
 

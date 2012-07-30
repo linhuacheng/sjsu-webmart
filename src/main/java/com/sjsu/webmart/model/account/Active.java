@@ -1,4 +1,4 @@
-package com.sjsu.webmart;
+package com.sjsu.webmart.model.account;
 
 public class Active implements AccountState{
 
