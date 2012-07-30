@@ -1,4 +1,4 @@
-package main.java.com.sjsu.webmart;
+package com.sjsu.webmart;
 
 public class Account {
 
