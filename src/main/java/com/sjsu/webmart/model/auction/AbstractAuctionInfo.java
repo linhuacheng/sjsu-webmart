@@ -3,6 +3,8 @@ package com.sjsu.webmart.model.auction;
 import java.util.Date;
 import java.util.List;
 
+import com.sjsu.webmart.processor.AuctionProcessor;
+
 /**
  * abstract bid information object
  *
