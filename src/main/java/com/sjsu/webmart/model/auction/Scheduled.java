@@ -1,5 +1,8 @@
 package com.sjsu.webmart.model.auction;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ckempaiah
@@ -9,26 +12,32 @@ package com.sjsu.webmart.model.auction;
  */
 public class Scheduled implements AuctionState {
 
-    private AbstractAuctionInfo auctionInfo;
+    private AuctionInterface auctionInfo;
 
-    public Scheduled(AbstractAuctionInfo auctionInfo){
+    public Scheduled(AuctionInterface auctionInfo){
         this.auctionInfo = auctionInfo;
     }
 
     @Override
     public void startAuction() {
-        auctionInfo.setAuctionState(new InProgress(auctionInfo));
-        System.out.println("Auction Inprogress");
+        if (auctionInfo.getAuctionStartTime().before(new Date())) {
+            auctionInfo.setAuctionState(new InProgress(auctionInfo));
+            System.out.println("Auction Inprogress");
+        } else {
+            System.out.println("Start time has not reached");
+        }
     }
 
     @Override
-    public void endAuction() {
+    public Bid endAuction() {
         System.out.println("Auction Scheduled, cannot perform end");
+        return null;
     }
 
 
     @Override
-    public void placeBid() {
+    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid) {
         System.out.println("Auction Scheduled, Cannot place bid");
+        return AuctionResponse.rejected_auction_not_scheduled;
     }
 }

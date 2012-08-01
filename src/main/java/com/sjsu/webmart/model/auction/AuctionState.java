@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
+import java.util.List;
+
 /**
  * Auction state model
  * User: ckempaiah
@@ -16,16 +18,11 @@ public interface AuctionState {
     /**
      * ends an auction
      */
-    public void endAuction();
-
-    /**
-     * closes an auction
-     */
-//    public void closeAuction();
+    public Bid endAuction();
 
     /**
      * places bid
      */
-    public void placeBid();
+    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid);
 
 }

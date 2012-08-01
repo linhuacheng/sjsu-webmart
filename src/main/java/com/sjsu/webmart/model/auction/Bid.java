@@ -19,6 +19,8 @@ public class Bid {
     private Account bidder;
     private Item item;
     private float bidPrice;
+    boolean offerRejected;
+
 
     public int getBidId() {
         return bidId;
@@ -58,5 +60,25 @@ public class Bid {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public boolean isOfferRejected() {
+        return offerRejected;
+    }
+
+    public void setOfferRejected(boolean offerRejected) {
+        this.offerRejected = offerRejected;
+    }
+
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "bidId=" + bidId +
+                ", timeOfBid=" + timeOfBid +
+                ", bidder=" + bidder +
+                ", item=" + item +
+                ", bidPrice=" + bidPrice +
+                ", offerRejected=" + offerRejected +
+                '}';
     }
 }

@@ -1,5 +1,8 @@
 package com.sjsu.webmart.model.auction;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ckempaiah
@@ -8,32 +11,29 @@ package com.sjsu.webmart.model.auction;
  * To change this template use File | Settings | File Templates.
  */
 public class InProgress implements AuctionState {
-    private AbstractAuctionInfo auctionInfo;
+    private AuctionInterface auctionInfo;
 
-    public InProgress(AbstractAuctionInfo auctionInfo){
+    public InProgress(AuctionInterface auctionInfo){
         this.auctionInfo = auctionInfo;
     }
 
     @Override
     public void startAuction() {
-        System.out.print("Auction InProgress, Cannot start it");
+        System.out.println("Auction InProgress, Cannot start it");
     }
 
     @Override
-    public void endAuction() {
-        System.out.print("Auction InProgress, Ending Auction");
+    public Bid endAuction() {
+        System.out.println("Auction InProgress, Ending Auction");
         auctionInfo.setAuctionState(new Closed(auctionInfo));
+        auctionInfo.setAuctionEndTime(new Date());
+        return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
+
     }
 
-//    @Override
-//    public void closeAuction() {
-//        //To change body of implemented methods use File | Settings | File Templates.
-//    }
-
     @Override
-    public void placeBid() {
+    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid) {
         System.out.println("Auction Inprogress, accept bid");
-        auctionInfo.checkBid();
-        //To change body of implemented methods use File | Settings | File Templates.
+        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentBid);
     }
 }
