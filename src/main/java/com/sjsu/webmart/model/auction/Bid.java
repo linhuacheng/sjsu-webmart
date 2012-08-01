@@ -73,8 +73,6 @@ public class Bid {
     @Override
     public String toString() {
         return "Bid{" +
-                "bidId=" + bidId +
-                ", timeOfBid=" + timeOfBid +
                 ", bidder=" + bidder +
                 ", item=" + item +
                 ", bidPrice=" + bidPrice +

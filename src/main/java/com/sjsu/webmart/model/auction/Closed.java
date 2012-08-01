@@ -1,5 +1,8 @@
 package com.sjsu.webmart.model.auction;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.List;
 
 /**
@@ -10,6 +13,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class Closed implements AuctionState {
+    Log log = LogFactory.getLog(Closed.class);
     private AuctionInterface auctionInfo;
 
     public Closed(AuctionInterface auctionInfo){
@@ -17,18 +21,18 @@ public class Closed implements AuctionState {
     }
     @Override
     public void startAuction() {
-        System.out.println("Auction Closed, Cannot start auction");
+        log.info("Auction Closed, Cannot start auction");
     }
 
     @Override
     public Bid endAuction() {
-        System.out.println("Auction closed");
+        log.info("Auction closed");
         return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
     }
 
     @Override
     public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid){
-        System.out.println("Auction closed, cannot place bid");
+        log.info("Auction closed, cannot place bid");
         return AuctionResponse.rejected_auction_closed;
     }
 }

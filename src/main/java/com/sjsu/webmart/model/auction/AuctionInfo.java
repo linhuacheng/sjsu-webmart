@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.sjsu.webmart.model.item.Item;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * abstract bid information object
@@ -15,6 +17,7 @@ import com.sjsu.webmart.model.item.Item;
  * To change this template use File | Settings | File Templates.
  */
 public class AuctionInfo implements AuctionInterface{
+    Log log = LogFactory.getLog(AuctionInfo.class);
 
     int auctionId;
     Date auctionStartTime;
@@ -62,13 +65,13 @@ public class AuctionInfo implements AuctionInterface{
 
     public AuctionResponse processBid(Bid newBid){
 
-        System.out.println("Process Bid:" + newBid);
+        log.info("Process Bid:" + newBid);
         AuctionResponse response = auctionState.placeBid(bidList, newBid, currentActiveBid);
         if (AuctionResponse.accepted.equals(response)){
-            System.out.println("New Bid accepted");
+            log.info("New Bid accepted");
             currentActiveBid = newBid;
         } else{
-            System.out.println("New Bid Rejected");
+            log.info("New Bid Rejected");
         }
         return response;
     }
