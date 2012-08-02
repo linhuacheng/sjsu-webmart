@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.MediaItem;
 import com.sjsu.webmart.model.order.Order;
 import com.sjsu.webmart.service.InventoryService;
 
@@ -78,12 +79,15 @@ public class InventoryServiceImpl implements InventoryService{
 			if(i.getItemDescription().contains("ConsumerItem"))
 			{
 				ConsumerItem ci = (ConsumerItem) i;
-				System.out.println(ci.getSize());
+				System.out.println("Size: "+ci.getSize());
+				System.out.println("Weight: "+ci.getWeight());
 			}
-//			else{
-//				MediaItem mi = (MediaItem) i;
-//				System.out.println(mi.);
-//			}
+			else{
+				MediaItem mi = (MediaItem) i;
+				System.out.println("Size: "+mi.getSize());
+				System.out.println("Duration: "+mi.getDuration());
+				System.out.println("Quality: "+mi.getQuality());
+			}
 			
 			System.out.println("************************************************************");
 			}
