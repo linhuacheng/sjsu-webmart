@@ -1,50 +1,117 @@
 package com.sjsu.webmart.model.account;
 
+import java.util.List;
+
+import com.sjsu.webmart.model.payment.PaymentInfo;
+
 public class Account {
 
-	AccountState state;
+	private AccountState state;
 	
-	public boolean isValidAccount()
-	{
-		return (Boolean) null;
-	}
+	private int accountId;
 	
-	public void registerUser()
-	{
-		state.register();
-	}
+	private String firstName;
 	
-	public void suspendUser()
-	{
-		state.suspend();
-	}
+	private String lastName;
+	
+	private String email;
+	
+	private String password;
+	
+	private String accountType;
+	
+	List<PaymentInfo> paymentInfo;
+	
+	List<AddressInfo> addressInfo;
 
-	public void deleteUser()
-	{
-		state.cancel();
-	}
 	
-	public void enableUser()
-	{
-		state.enable();
-	}
-	
-	public void login()
-	{
-		
-	}
-	
-	public void logout()
-	{
-		
-	}
-
 	public AccountState getState() {
 		return state;
 	}
 
 	public void setState(AccountState state) {
 		this.state = state;
+	}
+
+	public List<AddressInfo> getAddressInfo() {
+		return addressInfo;
+	}
+
+	public void setAddressInfo(List<AddressInfo> addressInfo) {
+		this.addressInfo = addressInfo;
+	}
+
+	public int getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+	public List<PaymentInfo> getPaymentInfo() {
+		return paymentInfo;
+	}
+
+	public void setPaymentInfo(List<PaymentInfo> paymentInfo) {
+		this.paymentInfo = paymentInfo;
+	}
+
+	public boolean isValidAccount(int accountId)
+	{
+		return (Boolean) null;
+	}
+	
+	public void suspendUser(Account ac)
+	{
+		state = ac.getState();
+		state.suspend(ac);
+	}
+
+	public void enableUser(Account ac)
+	{
+		state = ac.getState();
+		state.enable(ac);
 	}
 	
 }
