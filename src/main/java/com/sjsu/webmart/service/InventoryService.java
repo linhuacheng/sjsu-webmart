@@ -2,25 +2,15 @@ package com.sjsu.webmart.service;
 
 import com.sjsu.webmart.model.item.Item;
 
-public class InventoryService {
+public interface InventoryService {
 
-	public void addItem(Item item){
-		
-	}
+	public void addItem(Item item);
 	
-	public void deleteItem(Item item){
-		
-	}
+	public void deleteItem(int itemId);
 	
-	public void viewItem(Item item){
-		
-	}
+	public Item viewItem(int itemId);
 	
-	public void updateItem(Item item){
-		
-	}
+	public void updateItem(int intemId);
 	
-	public boolean getItemStatus(Item item){
-		return true; // or false depending upon availablity
-	}
+	public boolean getItemStatus(int itemId); 
 }
