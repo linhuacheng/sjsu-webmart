@@ -6,7 +6,7 @@ public class BuyOrder extends Order {
 
 	@Override
 	public boolean itemAvailable() {
-		boolean available = inventoryService.getItemStatus(item);
+		boolean available = inventoryService.getItemStatus(item.getItemId());
 		if (available) {
 			System.out.println("Item ID: " + item.getItemId()
 					+ " is available.");
@@ -25,13 +25,13 @@ public class BuyOrder extends Order {
 	@Override
 	public void updateInventory() {
 		// deduct item quantity
-		this.inventoryService.updateItem(item);
+		this.inventoryService.updateItem(item.getItemId());
 
 	}
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
-		return new BigDecimal(item.getBuyNowPrice());
+		return new BigDecimal(item.getPrice());
 	}
 
 }

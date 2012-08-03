@@ -30,7 +30,7 @@ public class RentOrder extends Order {
 		Date rentEnd = orderParams.getOrder().getToDate();
 		int numDays = getDaysDiff(rentStart, rentEnd);
 
-		return new BigDecimal(numDays * item.getRentalPrice());
+		return new BigDecimal(numDays * item.getPrice());
 	}
 
 	private int getDaysDiff(Date start, Date end) {

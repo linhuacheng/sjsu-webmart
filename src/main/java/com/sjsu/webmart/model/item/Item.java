@@ -8,23 +8,55 @@ public abstract class Item {
 	
 	private String itemTitle;
 	
-	private String itemType;
+	//private String itemType;
 	
 	private String itemDescription;
 	
 	private String sellerName;
 	
-	private float rentalPrice;
+	private float price;
 	
-	private float buyNowPrice;
+	private int quantity;
 	
-	private float maxBidPrice;
+//	private float rentalPrice;
+//	
+//	private float buyNowPrice;
 	
+	//private float maxBidPrice;
+	
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
 	private float discount;
 	
-	private Date bidStartTime;
+	private int rating;
 	
-	private Date bidEndTime;
+	
+	
+	//private Date bidStartTime;
+	
+	//private Date bidEndTime;
 
 	public int getItemId() {
 		return itemId;
@@ -42,13 +74,13 @@ public abstract class Item {
 		this.itemTitle = itemTitle;
 	}
 
-	public String getItemType() {
-		return itemType;
-	}
-
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
-	}
+//	public String getItemType() {
+//		return itemType;
+//	}
+//
+//	public void setItemType(String itemType) {
+//		this.itemType = itemType;
+//	}
 
 	public String getItemDescription() {
 		return itemDescription;
@@ -66,7 +98,7 @@ public abstract class Item {
 		this.sellerName = sellerName;
 	}
 
-	public float getRentalPrice() {
+	/*public float getRentalPrice() {
 		return rentalPrice;
 	}
 
@@ -80,15 +112,15 @@ public abstract class Item {
 
 	public void setBuyNowPrice(float buyNowPrice) {
 		this.buyNowPrice = buyNowPrice;
-	}
+	}*/
 
-	public float getMaxBidPrice() {
+	/*public float getMaxBidPrice() {
 		return maxBidPrice;
 	}
 
 	public void setMaxBidPrice(float maxBidPrice) {
 		this.maxBidPrice = maxBidPrice;
-	}
+	}*/
 
 	public float getDiscount() {
 		return discount;
@@ -98,7 +130,7 @@ public abstract class Item {
 		this.discount = discount;
 	}
 
-	public Date getBidStartTime() {
+	/*public Date getBidStartTime() {
 		return bidStartTime;
 	}
 
@@ -112,7 +144,7 @@ public abstract class Item {
 
 	public void setBidEndTime(Date bidEndTime) {
 		this.bidEndTime = bidEndTime;
-	}
+	}*/
 	
 	
 }

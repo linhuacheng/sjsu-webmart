@@ -12,12 +12,13 @@ import com.sjsu.webmart.processor.PaymentProcessor;
 import com.sjsu.webmart.processor.impl.CardProcessor;
 import com.sjsu.webmart.processor.impl.ChequeProcessor;
 import com.sjsu.webmart.service.InventoryService;
+import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 
 public abstract class Order {
 
 	private static int idSeq = 0;
 
-	protected static InventoryService inventoryService = InventoryService
+	protected static InventoryService inventoryService = InventoryServiceImpl
 			.getInstance();
 
 	protected Integer orderId;
@@ -105,7 +106,7 @@ public abstract class Order {
 	public boolean processPayment(OrderParams orderParams) {
 		BigDecimal cost = calculateCost(orderParams);
 
-		PaymentInfo paymentInfo = account.getPaymentInfo();
+		PaymentInfo paymentInfo = account.getPaymentInfo().get(0);
 		PaymentProcessor paymentProcessor = getPaymentProcessor(orderParams
 				.getPaymentType());
 		paymentInfo.setPaymentProcessor(paymentProcessor);

@@ -1,6 +1,8 @@
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,13 +36,12 @@ public class TestOrder {
 	OrderService orderService = OrderServiceImpl.getInstance();
 
 	private Item getItem() {
-		Item item = new ConsumerItem();
+		Item item = new ConsumerItem("2x2x2", "3lbs");
 		item.setItemDescription("Best Ipod nano");
 		item.setItemTitle("Consumer item, Ipod nano");
 		item.setItemId(1);
 		item.setSellerName("Seller1");
-		item.setBuyNowPrice(20);
-		item.setRentalPrice(1);
+		item.setPrice(20);
 		return item;
 	}
 
@@ -53,7 +54,9 @@ public class TestOrder {
 
 	private Account getAccount() {
 		Account account = new Account();
-		account.setPaymentInfo(this.getPaymentInfo());
+		List<PaymentInfo> payment = new ArrayList<PaymentInfo>();
+		payment.add(this.getPaymentInfo());
+		account.setPaymentInfo(payment);
 		return account;
 	}
 
@@ -116,8 +119,8 @@ public class TestOrder {
 
 		Assert.assertNotNull(orderParams.getOrder().getItem(),
 				"Item must not be null");
-		Assert.assertEquals(new BigDecimal(20),
-				order.calculateCost(orderParams),
+		Assert.assertEquals(order.calculateCost(orderParams),
+				new BigDecimal(20),
 				"Calculated buy now cost must be 20.");
 
 	}
@@ -139,9 +142,9 @@ public class TestOrder {
 
 		Assert.assertNotNull(orderParams.getOrder().getItem(),
 				"Item must not be null");
-		Assert.assertEquals(new BigDecimal(5),
-				order.calculateCost(orderParams),
-				"Calculated rental cost must be 5.");
+		Assert.assertEquals(order.calculateCost(orderParams),
+				new BigDecimal(100),				
+				"Calculated rental cost must be 100.");
 	}
 
 }

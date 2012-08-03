@@ -27,7 +27,7 @@ public class ReturnOrder extends Order {
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
 		// return negative cost
-		return new BigDecimal(- item.getBuyNowPrice());
+		return new BigDecimal(- item.getPrice());
 	}
 
 }

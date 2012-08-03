@@ -9,38 +9,26 @@ public class Active implements AccountState{
 		account = acc;
 	}
 
-	@Override
-	public void register() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Account is created and is active");
-		
+	public Active() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void suspend() {
+	public void enable(Account ac) {
 		// TODO Auto-generated method stub
 		
 		System.out.println("Account is already active");
+		
 	}
-
+	
 	@Override
-	public void cancel() {
+	public void suspend(Account ac) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("");
+		ac.setState(new InActive());
+		System.out.println("Account is suspended");
 	}
 
-	@Override
-	public void enable() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Account is activated");
-	}
+	
 
-	@Override
-	public boolean isActive() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

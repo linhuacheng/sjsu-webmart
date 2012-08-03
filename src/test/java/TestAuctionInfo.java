@@ -21,7 +21,7 @@ import java.util.Date;
 public class TestAuctionInfo {
     Log log = LogFactory.getLog(TestAuctionInfo.class);
     private Item getItem() {
-        Item item = new ConsumerItem();
+        Item item = new ConsumerItem("2x2x2", "3lbs");
         item.setItemDescription("Best Ipod nano");
         item.setItemTitle("Consumer item, Ipod nano");
         item.setItemId(1);
