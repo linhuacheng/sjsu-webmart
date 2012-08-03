@@ -1,31 +1,16 @@
 package com.sjsu.webmart.model.order;
 
+import java.math.BigDecimal;
+
 
 public class ReturnOrder extends Order {
 
-	@Override
-	public void processOrder() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean itemAvailable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
-	public boolean processPayment() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void fulfillOrder() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void updateOrder() {
@@ -35,14 +20,14 @@ public class ReturnOrder extends Order {
 
 	@Override
 	public void updateInventory() {
-		// TODO Auto-generated method stub
+		// Add back to inventory
 		
 	}
 
 	@Override
-	public void sendNotification() {
-		// TODO Auto-generated method stub
-		
+	public BigDecimal calculateCost(OrderParams orderParams) {
+		// return negative cost
+		return new BigDecimal(- item.getBuyNowPrice());
 	}
 
 }

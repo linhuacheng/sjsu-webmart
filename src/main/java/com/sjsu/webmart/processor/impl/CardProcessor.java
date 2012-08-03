@@ -8,14 +8,20 @@ import com.sjsu.webmart.processor.PaymentProcessor;
 public class CardProcessor implements PaymentProcessor {
 
 	@Override
-	public void debit(PaymentInfo paymentInfo, BigDecimal amount) {
-		// TODO Auto-generated method stub
+	public boolean debit(PaymentInfo paymentInfo, BigDecimal amount) {
+		System.out
+				.println("Credit card " + paymentInfo.getCardNumber()
+						+ " has been successfully processed. Amount debited: "
+						+ amount);
+		return true;
 	}
 
 	@Override
-	public void credit(PaymentInfo paymentInfo, BigDecimal amount) {
-		// TODO Auto-generated method stub
-		
+	public boolean credit(PaymentInfo paymentInfo, BigDecimal amount) {
+		System.out.println("Credit card " + paymentInfo.getCardNumber()
+				+ " has been successfully processed. Amount credited: "
+				+ amount);
+		return true;
 	}
-	
+
 }

@@ -1,48 +1,37 @@
 package com.sjsu.webmart.model.order;
 
+import java.math.BigDecimal;
 
 public class BuyOrder extends Order {
 
 	@Override
-	public void processOrder() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean itemAvailable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean processPayment() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void fulfillOrder() {
-		// TODO Auto-generated method stub
-		
+		boolean available = inventoryService.getItemStatus(item);
+		if (available) {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is available.");
+		} else {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is not available.");
+		}
+		return available;
 	}
 
 	@Override
 	public void updateOrder() {
-		// TODO Auto-generated method stub
-		
+		this.setOrderStatus(OrderStatus.SHIPPED);
 	}
 
 	@Override
 	public void updateInventory() {
-		// TODO Auto-generated method stub
-		
+		// deduct item quantity
+		this.inventoryService.updateItem(item);
+
 	}
 
 	@Override
-	public void sendNotification() {
-		// TODO Auto-generated method stub
-		
+	public BigDecimal calculateCost(OrderParams orderParams) {
+		return new BigDecimal(item.getBuyNowPrice());
 	}
 
 }

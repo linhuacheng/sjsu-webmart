@@ -1,8 +1,20 @@
 package com.sjsu.webmart.model.account;
 
+import com.sjsu.webmart.model.payment.PaymentInfo;
+
 public class Account {
 
 	AccountState state;
+	
+	PaymentInfo paymentInfo;
+	
+	public PaymentInfo getPaymentInfo() {
+		return paymentInfo;
+	}
+
+	public void setPaymentInfo(PaymentInfo paymentInfo) {
+		this.paymentInfo = paymentInfo;
+	}
 	
 	public boolean isValidAccount()
 	{

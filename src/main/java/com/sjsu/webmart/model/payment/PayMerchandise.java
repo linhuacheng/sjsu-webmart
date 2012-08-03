@@ -1,12 +1,13 @@
 package com.sjsu.webmart.model.payment;
 
+import java.math.BigDecimal;
+
 
 public class PayMerchandise extends PaymentInfo {
 
 	@Override
-	public void processPayment() {
-		// TODO Auto-generated method stub
-		
+	public boolean processPayment(BigDecimal amount) {
+		return this.debit(amount);		
 	}
 
 }

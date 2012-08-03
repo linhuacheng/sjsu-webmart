@@ -4,6 +4,22 @@ import com.sjsu.webmart.model.item.Item;
 
 public class InventoryService {
 
+	private static InventoryService instance = null;
+
+	private InventoryService() {
+	}
+
+	public static InventoryService getInstance() {
+		if (instance == null) {
+			synchronized (InventoryService.class) {
+				if (instance == null) {
+					instance = new InventoryService();
+				}
+			}
+		}
+		return instance;
+	}
+	
 	public void addItem(Item item){
 		
 	}
