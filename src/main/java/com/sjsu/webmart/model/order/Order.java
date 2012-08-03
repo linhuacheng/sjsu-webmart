@@ -29,8 +29,6 @@ public abstract class Order {
 	protected Date fromDate;
 	protected Date toDate;
 
-	protected PaymentInfo paymentInfo;
-
 	public Order() {
 		idSeq++;
 		orderId = idSeq;
@@ -93,20 +91,25 @@ public abstract class Order {
 	}
 
 	public void processOrder(OrderParams orderParams) {
-
+		System.out
+				.println("****************** START PROCESSING ORDER ********************");
 		if (itemAvailable()) {
 			boolean paymentSucccess = processPayment(orderParams);
-			fulfillOrder(orderParams);
-			updateOrder();
-			updateInventory();
-			sendNotification();
+			if (paymentSucccess) {
+				fulfillOrder(orderParams);
+				updateOrder();
+				updateInventory();
+				sendNotification();
+			}
 		}
+		System.out
+				.println("******************** END PROCESSING ORDER *******************");
 	}
 
 	public boolean processPayment(OrderParams orderParams) {
 		BigDecimal cost = calculateCost(orderParams);
 
-		PaymentInfo paymentInfo = account.getPaymentInfo().get(0);
+		PaymentInfo paymentInfo = orderParams.getPaymentInfo();
 		PaymentProcessor paymentProcessor = getPaymentProcessor(orderParams
 				.getPaymentType());
 		paymentInfo.setPaymentProcessor(paymentProcessor);

@@ -4,7 +4,6 @@ import com.sjsu.webmart.model.item.Item;
 
 public interface InventoryService {
 
-		
 	public void addItem(Item item);
 	
 	public void deleteItem(int itemId);
@@ -14,4 +13,7 @@ public interface InventoryService {
 	public void updateItem(int intemId);
 	
 	public boolean getItemStatus(int itemId); 
+	
+	public void updateQuantity(int itemId, int quantity);
+	
 }

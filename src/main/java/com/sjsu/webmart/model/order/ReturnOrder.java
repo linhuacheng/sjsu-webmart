@@ -2,6 +2,9 @@ package com.sjsu.webmart.model.order;
 
 import java.math.BigDecimal;
 
+import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.processor.FulfillmentContext;
+
 
 public class ReturnOrder extends Order {
 
@@ -14,20 +17,32 @@ public class ReturnOrder extends Order {
 
 	@Override
 	public void updateOrder() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("ORDER STATUS updated to:" + OrderStatus.COMPLETED);
+		this.setOrderStatus(OrderStatus.COMPLETED);
 	}
 
 	@Override
 	public void updateInventory() {
 		// Add back to inventory
+		Item i = inventoryService.viewItem(item.getItemId());
+		int quantity = i.getQuantity();
+		quantity++;
 		
+		// deduct item quantity
+		this.inventoryService.updateQuantity(item.getItemId(), quantity);
 	}
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
+		BigDecimal cost = new BigDecimal(- item.getPrice());
 		// return negative cost
-		return new BigDecimal(- item.getPrice());
+		System.out.println("ORDER COST calculated:" + cost);
+		return cost;
+	}
+	
+	@Override
+	public void fulfillOrder(OrderParams orderParams) {
+		System.out.println("FULFILLMENT - do nothing for return order.");
 	}
 
 }

@@ -10,7 +10,7 @@ public class CardProcessor implements PaymentProcessor {
 	@Override
 	public boolean debit(PaymentInfo paymentInfo, BigDecimal amount) {
 		System.out
-				.println("Credit card " + paymentInfo.getCardNumber()
+				.println("CREDIT CARD: " + paymentInfo.getCardNumber()
 						+ " has been successfully processed. Amount debited: "
 						+ amount);
 		return true;
@@ -18,7 +18,7 @@ public class CardProcessor implements PaymentProcessor {
 
 	@Override
 	public boolean credit(PaymentInfo paymentInfo, BigDecimal amount) {
-		System.out.println("Credit card " + paymentInfo.getCardNumber()
+		System.out.println("CREDIT CARD " + paymentInfo.getCardNumber()
 				+ " has been successfully processed. Amount credited: "
 				+ amount);
 		return true;

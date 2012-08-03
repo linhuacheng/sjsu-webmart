@@ -7,7 +7,7 @@ public class Online implements Fulfillment {
 
 	@Override
 	public void shipOrder(OrderParams orderParams) {
-		System.out.println("Order fulfilled online: " + orderParams.getOrder());
+		System.out.println("FULFILLMENT - ONLINE: " + orderParams.getOrder());
 	}
 
 }

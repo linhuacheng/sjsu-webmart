@@ -1,16 +1,27 @@
 package com.sjsu.webmart.model.order;
 
+import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 
 public class OrderParams {
 	
-	OrderType orderType;
+	private OrderType orderType;
 	
-	Order order;
+	private Order order;
 	
-	PaymentType paymentType;
+	private PaymentType paymentType;
 	
-	FulfillmentType fulfillmentType;
+	private FulfillmentType fulfillmentType;
+	
+	private PaymentInfo paymentInfo;
+
+	public PaymentInfo getPaymentInfo() {
+		return paymentInfo;
+	}
+
+	public void setPaymentInfo(PaymentInfo paymentInfo) {
+		this.paymentInfo = paymentInfo;
+	}
 
 	public OrderType getOrderType() {
 		return orderType;

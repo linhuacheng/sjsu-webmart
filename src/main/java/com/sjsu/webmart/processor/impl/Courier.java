@@ -7,7 +7,7 @@ public class Courier implements Fulfillment {
 
 	@Override
 	public void shipOrder(OrderParams orderParams) {
-		System.out.println("Order shipped by Courier: "
+		System.out.println("FULFILLMENT - COURIER: "
 				+ orderParams.getOrder());
 	}
 

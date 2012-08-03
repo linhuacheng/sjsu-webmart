@@ -2,6 +2,8 @@ package com.sjsu.webmart.model.order;
 
 import java.math.BigDecimal;
 
+import com.sjsu.webmart.model.item.Item;
+
 public class BuyOrder extends Order {
 
 	@Override
@@ -9,29 +11,36 @@ public class BuyOrder extends Order {
 		boolean available = inventoryService.getItemStatus(item.getItemId());
 		if (available) {
 			System.out.println("Item ID: " + item.getItemId()
-					+ " is available.");
+					+ " is AVAILABLE.");
 		} else {
 			System.out.println("Item ID: " + item.getItemId()
-					+ " is not available.");
+					+ " is NOT AVAILABLE.");
 		}
 		return available;
 	}
 
 	@Override
 	public void updateOrder() {
+		System.out.println("ORDER STATUS updated to: " + OrderStatus.SHIPPED);
 		this.setOrderStatus(OrderStatus.SHIPPED);
 	}
 
 	@Override
 	public void updateInventory() {
+		Item i = inventoryService.viewItem(item.getItemId());
+		int quantity = i.getQuantity();
+		quantity--;
+		
 		// deduct item quantity
-		this.inventoryService.updateItem(item.getItemId());
-
+		this.inventoryService.updateQuantity(item.getItemId(), quantity);
 	}
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
-		return new BigDecimal(item.getPrice());
+		BigDecimal cost = new BigDecimal(item.getPrice());
+		
+		System.out.println("ORDER COST calculated: " + cost);
+		return cost;
 	}
 
 }

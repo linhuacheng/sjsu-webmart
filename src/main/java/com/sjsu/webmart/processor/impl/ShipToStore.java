@@ -7,7 +7,7 @@ public class ShipToStore implements Fulfillment {
 
 	@Override
 	public void shipOrder(OrderParams orderParams) {
-		System.out.println("Order shipped to Store: " + orderParams.getOrder());
+		System.out.println("FULFILLMENT - STORE: " + orderParams.getOrder());
 	}
 
 }

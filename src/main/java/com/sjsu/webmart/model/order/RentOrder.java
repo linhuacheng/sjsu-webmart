@@ -14,14 +14,15 @@ public class RentOrder extends Order {
 
 	@Override
 	public void updateOrder() {
-		this.setOrderStatus(OrderStatus.SHIPPED);
+		System.out.println("ORDER STATUS updated to:" + OrderStatus.COMPLETED);
+		this.setOrderStatus(OrderStatus.COMPLETED);
 
 	}
 
 	@Override
 	public void updateInventory() {
-		// deduct item quantity
-
+		// block off the date rented in the item
+		System.out.println("INVENTORY UPDATE: Block off the rented date.");
 	}
 
 	@Override
@@ -30,7 +31,10 @@ public class RentOrder extends Order {
 		Date rentEnd = orderParams.getOrder().getToDate();
 		int numDays = getDaysDiff(rentStart, rentEnd);
 
-		return new BigDecimal(numDays * item.getPrice());
+		BigDecimal cost = new BigDecimal(numDays * item.getPrice());
+		
+		System.out.println("ORDER COST calculated:" + cost);
+		return cost;
 	}
 
 	private int getDaysDiff(Date start, Date end) {

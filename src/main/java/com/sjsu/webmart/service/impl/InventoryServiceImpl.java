@@ -180,6 +180,39 @@ public class InventoryServiceImpl implements InventoryService{
 			}
 		return false;
 	}
+	
+	public void updateQuantity(int itemId, int quantity) {
+		int oldQuantity =0;
+		
+		for (Item item: items) {
+			if (item.getItemId() == itemId) {
+				oldQuantity = item.getQuantity();
+				item.setQuantity(quantity);
+			}
+		}
+		
+		System.out.println("ITEM INVENTORY update...");
+	System.out.println("QUANTITY for Item ID: " + itemId + " has been updated from " + oldQuantity + " to " + quantity);
+		
+		for (Item item: rentitems) {
+			if (item.getItemId() == itemId) {
+				item.setQuantity(quantity);
+				return;
+			}
+		}
+		for (Item item: biditems) {
+			if (item.getItemId() == itemId) {
+				item.setQuantity(quantity);
+				return;
+			}
+		}
+		for (Item item: buyitems) {
+			if (item.getItemId() == itemId) {
+				item.setQuantity(quantity);
+				return;
+			}
+		}
+	}
 
 	
 
