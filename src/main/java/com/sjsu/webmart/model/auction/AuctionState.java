@@ -1,6 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
-import java.util.List;
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
 
 /**
  * Auction state model
@@ -13,7 +14,7 @@ public interface AuctionState {
     /**
      * starts the auction
      */
-    public void startAuction();
+    public AuctionResponse startAuction();
 
     /**
      * ends an auction
@@ -23,6 +24,8 @@ public interface AuctionState {
     /**
      * places bid
      */
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid);
+    public AuctionResponse placeBid(Bid bid);
+
+    public AuctionStateType getStateType();
 
 }
