@@ -1,10 +1,15 @@
 package com.sjsu.webmart.model.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.notification.Message;
+import com.sjsu.webmart.model.notification.MessageObservable;
+import com.sjsu.webmart.model.notification.MessageObserver;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.processor.FulfillmentContext;
@@ -12,14 +17,21 @@ import com.sjsu.webmart.processor.PaymentProcessor;
 import com.sjsu.webmart.processor.impl.CardProcessor;
 import com.sjsu.webmart.processor.impl.ChequeProcessor;
 import com.sjsu.webmart.service.InventoryService;
+import com.sjsu.webmart.service.NotificationService;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
+import com.sjsu.webmart.service.impl.NotificationServiceImpl;
 
-public abstract class Order {
+public abstract class Order implements MessageObservable {
 
 	private static int idSeq = 0;
 
 	protected static InventoryService inventoryService = InventoryServiceImpl
 			.getInstance();
+	
+	protected static NotificationService notificationService = NotificationServiceImpl
+			.getInstance();
+	
+	private List<MessageObserver> observers = new ArrayList<MessageObserver>();
 
 	protected Integer orderId;
 	protected OrderType orderType;
@@ -32,6 +44,7 @@ public abstract class Order {
 	public Order() {
 		idSeq++;
 		orderId = idSeq;
+		addObserver(notificationService);
 	}
 
 	public Integer getOrderId() {
@@ -140,6 +153,19 @@ public abstract class Order {
 				+ item.getSellerName() + '}';
 	}
 
+	public void addObserver(MessageObserver observer) {
+		observers.add(observer);
+	}
+
+	public void deleteObserver(MessageObserver observer) {
+		observers.remove(observer);
+	}
+
+	public void notifyObservers(Object args) {
+		for (MessageObserver observer : observers) {
+			observer.update(this, args);
+		}
+	}
 	public abstract boolean itemAvailable();
 
 	public abstract BigDecimal calculateCost(OrderParams orderParams);
@@ -149,6 +175,8 @@ public abstract class Order {
 	public abstract void updateInventory();
 
 	public void sendNotification() {
-		// send notification
+		String content = "ORDER PROCESSED: " + this.toString();
+		Message msg = new Message(this.getAccount().getEmail(), content);
+		notifyObservers(msg);
 	}
 }

@@ -64,6 +64,7 @@ public class TestOrder {
 
 	private Account getAccount() {
 		Account account = new Account();
+		account.setEmail("cheng@gmail.com");
 		List<PaymentInfo> payment = new ArrayList<PaymentInfo>();
 		payment.add(this.getPaymentInfo());
 		account.setPaymentInfo(payment);
