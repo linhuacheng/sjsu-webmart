@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.model.item.Item;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,9 +39,10 @@ public class AuctionInfo implements AuctionInterface{
     public void setAuctionState(AuctionState auctionState) {
         this.auctionState = auctionState;
     }
-    public AuctionInfo(AuctionStrategy auctionStrategy, float maxBidPrice
+    public AuctionInfo(AuctionType auctionType, float maxBidPrice
             ,Date bidStartTime, Date bidEndTime, Item item){
-        this.auctionStrategy = auctionStrategy;
+
+        setAuctionStrategy(auctionType);
         this.auctionStartTime = bidStartTime;
         this.auctionEndTime = bidEndTime;
         bidList = new ArrayList<Bid>();
@@ -56,17 +60,27 @@ public class AuctionInfo implements AuctionInterface{
 
     public void updateAuction(){
         //TODO: add implementation
+    }
 
+    public void startAuction(){
+        auctionState.startAuction();
     }
     public Bid closeAuction(){
         return auctionState.endAuction();
     }
 
+    public void setAuctionStrategy(AuctionType auctionType){
+        if (AuctionType.open.equals(auctionType)){
+            auctionStrategy= new OpenAuctionStrategy();
+        } else if (AuctionType.closed.equals(auctionType)){
+            auctionStrategy = new ClosedAuctionStrategy();
+        }
+    }
 
     public AuctionResponse processBid(Bid newBid){
 
         log.info("Process Bid:" + newBid);
-        AuctionResponse response = auctionState.placeBid(bidList, newBid, currentActiveBid);
+        AuctionResponse response = auctionState.placeBid(newBid);
         if (AuctionResponse.accepted.equals(response)){
             log.info("New Bid accepted");
             currentActiveBid = newBid;
@@ -85,8 +99,16 @@ public class AuctionInfo implements AuctionInterface{
         auctionStrategy.sendNotification();
     }
 
+    public void getWinner(){
+        auctionStrategy.computeWinner(bidList);
+    }
+
     //getters and setters
 
+
+    public Bid getCurrentActiveBid() {
+        return currentActiveBid;
+    }
 
     public Item getItem() {
         return item;

@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class OpenAuctionStrategy implements AuctionStrategy {
+
     Log log = LogFactory.getLog(Scheduled.class);
     private static Comparator<Bid> descSortByBidPrice = new Comparator<Bid>() {
         @Override

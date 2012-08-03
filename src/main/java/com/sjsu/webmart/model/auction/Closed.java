@@ -1,12 +1,12 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.List;
-
 /**
- * Created with IntelliJ IDEA.
+ * Closed auction state
  * User: ckempaiah
  * Date: 7/30/12
  * Time: 12:15 AM
@@ -20,8 +20,9 @@ public class Closed implements AuctionState {
         this.auctionInfo = auctionInfo;
     }
     @Override
-    public void startAuction() {
+    public AuctionResponse startAuction() {
         log.info("Auction Closed, Cannot start auction");
+        return AuctionResponse.invalid_operation;
     }
 
     @Override
@@ -31,8 +32,13 @@ public class Closed implements AuctionState {
     }
 
     @Override
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid){
+    public AuctionResponse placeBid(Bid bid){
         log.info("Auction closed, cannot place bid");
         return AuctionResponse.rejected_auction_closed;
+    }
+
+    @Override
+    public AuctionStateType getStateType() {
+        return AuctionStateType.closed;
     }
 }

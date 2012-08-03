@@ -1,3 +1,6 @@
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.auction.*;
 import com.sjsu.webmart.model.item.ConsumerItem;
@@ -35,8 +38,8 @@ public class TestAuctionInfo {
     }
 
     private AuctionInfo getNewAuctionInfo(){
-        OpenAuctionStrategy openAuctionStrategy = new OpenAuctionStrategy();
-        return new AuctionInfo(openAuctionStrategy, 300f, new Date(System.currentTimeMillis()-5000),
+
+        return new AuctionInfo(AuctionType.open, 300f, new Date(System.currentTimeMillis()-5000),
                 new Date(System.currentTimeMillis() + 10000), getItem());
 
     }

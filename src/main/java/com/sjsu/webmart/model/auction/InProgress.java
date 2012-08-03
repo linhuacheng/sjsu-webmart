@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -7,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * in progress auction state
  * User: ckempaiah
  * Date: 7/30/12
  * Time: 12:15 AM
@@ -22,8 +24,9 @@ public class InProgress implements AuctionState {
     }
 
     @Override
-    public void startAuction() {
+    public AuctionResponse startAuction() {
         log.info("Auction InProgress, Cannot start it");
+        return AuctionResponse.invalid_operation;
     }
 
     @Override
@@ -36,8 +39,15 @@ public class InProgress implements AuctionState {
     }
 
     @Override
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid) {
+    public AuctionResponse placeBid(Bid bid) {
+        List<Bid> bids = auctionInfo.getBidList();
+        Bid currentMaxBid = auctionInfo.getCurrentActiveBid();
         log.info("Auction Inprogress, accept bid");
-        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentBid);
+        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentMaxBid);
+    }
+
+    @Override
+    public AuctionStateType getStateType() {
+        return AuctionStateType.inprogress;
     }
 }
