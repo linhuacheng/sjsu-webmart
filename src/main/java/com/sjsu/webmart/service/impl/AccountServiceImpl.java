@@ -8,7 +8,6 @@ import java.util.List;
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
-import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.service.AccountService;
 
 public class AccountServiceImpl implements AccountService{
@@ -18,7 +17,7 @@ public class AccountServiceImpl implements AccountService{
 	private static int id = 1;
 	private Account a;
 	private List<AddressInfo> addresses;
-	private List<PaymentInfo> payment_details;
+//	private List<PaymentInfo> payment_details;
 	
 	
 	private AccountServiceImpl() {
@@ -54,7 +53,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	
-	public static AccountServiceImpl getInstance() {
+	public static AccountService getInstance() {
 	if (instance == null) {
 	synchronized (AccountServiceImpl.class){
 	if (instance == null) {
@@ -152,7 +151,10 @@ public class AccountServiceImpl implements AccountService{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println("Exception");
 		}
+		
+		System.out.println(a.getAccountId());
 		
 		System.out.println("User Registered...");
 	}
@@ -163,27 +165,33 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 	
 		Account a;
-		a = findAccountByEmail(accountId);
-		
+		a = findAccountById(accountId);
+		int i = 1;
 		if(a!=null)
 		{
+			System.out.println("Account Status : "+a.getState().toString());
 			System.out.println("Account Id : "+a.getAccountId());
 			System.out.println("First Name :  "+a.getFirstName());
 			System.out.println("Last Name : "+a.getLastName());
 			System.out.println("Email Id : "+a.getEmail());
-			System.out.println("Addresses: ");
+			
 			for(AddressInfo a_info : a.getAddressInfo())
 			{
+				System.out.println("Address "+i+" : ");
 				System.out.println(a_info.getAddress1());
 				System.out.println(a_info.getAddress2());
 				System.out.println(a_info.getCity());
 				System.out.println(a_info.getState());
 				System.out.println(a_info.getZip());
-				System.out.println(a_info.getCountry());
-				System.out.println("******************");
+				System.out.println(a_info.getCountry()+"\n");
 			}
 			
 //			System.out.println(a.getPaymentInfo());
+		}
+		
+		else
+		{
+			System.out.println("User not found !!");
 		}
 		
 	}
@@ -191,7 +199,7 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public void editAccount(int accountId) {
 		
-		Account ac = findAccountByEmail(accountId);
+		Account ac = findAccountById(accountId);
 		String input;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Editing account...");
@@ -266,19 +274,24 @@ public class AccountServiceImpl implements AccountService{
 	public void deleteAccount(int accountId) {
 		// TODO Auto-generated method stub
 		
-		Account ac = findAccountByEmail(accountId);
+		Account ac = findAccountById(accountId);
 		accounts.remove(ac);
 		System.out.println("Account deleted");
 	}
 
 
-	public Account findAccountByEmail(int accountId) {
+	public Account findAccountById(int accountId) {
 		// TODO Auto-generated method stub
 		for(Account ac: accounts)
 		{
-			if(ac.getAccountId() == accountId)
+//			System.out.println("Account Id from existing accounts .... "+ac.getAccountId());
+//			System.out.println("Account Id from the user ... "+accountId);
+			
+			if(ac.getAccountId()==accountId)
 				return ac;
 		}
+		
+		System.out.println("User not found...");
 		return null;
 	}
 
@@ -294,14 +307,14 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public void processEnableUserAccount(int accountId) {
 		// TODO Auto-generated method stub
-		Account ac = findAccountByEmail(accountId);
+		Account ac = findAccountById(accountId);
 		a.enableUser(ac);
 	}
 
 	@Override
 	public void processSuspendUserAccount(int accountId) {
 		// TODO Auto-generated method stub
-		Account ac = findAccountByEmail(accountId);
+		Account ac = findAccountById(accountId);
 		a.suspendUser(ac);
 	}
 

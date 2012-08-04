@@ -15,4 +15,8 @@ public class InActive implements AccountState{
 		System.out.println("Account is activated");
 	}
 
+	public String toString()
+	{
+		return "Account is Inactive";
+	}
 }

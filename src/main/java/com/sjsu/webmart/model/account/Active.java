@@ -29,6 +29,9 @@ public class Active implements AccountState{
 		System.out.println("Account is suspended");
 	}
 
-	
+	public String toString()
+	{
+		return "Account is Active";
+	}
 
 }
