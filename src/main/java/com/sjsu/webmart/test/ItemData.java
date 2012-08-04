@@ -23,7 +23,7 @@ public class ItemData {
 	public void initializeInventory(){
 		
 		for (int i = 0; i < 4; i++){
-			MediaItem mitem =new MediaItem(30,"HD","250MB");
+			MediaItem mitem =new MediaItem("30","HD","250MB");
 			mitem.setItemId(isi.lastItemId()+1);
 			mitem.setItemTitle(mItem[i]);
 			mitem.setSellerName(seller[0]);

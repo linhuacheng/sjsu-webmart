@@ -10,9 +10,11 @@ public interface InventoryService {
 	
 	public Item viewItem(int itemId);
 	
-	public void updateItem(int intemId);
+	
 	
 	public boolean getItemStatus(int itemId); 
+	
+	public void updateItem(int itemId,String title, float price, float discount);
 	
 	public void updateQuantity(int itemId, int quantity);
 	

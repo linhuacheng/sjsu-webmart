@@ -2,22 +2,22 @@ package com.sjsu.webmart.model.item;
 
 public class MediaItem extends Item{
 
-	private int duration;
+	private String duration;
 	private String quality;
 	private String size;
 	
-	public MediaItem(int dur, String quality, String size){
+	public MediaItem(String dur, String quality, String size){
 		setDuration(dur);
 		this.setQuality(quality);
 		this.setSize(size);
 	}
 
-	public int getDuration() {
+	public String getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public void setDuration(String dur) {
+		this.duration = dur;
 	}
 
 	public String getQuality() {
