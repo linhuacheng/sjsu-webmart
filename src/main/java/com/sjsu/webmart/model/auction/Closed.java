@@ -1,34 +1,44 @@
 package com.sjsu.webmart.model.auction;
 
-import java.util.List;
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * Created with IntelliJ IDEA.
+ * Closed auction state
  * User: ckempaiah
  * Date: 7/30/12
  * Time: 12:15 AM
  * To change this template use File | Settings | File Templates.
  */
 public class Closed implements AuctionState {
+    Log log = LogFactory.getLog(Closed.class);
     private AuctionInterface auctionInfo;
 
     public Closed(AuctionInterface auctionInfo){
         this.auctionInfo = auctionInfo;
     }
     @Override
-    public void startAuction() {
-        System.out.println("Auction Closed, Cannot start auction");
+    public AuctionResponse startAuction() {
+        log.info("Auction Closed, Cannot start auction");
+        return AuctionResponse.invalid_operation;
     }
 
     @Override
     public Bid endAuction() {
-        System.out.println("Auction closed");
+        log.info("Auction closed");
         return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
     }
 
     @Override
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid){
-        System.out.println("Auction closed, cannot place bid");
+    public AuctionResponse placeBid(Bid bid){
+        log.info("Auction closed, cannot place bid");
         return AuctionResponse.rejected_auction_closed;
+    }
+
+    @Override
+    public AuctionStateType getStateType() {
+        return AuctionStateType.closed;
     }
 }

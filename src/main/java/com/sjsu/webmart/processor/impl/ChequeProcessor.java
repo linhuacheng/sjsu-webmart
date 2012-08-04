@@ -8,14 +8,21 @@ import com.sjsu.webmart.processor.PaymentProcessor;
 public class ChequeProcessor implements PaymentProcessor {
 
 	@Override
-	public void debit(PaymentInfo paymentInfo, BigDecimal amount) {
-		// TODO Auto-generated method stub
-		
+	public boolean debit(PaymentInfo paymentInfo, BigDecimal amount) {
+		System.out
+		.println("CHEQUE NUMBER: " + paymentInfo.getChequeNumber()
+				+ " has been successfully processed. Amount debited: "
+				+ amount);
+		return true;
 	}
 
 	@Override
-	public void credit(PaymentInfo paymentInfo, BigDecimal amount) {
-		// TODO Auto-generated method stub
+	public boolean credit(PaymentInfo paymentInfo, BigDecimal amount) {
+		System.out
+		.println("CHEQUE NUMBER: " + paymentInfo.getChequeNumber()
+				+ " has been successfully processed. Amount credited: "
+				+ amount);
+		return true;
 		
 	}
 	

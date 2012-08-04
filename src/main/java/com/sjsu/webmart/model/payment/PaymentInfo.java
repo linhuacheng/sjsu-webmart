@@ -10,12 +10,22 @@ public abstract class PaymentInfo {
 	protected Integer paymentInfoId;
 	protected PaymentType paymentType;
 	protected String cardNumber;
+	protected String chequeNumber;
+
+
 	protected Integer securityCode;
 	protected Date expirationDate;
 	protected PaymentProcessor paymentProcessor;
 
-	public void debit(BigDecimal amount) {
-		paymentProcessor.debit(this, amount);
+	public String getChequeNumber() {
+		return chequeNumber;
+	}
+	public void setChequeNumber(String chequeNumber) {
+		this.chequeNumber = chequeNumber;
+	}
+	
+	public boolean debit(BigDecimal amount) {
+		return paymentProcessor.debit(this, amount);
 	}
 	public Integer getPaymentInfoId() {
 		return paymentInfoId;
@@ -54,9 +64,9 @@ public abstract class PaymentInfo {
 		this.paymentProcessor = paymentProcessor;
 	}
 	
-	public void credit(BigDecimal amount) {
-		paymentProcessor.credit(this, amount);	
+	public boolean credit(BigDecimal amount) {
+		return paymentProcessor.credit(this, amount);	
 	}
 
-	public abstract void processPayment();
+	public abstract boolean processPayment(BigDecimal amount);
 }

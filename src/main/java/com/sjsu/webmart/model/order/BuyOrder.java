@@ -1,48 +1,46 @@
 package com.sjsu.webmart.model.order;
 
+import java.math.BigDecimal;
+
+import com.sjsu.webmart.model.item.Item;
 
 public class BuyOrder extends Order {
 
 	@Override
-	public void processOrder() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean itemAvailable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean processPayment() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void fulfillOrder() {
-		// TODO Auto-generated method stub
-		
+		boolean available = inventoryService.getItemStatus(item.getItemId());
+		if (available) {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is AVAILABLE.");
+		} else {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is NOT AVAILABLE.");
+		}
+		return available;
 	}
 
 	@Override
 	public void updateOrder() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("ORDER STATUS updated to: " + OrderStatus.SHIPPED);
+		this.setOrderStatus(OrderStatus.SHIPPED);
 	}
 
 	@Override
 	public void updateInventory() {
-		// TODO Auto-generated method stub
+		Item i = inventoryService.viewItem(item.getItemId());
+		int quantity = i.getQuantity();
+		quantity--;
 		
+		// deduct item quantity
+		this.inventoryService.updateQuantity(item.getItemId(), quantity);
 	}
 
 	@Override
-	public void sendNotification() {
-		// TODO Auto-generated method stub
+	public BigDecimal calculateCost(OrderParams orderParams) {
+		BigDecimal cost = new BigDecimal(item.getPrice());
 		
+		System.out.println("ORDER COST calculated: " + cost);
+		return cost;
 	}
 
 }

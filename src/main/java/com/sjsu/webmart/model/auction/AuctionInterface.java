@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * auction interface
  * User: ckempaiah
  * Date: 7/31/12
  * Time: 12:59 AM
@@ -21,5 +21,7 @@ public interface AuctionInterface {
     public void setAuctionEndTime(Date auctionEndTime);
 
     public Date getAuctionStartTime();
+
+    public Bid getCurrentActiveBid();
 
 }

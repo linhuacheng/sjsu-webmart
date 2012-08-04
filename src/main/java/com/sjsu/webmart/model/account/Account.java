@@ -1,13 +1,18 @@
 package com.sjsu.webmart.model.account;
 
-import java.util.List;
 
+import java.util.List;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 
 public class Account {
 
 	private AccountState state;
-	
+
+	public boolean isValidAccount()
+	{
+		return (Boolean) null;
+	}
+
 	private int accountId;
 	
 	private String firstName;

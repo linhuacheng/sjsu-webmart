@@ -1,5 +1,10 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,6 +18,7 @@ import java.util.List;
  */
 public class OpenAuctionStrategy implements AuctionStrategy {
 
+    Log log = LogFactory.getLog(Scheduled.class);
     private static Comparator<Bid> descSortByBidPrice = new Comparator<Bid>() {
         @Override
         public int compare(Bid o1, Bid o2) {
@@ -29,11 +35,11 @@ public class OpenAuctionStrategy implements AuctionStrategy {
     public AuctionResponse acceptBid(List<Bid> bids, Bid bid, Bid currentBid) {
 
         if (currentBid == null || bid.getBidPrice() > currentBid.getBidPrice()) {
-            System.out.println("accepting bid " + bid);
+            log.info("accepting bid " + bid);
             bids.add(bid);
             return AuctionResponse.accepted;
         } else {
-            System.out.println("Rejecting bid " + bid);
+            log.info("Rejecting bid " + bid);
             return AuctionResponse.rejected_invalid_price;
         }
 
@@ -44,7 +50,7 @@ public class OpenAuctionStrategy implements AuctionStrategy {
 
         Collections.sort(bids, descSortByBidPrice);
         Bid maxBid = bids.get(0);
-        System.out.println("Max Bid" + maxBid);
+        log.info("Max Bid" + maxBid);
         return maxBid;
     }
 

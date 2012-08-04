@@ -1,17 +1,21 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.Date;
-import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * Scheduled auction state
  * User: ckempaiah
  * Date: 7/29/12
  * Time: 10:29 PM
  * To change this template use File | Settings | File Templates.
  */
 public class Scheduled implements AuctionState {
-
+    Log log = LogFactory.getLog(Scheduled.class);
     private AuctionInterface auctionInfo;
 
     public Scheduled(AuctionInterface auctionInfo){
@@ -19,25 +23,33 @@ public class Scheduled implements AuctionState {
     }
 
     @Override
-    public void startAuction() {
+    public AuctionResponse startAuction() {
         if (auctionInfo.getAuctionStartTime().before(new Date())) {
             auctionInfo.setAuctionState(new InProgress(auctionInfo));
-            System.out.println("Auction Inprogress");
+            log.info("Auction Inprogress");
+            return AuctionResponse.success;
         } else {
-            System.out.println("Start time has not reached");
+            log.info("Start time has not reached");
+            return AuctionResponse.time_not_reached;
         }
+
     }
 
     @Override
     public Bid endAuction() {
-        System.out.println("Auction Scheduled, cannot perform end");
+        log.info("Auction Scheduled, cannot perform end");
         return null;
     }
 
 
     @Override
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid) {
-        System.out.println("Auction Scheduled, Cannot place bid");
+    public AuctionResponse placeBid(Bid bid) {
+        log.info("Auction Scheduled, Cannot place bid");
         return AuctionResponse.rejected_auction_not_scheduled;
+    }
+
+    @Override
+    public AuctionStateType getStateType() {
+        return AuctionStateType.scheduled;
     }
 }

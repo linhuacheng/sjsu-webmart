@@ -1,16 +1,22 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionResponse;
+import com.sjsu.webmart.common.AuctionStateType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
+ * in progress auction state
  * User: ckempaiah
  * Date: 7/30/12
  * Time: 12:15 AM
  * To change this template use File | Settings | File Templates.
  */
 public class InProgress implements AuctionState {
+    Log log = LogFactory.getLog(InProgress.class);
     private AuctionInterface auctionInfo;
 
     public InProgress(AuctionInterface auctionInfo){
@@ -18,13 +24,14 @@ public class InProgress implements AuctionState {
     }
 
     @Override
-    public void startAuction() {
-        System.out.println("Auction InProgress, Cannot start it");
+    public AuctionResponse startAuction() {
+        log.info("Auction InProgress, Cannot start it");
+        return AuctionResponse.invalid_operation;
     }
 
     @Override
     public Bid endAuction() {
-        System.out.println("Auction InProgress, Ending Auction");
+        log.info("Auction InProgress, Ending Auction");
         auctionInfo.setAuctionState(new Closed(auctionInfo));
         auctionInfo.setAuctionEndTime(new Date());
         return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
@@ -32,8 +39,15 @@ public class InProgress implements AuctionState {
     }
 
     @Override
-    public AuctionResponse placeBid(List<Bid> bids,Bid bid, Bid currentBid) {
-        System.out.println("Auction Inprogress, accept bid");
-        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentBid);
+    public AuctionResponse placeBid(Bid bid) {
+        List<Bid> bids = auctionInfo.getBidList();
+        Bid currentMaxBid = auctionInfo.getCurrentActiveBid();
+        log.info("Auction Inprogress, accept bid");
+        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentMaxBid);
+    }
+
+    @Override
+    public AuctionStateType getStateType() {
+        return AuctionStateType.inprogress;
     }
 }

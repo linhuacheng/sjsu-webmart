@@ -13,4 +13,7 @@ public interface InventoryService {
 	public void updateItem(int intemId);
 	
 	public boolean getItemStatus(int itemId); 
+	
+	public void updateQuantity(int itemId, int quantity);
+	
 }
