@@ -6,6 +6,10 @@ public class ConsumerItem extends Item{
 	
 	private String weight;
 	
+	public ConsumerItem()
+	{
+		
+	}
 	public ConsumerItem(String size, String weight){
 		this.size = size;
 		this.weight = weight;

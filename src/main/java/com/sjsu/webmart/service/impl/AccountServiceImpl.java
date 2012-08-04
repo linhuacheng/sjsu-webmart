@@ -24,31 +24,7 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated constructor stub
 		System.out.println("Constructor initialized");
 
-		AddressInfo a_info = new AddressInfo();
-//		PaymentInfo p = null;
-//		payment_details = new ArrayList<PaymentInfo>();
-		addresses = new ArrayList<AddressInfo>();
-		a = new Account();
-
-		a.setAccountId(id++);
-		a.setAccountType("Customer");
-		a.setEmail("nikitha@gmail.com");
-		a.setFirstName("Nikitha");
-		a.setLastName("Vurumalla");
-		a.setPassword("nikitha");
-		a.setPaymentInfo(null);
-		a.setState(new Active());
-		
-		a_info.setAddress1("1234 Pebble Dr");
-		a_info.setAddress2("#345");
-		a_info.setCity("Sunnyvale");
-		a_info.setState("CA");
-		a_info.setZip("95039");
-		a_info.setCountry("USA");
-		addresses.add(a_info);
-		a.setAddressInfo(addresses);
-
-		accounts.add(a);
+		createInitialAccounts();
 
 	}
 
@@ -325,5 +301,34 @@ public class AccountServiceImpl implements AccountService{
 		return accounts;
 	}
 
+	private void createInitialAccounts(){
+		
+		AddressInfo a_info = new AddressInfo();
+//		PaymentInfo p = null;
+//		payment_details = new ArrayList<PaymentInfo>();
+		addresses = new ArrayList<AddressInfo>();
+		
+		a = new Account();
+
+		a.setAccountId(id++);
+		a.setAccountType("Customer");
+		a.setEmail("nikitha@gmail.com");
+		a.setFirstName("Nikitha");
+		a.setLastName("Vurumalla");
+		a.setPassword("nikitha");
+		a.setPaymentInfo(null);
+		a.setState(new Active());
+		
+		a_info.setAddress1("1234 Pebble Dr");
+		a_info.setAddress2("#345");
+		a_info.setCity("Sunnyvale");
+		a_info.setState("CA");
+		a_info.setZip("95039");
+		a_info.setCountry("USA");
+		addresses.add(a_info);
+		a.setAddressInfo(addresses);
+
+		accounts.add(a);
+	}
 	
 }
