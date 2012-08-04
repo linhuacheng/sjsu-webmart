@@ -9,6 +9,8 @@ import com.sjsu.webmart.model.auction.AuctionState;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.service.AuctionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.*;
 
@@ -20,7 +22,7 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class AuctionServiceImpl implements AuctionService {
-
+    private Log LOG = LogFactory.getLog(AuctionServiceImpl.class);
     private HashMap<Integer, AuctionInfo> auctionInfoList = new HashMap<Integer, AuctionInfo>();
     private static int nextAuctionId = 1;
 
@@ -28,6 +30,7 @@ public class AuctionServiceImpl implements AuctionService {
     public void setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime) {
 
         synchronized (auctionInfoList) {
+            LOG.debug("Setting up new Auction");
             AuctionInfo auctionInfo = new AuctionInfo(auctionType, maxBidPrice, bidStartTime, bidEndTime, item);
             auctionInfo.setAuctionId(nextAuctionId);
             auctionInfoList.put(nextAuctionId, auctionInfo);
