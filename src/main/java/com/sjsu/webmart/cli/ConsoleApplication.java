@@ -33,6 +33,8 @@ public class ConsoleApplication {
     private BufferedReader reader;
     private List<ConsoleOption> mainOptions;
     AuctionConsoleHandler auctionConsoleHandler;
+    OrderConsoleHandler orderConsoleHandler;
+    ItemConsoleHandler itemConsoleHandler;
     AuctionService auctionService= AuctionServiceImpl.getInstance();
     AccountService accountService = AccountServiceImpl.getInstance();
 
@@ -59,6 +61,8 @@ public class ConsoleApplication {
 
         consoleApplication.createConsoleOptions();
         consoleApplication.auctionConsoleHandler = new AuctionConsoleHandler(out, reader);
+        consoleApplication.itemConsoleHandler = new ItemConsoleHandler(out, reader);
+        consoleApplication.orderConsoleHandler = new OrderConsoleHandler(out, reader);
         consoleApplication.setupSampleData();
         consoleApplication.start();
 
@@ -83,9 +87,12 @@ public class ConsoleApplication {
                     break;
                 case OPTION_TWO:
                     printEnteredOption(out,mainOptions, optionNum);
+                    //write itemconsolehandler code from here
+                    itemConsoleHandler.handleItemOptions();
                     break;
                 case OPTION_THREE:
                     printEnteredOption(out,mainOptions, optionNum);
+                    orderConsoleHandler.handleOrderOptions();
                     break;
                 case OPTION_FOUR:
                     printEnteredOption(out,mainOptions, optionNum);

@@ -1,6 +1,9 @@
 package com.sjsu.webmart.service;
 
+import java.util.List;
+
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
 
 public interface InventoryService {
 
@@ -17,5 +20,7 @@ public interface InventoryService {
 	public void updateItem(int itemId,String title, float price, float discount);
 	
 	public void updateQuantity(int itemId, int quantity);
+	
+	public List<Item> listItem(ItemType type);
 	
 }

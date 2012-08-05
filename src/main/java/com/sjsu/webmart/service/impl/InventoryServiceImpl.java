@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.model.item.MediaItem;
 import com.sjsu.webmart.service.InventoryService;
 
@@ -45,12 +46,9 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	public void addItem(Item item) {
-		Item i;
 		// TODO Auto-generated method stub
 		items.add(item);
-
-		System.out.println("Item added");
-		// System.out.println("Items : " +items.get(1));
+		System.out.println("Item no. " + item.getItemId() + " is added");
 	}
 
 	public void viewAllItems() {
@@ -93,21 +91,18 @@ public class InventoryServiceImpl implements InventoryService {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		rentitems.add(item);
-		System.out.println("Rentable Item");
 	}
 
 	public void addToBuyList(Item item) {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		buyitems.add(item);
-		System.out.println("Buyable Item");
 	}
 
 	public void addToBidList(Item item) {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		biditems.add(item);
-		System.out.println("Biddable Item");
 	}
 
 	@Override
@@ -198,34 +193,31 @@ public class InventoryServiceImpl implements InventoryService {
 			String list = findItemInList(itemId);
 			if (list == "rent") {
 				for (Item i : rentitems) {
-					if(i.getItemId() == itemId){
-					rentitems.remove(i);
-					rentitems.add(temp);
-					break;
+					if (i.getItemId() == itemId) {
+						rentitems.remove(i);
+						rentitems.add(temp);
+						break;
 					}
 				}
-			}
-			else if (list == "buy") {
+			} else if (list == "buy") {
 				for (Item i : buyitems) {
-					if(i.getItemId() == itemId){
+					if (i.getItemId() == itemId) {
 						buyitems.remove(i);
 						buyitems.add(temp);
 						break;
-						}
+					}
 				}
-			}
-			else if (list == "bid") {
+			} else if (list == "bid") {
 				for (Item i : biditems) {
-					if(i.getItemId() == itemId){
+					if (i.getItemId() == itemId) {
 						biditems.remove(i);
 						biditems.add(temp);
 						break;
-						}
+					}
 				}
 			}
 			items.add(temp);
-			
-			
+
 		} else
 			System.out.println("Item not found");
 
@@ -295,6 +287,26 @@ public class InventoryServiceImpl implements InventoryService {
 				return;
 			}
 		}
+	}
+
+	@Override
+	public List<Item> listItem(ItemType type) {
+		List<Item> i;
+		switch (type) {
+			case BIDABLE:
+				i = biditems;
+				break;
+			case RENTABLE:
+				i = rentitems;
+				break;
+			case BUYABLE:
+				i = buyitems;
+				break;
+			default:
+				i = buyitems;
+				break;
+		}
+		return i;
 	}
 
 }

@@ -40,6 +40,15 @@ public abstract class Order implements MessageObservable {
 	protected Account account;
 	protected Date fromDate;
 	protected Date toDate;
+	protected Date orderDate;
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
 
 	public Order() {
 		idSeq++;

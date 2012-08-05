@@ -30,7 +30,6 @@ public class ItemData {
 			mitem.setItemDescription("MediaItem");
 			mitem.setDiscount(0);
 			id = decorateItem(mitem);
-			//isi.addItem(id);
 			
 		}
 		for (int i = 0; i < 4; i++){
@@ -43,9 +42,8 @@ public class ItemData {
 			citem.setDiscount(0);
 			id = decorateItem(citem);
 			
-			//isi.addItem(id);
 		}
-		isi.viewAllItems();
+		
 	}
 	private ItemDecorator decorateItem(Item mitem) {
 		// TODO Auto-generated method stub
