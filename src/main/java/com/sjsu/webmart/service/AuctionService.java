@@ -7,6 +7,7 @@ import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -34,4 +35,8 @@ public interface AuctionService {
     void closeAllAuctions();
 
     void startAllAuctions();
+
+    Collection<AuctionInfo> getAllAuctions();
+
+    AuctionResponse startAuctionByAuctionId(int auctionId);
 }

@@ -19,5 +19,6 @@ public interface AccountService {
 	public void processSuspendUserAccount(int accountId);
 	
 	public List<Account> getAllAccounts();
-	
+
+    Account findAccountById(int accountId);
 }

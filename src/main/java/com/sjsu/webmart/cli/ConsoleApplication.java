@@ -1,7 +1,14 @@
 package com.sjsu.webmart.cli;
 
+import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
+import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.item.ConsumerItem;
+import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.service.AuctionService;
+import com.sjsu.webmart.service.impl.AccountServiceImpl;
+import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -9,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import static com.sjsu.webmart.util.ConsoleUtil.*;
 
@@ -25,6 +33,8 @@ public class ConsoleApplication {
     private BufferedReader reader;
     private List<ConsoleOption> mainOptions;
     AuctionConsoleHandler auctionConsoleHandler;
+    AuctionService auctionService= AuctionServiceImpl.getInstance();
+    AccountService accountService = AccountServiceImpl.getInstance();
 
     /**
      *
@@ -49,6 +59,7 @@ public class ConsoleApplication {
 
         consoleApplication.createConsoleOptions();
         consoleApplication.auctionConsoleHandler = new AuctionConsoleHandler(out, reader);
+        consoleApplication.setupSampleData();
         consoleApplication.start();
 
     }
@@ -85,7 +96,7 @@ public class ConsoleApplication {
                     break;
                 case OPTION_EXIT:
                     //printEnteredOption(out,mainOptions, optionNum);
-                    break;
+                    return;
                 default:
                     out.println("Invalid Option");
                     optionNum = OptionNum.OPTION_NONE;
@@ -114,5 +125,17 @@ public class ConsoleApplication {
         mainOptions.add(manageReport);
         mainOptions.add(exit);
 
+    }
+
+    private void setupSampleData(){
+        Account account = accountService.findAccountById(1);
+        ConsumerItem consumerItem = new ConsumerItem();
+        consumerItem.setItemId(1);
+        consumerItem.setWeight(".5lbs");
+        consumerItem.setQuantity(10);
+        consumerItem.setItemDescription("Amazon Kindle Fire Tablet");
+        consumerItem.setPrice(200);
+        auctionService.setupNewAuction(consumerItem, AuctionType.open, 200
+                , new Date(System.currentTimeMillis()-10000), new Date(System.currentTimeMillis()+100000));
     }
 }

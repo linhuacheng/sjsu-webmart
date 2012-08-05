@@ -50,6 +50,22 @@ public class ConsoleUtil {
     public static String getInput(BufferedReader reader)throws IOException{
         return reader.readLine();
     }
+
+    public static int getIdValue(BufferedReader reader) throws IOException {
+        String option;
+
+
+        if ((option = reader.readLine()) != null) {
+            try {
+                return Integer.parseInt(option);
+            } catch (NumberFormatException nfe) {
+                //ignore exception
+
+            }
+        }
+        return -1;
+    }
+
     /**
      * prints options
      * @param optionNum
@@ -62,5 +78,9 @@ public class ConsoleUtil {
         }
         out.print("Enter Option:");
         out.flush();
+    }
+
+    public static void printText(PrintWriter out, String text){
+        out.println(text);
     }
 }

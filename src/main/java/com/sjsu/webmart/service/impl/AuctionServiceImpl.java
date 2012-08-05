@@ -25,6 +25,16 @@ public class AuctionServiceImpl implements AuctionService {
     private Log LOG = LogFactory.getLog(AuctionServiceImpl.class);
     private HashMap<Integer, AuctionInfo> auctionInfoList = new HashMap<Integer, AuctionInfo>();
     private static int nextAuctionId = 1;
+    private static AuctionService auctionService = new AuctionServiceImpl();
+
+
+    private AuctionServiceImpl(){
+
+    }
+
+    public static AuctionService getInstance(){
+        return auctionService;
+    }
 
     @Override
     public void setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime) {
@@ -71,6 +81,12 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public Collection<AuctionInfo> getAllAuctions(){
+
+        return auctionInfoList.values();
+    }
+
+    @Override
     public AuctionStateType getAuctionState(int auctionId){
         AuctionInfo auctionInfo = auctionInfoList.get(auctionId);
         if (auctionInfo != null) {
@@ -112,5 +128,14 @@ public class AuctionServiceImpl implements AuctionService {
                 auctionInfo.startAuction();
             }
         }
+    }
+
+    @Override
+    public AuctionResponse startAuctionByAuctionId(int auctionId){
+        if(auctionInfoList.get(auctionId) != null){
+            auctionInfoList.get(auctionId).startAuction();
+            return AuctionResponse.success;
+        }
+        return AuctionResponse.invalid_start_auction_argument;
     }
 }

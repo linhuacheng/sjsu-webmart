@@ -15,6 +15,7 @@ public enum OptionNum {
     , OPTION_THREE(3)
     , OPTION_FOUR(4)
     , OPTION_FIVE(5)
+    , OPTION_SIX(6)
     , OPTION_EXIT(-1)
     , OPTION_NONE(0)
     ;
