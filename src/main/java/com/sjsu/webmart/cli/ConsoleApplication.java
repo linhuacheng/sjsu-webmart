@@ -25,6 +25,7 @@ public class ConsoleApplication {
     private BufferedReader reader;
     private List<ConsoleOption> mainOptions;
     AuctionConsoleHandler auctionConsoleHandler;
+    ItemConsoleHandler itemConsoleHandler;
 
     /**
      *
@@ -49,6 +50,7 @@ public class ConsoleApplication {
 
         consoleApplication.createConsoleOptions();
         consoleApplication.auctionConsoleHandler = new AuctionConsoleHandler(out, reader);
+        consoleApplication.itemConsoleHandler = new ItemConsoleHandler(out, reader);
         consoleApplication.start();
 
     }
@@ -72,6 +74,8 @@ public class ConsoleApplication {
                     break;
                 case OPTION_TWO:
                     printEnteredOption(out,mainOptions, optionNum);
+                    //write itemconsolehandler code from here
+                    itemConsoleHandler.handleItemOptions();
                     break;
                 case OPTION_THREE:
                     printEnteredOption(out,mainOptions, optionNum);

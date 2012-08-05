@@ -45,12 +45,9 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	public void addItem(Item item) {
-		Item i;
 		// TODO Auto-generated method stub
 		items.add(item);
-
-		System.out.println("Item added");
-		// System.out.println("Items : " +items.get(1));
+		System.out.println("Item no. " +item.getItemId()+ " is added");
 	}
 
 	public void viewAllItems() {
@@ -93,21 +90,18 @@ public class InventoryServiceImpl implements InventoryService {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		rentitems.add(item);
-		System.out.println("Rentable Item");
 	}
 
 	public void addToBuyList(Item item) {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		buyitems.add(item);
-		System.out.println("Buyable Item");
 	}
 
 	public void addToBidList(Item item) {
 		// TODO Auto-generated method stub
 		item.setItemId(++id);
 		biditems.add(item);
-		System.out.println("Biddable Item");
 	}
 
 	@Override
