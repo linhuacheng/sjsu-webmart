@@ -27,7 +27,7 @@ public class BuyOrder extends Order {
 
 	@Override
 	public void updateInventory() {
-		Item i = inventoryService.viewItem(item.getItemId());
+		Item i = inventoryService.getItem(item.getItemId());
 		int quantity = i.getQuantity();
 		quantity--;
 		

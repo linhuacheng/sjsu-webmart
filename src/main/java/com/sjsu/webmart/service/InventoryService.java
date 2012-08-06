@@ -11,6 +11,8 @@ public interface InventoryService {
 	
 	public void deleteItem(int itemId);
 	
+	public Item getItem(int itemId);
+	
 	public Item viewItem(int itemId);
 	
 	

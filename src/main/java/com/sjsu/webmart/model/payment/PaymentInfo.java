@@ -6,6 +6,8 @@ import com.sjsu.webmart.processor.PaymentProcessor;
 import java.util.Date;
 
 public abstract class PaymentInfo {
+	
+	private static int idSeq = 1;
 
 	protected Integer paymentInfoId;
 	protected PaymentType paymentType;
@@ -69,4 +71,8 @@ public abstract class PaymentInfo {
 	}
 
 	public abstract boolean processPayment(BigDecimal amount);
+	
+	public static Integer getNextId() {
+		return idSeq++;
+	}
 }

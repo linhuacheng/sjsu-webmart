@@ -24,7 +24,7 @@ public class ReturnOrder extends Order {
 	@Override
 	public void updateInventory() {
 		// Add back to inventory
-		Item i = inventoryService.viewItem(item.getItemId());
+		Item i = inventoryService.getItem(item.getItemId());
 		int quantity = i.getQuantity();
 		quantity++;
 		
