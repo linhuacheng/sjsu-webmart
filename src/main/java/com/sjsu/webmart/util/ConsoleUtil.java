@@ -70,6 +70,9 @@ public class ConsoleUtil {
         return -1;
     }
 
+    public static int getIdValue(BufferedReader reader) throws IOException{
+        return getIntValue(reader);
+    }
     public static float getFloatValue(BufferedReader reader) throws IOException {
         String option;
 
