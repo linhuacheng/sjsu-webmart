@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sjsu.webmart.model.item.*;
+import com.sjsu.webmart.model.order.FulfillmentType;
+import com.sjsu.webmart.model.order.OrderParams;
+import com.sjsu.webmart.processor.Fulfillment;
 import com.sjsu.webmart.service.InventoryService;
 
 public class InventoryServiceImpl implements InventoryService {
@@ -28,6 +31,21 @@ public class InventoryServiceImpl implements InventoryService {
 			}
 		}
 		return instance;
+	}
+	
+	public List<FulfillmentType> getShippingOptions(Item i){
+		List <FulfillmentType> fulfill = null;
+		if (i.getItemDescription()=="ConsumerItem"|| i.getItemDescription() =="Consumer Item"){
+			fulfill.add(FulfillmentType.COURIER);
+			fulfill.add(FulfillmentType.STORE);
+			
+		}
+		else{
+			fulfill.add(FulfillmentType.COURIER);
+			fulfill.add(FulfillmentType.ONLINE);
+			fulfill.add(FulfillmentType.STORE);
+		}
+		return fulfill;
 	}
 
 	public List<Item> listItem() {
