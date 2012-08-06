@@ -22,5 +22,7 @@ public interface InventoryService {
 	public void updateQuantity(int itemId, int quantity);
 	
 	public List<Item> listItem(ItemType type);
-	
+
+    Item createNewConsumerItem(ItemType itemType, String title, float price
+            , String description, String weight, int quantity);
 }

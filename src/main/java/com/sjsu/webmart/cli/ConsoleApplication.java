@@ -4,11 +4,16 @@ import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.item.Bidable;
 import com.sjsu.webmart.model.item.ConsumerItem;
+import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.service.AuctionService;
+import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
+import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -37,6 +42,7 @@ public class ConsoleApplication {
     ItemConsoleHandler itemConsoleHandler;
     AuctionService auctionService= AuctionServiceImpl.getInstance();
     AccountService accountService = AccountServiceImpl.getInstance();
+    InventoryService inventoryService = InventoryServiceImpl.getInstance();
 
     /**
      *
@@ -135,14 +141,10 @@ public class ConsoleApplication {
     }
 
     private void setupSampleData(){
-        Account account = accountService.findAccountById(1);
-        ConsumerItem consumerItem = new ConsumerItem();
-        consumerItem.setItemId(1);
-        consumerItem.setWeight(".5lbs");
-        consumerItem.setQuantity(10);
-        consumerItem.setItemDescription("Amazon Kindle Fire Tablet");
-        consumerItem.setPrice(200);
-        auctionService.setupNewAuction(consumerItem, AuctionType.open, 200
-                , new Date(System.currentTimeMillis()-10000), new Date(System.currentTimeMillis()+100000));
+        Item item = inventoryService.createNewConsumerItem(ItemType.BIDABLE,"Kindle Fire", 200, "Amazon Kindle Fire Tablet", ".5lbs", 10);
+        inventoryService.createNewConsumerItem(ItemType.BIDABLE,"Sony NEX5N", 699, "Sony Compact Interchangeable Lens Touchscreen Camera\n" +
+                "With 18-55mm lens" , "3lbs", 2);
+        auctionService.setupNewAuction(item, AuctionType.open, 200
+                , new Date(System.currentTimeMillis() - 10000), new Date(System.currentTimeMillis() + 10000));
     }
 }

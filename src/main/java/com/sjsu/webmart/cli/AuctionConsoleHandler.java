@@ -6,10 +6,13 @@ import com.sjsu.webmart.model.account.AccountCLI;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.service.AuctionService;
+import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
+import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +28,7 @@ import java.util.List;
 import static com.sjsu.webmart.util.ConsoleUtil.*;
 
 /**
- * Created with IntelliJ IDEA.
+ * Auction console handler
  * User: ckempaiah
  * Date: 8/4/12
  * Time: 2:03 PM
@@ -38,12 +41,14 @@ public class AuctionConsoleHandler {
     private PrintWriter out;
     private BufferedReader reader;
     private AccountService accountService;
+    private InventoryService inventoryService;
 
     public AuctionConsoleHandler(PrintWriter out, BufferedReader reader) {
         this.out = out;
         this.reader = reader;
         auctionService = AuctionServiceImpl.getInstance();
         accountService = AccountServiceImpl.getInstance();
+        inventoryService = InventoryServiceImpl.getInstance();
         createAuctionOptions();
     }
 
@@ -60,6 +65,7 @@ public class AuctionConsoleHandler {
             secondOption = getOption(reader);
             switch (secondOption) {
                 case OPTION_ONE:
+                    //view auction
                     printEnteredOption(out, auctionOptions, secondOption);
 
 //                    Item item = new ConsumerItem();
@@ -74,16 +80,21 @@ public class AuctionConsoleHandler {
                     printAuction(null);
                     break;
                 case OPTION_TWO:
+                    //setup auction
                     printEnteredOption(out, auctionOptions, secondOption);
+                    handleSetupAuction();
                     break;
                 case OPTION_THREE:
+                    //Start Auction
                     printEnteredOption(out, auctionOptions, secondOption);
                     handleStartAuction();
                     break;
                 case OPTION_FOUR:
+                    //place bid
                     printEnteredOption(out, auctionOptions, secondOption);
                     break;
                 case OPTION_FIVE:
+                    //close Auction
                     printEnteredOption(out, auctionOptions, secondOption);
                     break;
                 case OPTION_EXIT:
@@ -108,23 +119,75 @@ public class AuctionConsoleHandler {
 
             for (AuctionInfo auctionInfo : auctionInfos) {
                 printText(out, String.format("Auction Details Item Id =(%s), Item Desc = (%s) Auction State = (%s)" +
-                        " Max Bid Price = (%s), Bid List =(%s)", auctionInfo.getItem().getItemId()
-                        , auctionInfo.getItem().getItemDescription()
+                        " Max Bid Price = (%s), Bid End Time= (%s), Bid List =(%s)", auctionInfo.getItem().getItemId()
+                        , auctionInfo.getItem().getItemTitle()
                         , auctionInfo.getAuctionState().getStateType()
                         , auctionInfo.getMaxBidPrice()
+                        , auctionInfo.getAuctionEndTime()
                         , auctionInfo.getBidList()
                 ));
             }
         }
     }
 
+    private void handleSetupAuction() throws IOException {
+
+        List<Item> itemList = inventoryService.listItem(ItemType.BIDABLE);
+        Item item= null;
+        int itemId;
+        float price;
+        AuctionInfo existingAuction;
+        AuctionInfo newAuction;
+        Date auctionStartTime;
+        Date auctionEndTime;
+        if (CollectionUtils.isEmpty(itemList)){
+            printText(out, "No Biddable Items Found, create them first");
+            return;
+        }
+        printItemDetails(out, itemList);
+        printText(out, "Enter item Id:");
+
+
+        if ((itemId = getIntValue(reader)) != -1) {
+            item = inventoryService.viewItem(itemId);
+        }
+        if (item == null){
+            printText(out, "Invalid Item Id");
+            return;
+        }
+        existingAuction = auctionService.getAuctionByItemId(item.getItemId());
+
+        if ( existingAuction!= null && ! existingAuction.getAuctionState().equals(AuctionStateType.closed)){
+            printText(out, "Auction Form Item is scheduled/Inprogress");
+            return;
+        }
+        printText(out, "Enter Max Bid Price:");
+
+        if ((price = getFloatValue(reader)) == -1) {
+            printText(out, "Invalid Price");
+            return;
+        }
+        printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()));
+        auctionEndTime = getDateValue(reader);
+        auctionStartTime = new Date(System.currentTimeMillis()-10000);
+
+        if (auctionEndTime == null || auctionStartTime.after(auctionEndTime)){
+            printText(out, "Auction end time must be greater than current time");
+            return;
+        }
+
+        newAuction = auctionService.setupNewAuction(item,AuctionType.open,price, auctionStartTime, auctionEndTime);
+
+        printText(out, String.format("Successfully Created Auction (%s)", newAuction.getAuctionId()));
+
+    }
     private void handleStartAuction() throws IOException {
 
         int input;
         printText(out, "Select from the Following Auctions to start an auction");
         printAuction(AuctionStateType.scheduled);
 
-        if ((input = getIdValue(reader)) != -1) {
+        if ((input = getIntValue(reader)) != -1) {
 
             if (AuctionResponse.success.equals(auctionService.startAuctionByAuctionId(input))) {
                 return;

@@ -3,16 +3,13 @@ package com.sjsu.webmart.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sjsu.webmart.model.item.ConsumerItem;
-import com.sjsu.webmart.model.item.Item;
-import com.sjsu.webmart.model.item.ItemType;
-import com.sjsu.webmart.model.item.MediaItem;
+import com.sjsu.webmart.model.item.*;
 import com.sjsu.webmart.service.InventoryService;
 
 public class InventoryServiceImpl implements InventoryService {
 
 	private static InventoryServiceImpl instance = null;
-	private static int id = 0;
+	private static int id = 1;
 	private static List<Item> items = new ArrayList<Item>();
 	private static List<Item> rentitems = new ArrayList<Item>();
 	private static List<Item> biditems = new ArrayList<Item>();
@@ -51,6 +48,32 @@ public class InventoryServiceImpl implements InventoryService {
 		System.out.println("Item no. " + item.getItemId() + " is added");
 	}
 
+    @Override
+    public Item createNewConsumerItem(ItemType itemType, String title, float price
+            , String description, String weight, int quantity){
+        ConsumerItem consumerItem = new ConsumerItem();
+        consumerItem.setItemId(id++);
+        consumerItem.setItemDescription(description);
+        consumerItem.setItemTitle(title);
+        consumerItem.setPrice(price);
+        consumerItem.setQuantity(quantity);
+        consumerItem.setWeight(weight);
+
+        if(ItemType.BIDABLE.equals(itemType)){
+            Item item = new Bidable(consumerItem);
+            biditems.add(item);
+            items.add(item);
+        } else if (ItemType.RENTABLE.equals(itemType)){
+            Item item = new Rentable(consumerItem);
+            biditems.add(item);
+            items.add(item);
+        } else {
+            Item item = new Buyable(consumerItem);
+            biditems.add(item);
+            items.add(item);
+        }
+        return consumerItem;
+    }
 	public void viewAllItems() {
 		// TODO Auto-generated method stub
 		List<Item> itemtemp = new ArrayList<Item>();
@@ -308,5 +331,6 @@ public class InventoryServiceImpl implements InventoryService {
 		}
 		return i;
 	}
+
 
 }

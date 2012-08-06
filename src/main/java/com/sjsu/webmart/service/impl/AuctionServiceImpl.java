@@ -37,7 +37,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public void setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime) {
+    public AuctionInfo setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime) {
 
         synchronized (auctionInfoList) {
             LOG.debug("Setting up new Auction");
@@ -45,6 +45,7 @@ public class AuctionServiceImpl implements AuctionService {
             auctionInfo.setAuctionId(nextAuctionId);
             auctionInfoList.put(nextAuctionId, auctionInfo);
             nextAuctionId++;
+            return auctionInfo;
         }
     }
 
@@ -137,5 +138,16 @@ public class AuctionServiceImpl implements AuctionService {
             return AuctionResponse.success;
         }
         return AuctionResponse.invalid_start_auction_argument;
+    }
+
+    @Override
+    public AuctionInfo getAuctionByItemId(int itemId){
+        for (Map.Entry<Integer,AuctionInfo> auctionInfoEntry: auctionInfoList.entrySet()){
+            AuctionInfo auctionInfo = auctionInfoEntry.getValue();
+            if(auctionInfo.getItem().getItemId() == itemId){
+                return auctionInfo;
+            }
+        }
+        return null;
     }
 }

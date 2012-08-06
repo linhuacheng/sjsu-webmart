@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public interface AuctionService {
 
-    void setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime);
+    public AuctionInfo setupNewAuction(Item item, AuctionType auctionType, float maxBidPrice, Date bidStartTime, Date bidEndTime);
 
     AuctionResponse closeAuction(int auctionId);
 
@@ -39,4 +39,6 @@ public interface AuctionService {
     Collection<AuctionInfo> getAllAuctions();
 
     AuctionResponse startAuctionByAuctionId(int auctionId);
+
+    AuctionInfo getAuctionByItemId(int itemId);
 }
