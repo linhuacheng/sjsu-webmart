@@ -3,11 +3,14 @@ package com.sjsu.webmart.service.impl;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
+import com.sjsu.webmart.model.payment.PayMerchandise;
+import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.service.AccountService;
 
 public class AccountServiceImpl implements AccountService{
@@ -329,6 +332,25 @@ public class AccountServiceImpl implements AccountService{
 		addresses.add(a_info);
 		a.setAddressInfo(addresses);
 
+		
+		PaymentInfo p_info1 = new PayMerchandise();
+		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p_info1.setCardNumber("5432123456782345");
+		p_info1.setChequeNumber("45234456456");
+		p_info1.setExpirationDate(new Date());
+		
+		PaymentInfo p_info2 = new PayMerchandise();
+		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
+		p_info2.setCardNumber("5432123456788332");
+		p_info2.setChequeNumber("45234451234");
+		p_info2.setExpirationDate(new Date());
+		
+		List<PaymentInfo> payments = new ArrayList<PaymentInfo>();
+		payments.add(p_info1);
+		payments.add(p_info2);
+		
+		a.setPaymentInfo(payments);
+		
 		accounts.add(a);
 	}
 	

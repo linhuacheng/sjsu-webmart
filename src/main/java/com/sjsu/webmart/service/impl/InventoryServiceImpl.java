@@ -19,7 +19,7 @@ public class InventoryServiceImpl implements InventoryService {
 	private static List<Item> buyitems = new ArrayList<Item>();
 
 	private InventoryServiceImpl() {
-
+		createInitialItems();
 	}
 
 	public static InventoryServiceImpl getInstance() {
@@ -147,30 +147,48 @@ public class InventoryServiceImpl implements InventoryService {
 
 	@Override
 	public Item viewItem(int itemId) {
-		// TODO Auto-generated method stub
-		// System.out.println("Items :" +items);
-		for (Item i : items) {
+		Item i = getItem(itemId);
+		if (i != null) {
+			System.out
+					.println("************************************************************");
+			System.out.println("Item Id :" + i.getItemId());
+			System.out.println("Item Title: " + i.getItemTitle());
+			System.out.println("Number of Items Available: "
+					+ i.getQuantity());
+			System.out.println("Seller Name: " + i.getSellerName());
+			System.out.println("Item Rating: " + i.getRating());
+			System.out.println("Price: " + i.getPrice());
+			System.out.println("Description: " + i.getItemDescription());
+			System.out.println("Discount Available: " + i.getDiscount());
+			System.out
+					.println("************************************************************");
+			return i;
+		} else {
+			System.out.println("Item not found");
+			return null;
+		}
+	}
+
+	@Override
+	public Item getItem(int itemId) {
+		for (Item i : rentitems) {
 			if (i.getItemId() == itemId) {
-				System.out
-						.println("************************************************************");
-				System.out.println("Item Id :" + i.getItemId());
-				System.out.println("Item Title: " + i.getItemTitle());
-				System.out.println("Number of Items Available: "
-						+ i.getQuantity());
-				System.out.println("Seller Name: " + i.getSellerName());
-				System.out.println("Item Rating: " + i.getRating());
-				System.out.println("Price: " + i.getPrice());
-				System.out.println("Description: " + i.getItemDescription());
-				System.out.println("Discount Available: " + i.getDiscount());
-				System.out
-						.println("************************************************************");
 				return i;
 			}
 		}
-		System.out.println("Item not found");
+		for (Item i : buyitems) {
+			if (i.getItemId() == itemId) {
+				return i;
+			}
+		}
+		for (Item i : biditems) {
+			if (i.getItemId() == itemId) {
+				return i;
+			}
+		}
 		return null;
 	}
-
+	
 	@Override
 	public void updateItem(int itemId, String title, float price, float discount) {
 		Item temp = null;
@@ -246,11 +264,9 @@ public class InventoryServiceImpl implements InventoryService {
 
 	@Override
 	public boolean getItemStatus(int itemId) {
-		// TODO Auto-generated method stub
-		for (Item i : items) {
-			if ((i.getItemId() == itemId) && (i.getQuantity() > 0)) {
-				return true;
-			}
+		Item i = getItem(itemId);
+		if (i != null && i.getQuantity() > 0) {
+			return true;
 		}
 		return false;
 	}
@@ -258,35 +274,20 @@ public class InventoryServiceImpl implements InventoryService {
 	public void updateQuantity(int itemId, int quantity) {
 		int oldQuantity = 0;
 
-		for (Item item : items) {
-			if (item.getItemId() == itemId) {
-				oldQuantity = item.getQuantity();
-				item.setQuantity(quantity);
-			}
+		Item item = getItem(itemId);
+		
+		if (item != null) {
+			oldQuantity = item.getQuantity();
+			item.setQuantity(quantity);
+			System.out.println("ITEM INVENTORY update...");
+			System.out.println("QUANTITY for Item ID: " + itemId
+					+ " has been updated from " + oldQuantity + " to " + quantity);
+		} else {
+			System.out.println("No item found.");
 		}
 
-		System.out.println("ITEM INVENTORY update...");
-		System.out.println("QUANTITY for Item ID: " + itemId
-				+ " has been updated from " + oldQuantity + " to " + quantity);
 
-		for (Item item : rentitems) {
-			if (item.getItemId() == itemId) {
-				item.setQuantity(quantity);
-				return;
-			}
-		}
-		for (Item item : biditems) {
-			if (item.getItemId() == itemId) {
-				item.setQuantity(quantity);
-				return;
-			}
-		}
-		for (Item item : buyitems) {
-			if (item.getItemId() == itemId) {
-				item.setQuantity(quantity);
-				return;
-			}
-		}
+
 	}
 
 	@Override
@@ -309,4 +310,26 @@ public class InventoryServiceImpl implements InventoryService {
 		return i;
 	}
 
+	private void createInitialItems() {
+		Item item = new ConsumerItem("2x2x2", "3lbs");
+		item.setItemDescription("Best Ipod nano");
+		item.setItemTitle("Consumer item, Ipod nano");
+		item.setItemId(id++);
+		item.setSellerName("Seller1");
+		item.setPrice(20);
+		item.setQuantity(5);
+			
+		addToBuyList(item);
+		
+		item = new ConsumerItem("2x2x2", "3lbs");
+		item.setItemDescription("Bose earphone");
+		item.setItemTitle("Consumer item, Bose earphone");
+		item.setItemId(id++);
+		item.setSellerName("Seller2");
+		item.setPrice(120);
+		item.setQuantity(3);
+			
+		addToBuyList(item);
+		
+	}
 }
