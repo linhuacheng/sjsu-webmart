@@ -78,19 +78,7 @@ public class OrderConsoleHandler {
 			switch (secondOption) {
 			case OPTION_ONE:
 				printEnteredOption(out, orderOptions, secondOption);
-				String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
-				System.out
-						.println("_________________________________________________________________");
-				System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
-				System.out
-						.println("_________________________________________________________________");
-				for (Order order : orderService.listOrder()) {
-					System.out.format(format, order.getOrderId(), order
-							.getOrderType(), order.getItem()
-							.getItemDescription());
-				}
-				System.out
-						.println("_________________________________________________________________");
+				handleViewOrder();
 				break;
 			case OPTION_TWO:
 				printEnteredOption(out, orderOptions, secondOption);
@@ -159,6 +147,40 @@ public class OrderConsoleHandler {
 		}
 	}
 
+	private void handleViewOrder() {
+		printText(out, "Available Orders.");
+		String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+		System.out
+				.println("_________________________________________________________________");
+		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
+		System.out
+				.println("_________________________________________________________________");
+		for (Order order : orderService.listOrder()) {
+			System.out.format(format, order.getOrderId(), order
+					.getOrderType(), order.getItem()
+					.getItemDescription(), order.getCost());
+		}
+		System.out
+				.println("_________________________________________________________________");
+		
+		int input;
+		Order order = null;
+		while (order ==null) {
+			printText(out, "Select an Order to View:");
+			try {
+				input = getIdValue(reader);
+				order = orderService.getOrder(input);
+				if (order ==null) {
+					printText(out, "Invalid option, please try again.");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println(order);
+	}
 	private void handleBuyItem() {
 		Account account = accountService.getAllAccounts().get(0);		
 		

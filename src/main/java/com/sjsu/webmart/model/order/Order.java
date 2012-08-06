@@ -21,6 +21,10 @@ import com.sjsu.webmart.service.NotificationService;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import com.sjsu.webmart.service.impl.NotificationServiceImpl;
 
+/**
+ * @author chenglin
+ *
+ */
 public abstract class Order implements MessageObservable {
 
 	private static int idSeq = 0;
@@ -41,6 +45,15 @@ public abstract class Order implements MessageObservable {
 	protected Date fromDate;
 	protected Date toDate;
 	protected Date orderDate;
+	protected BigDecimal cost;
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
 
 	public Date getOrderDate() {
 		return orderDate;
@@ -129,7 +142,7 @@ public abstract class Order implements MessageObservable {
 	}
 
 	public boolean processPayment(OrderParams orderParams) {
-		BigDecimal cost = calculateCost(orderParams);
+		cost = calculateCost(orderParams);
 
 		PaymentInfo paymentInfo = orderParams.getPaymentInfo();
 		PaymentProcessor paymentProcessor = getPaymentProcessor(orderParams
@@ -158,7 +171,8 @@ public abstract class Order implements MessageObservable {
 	@Override
 	public String toString() {
 		return "Order{" + "orderId=" + orderId + ", orderType=" + orderType
-				+ ", item=" + item + ", buyer=" + account + ", seller="
+				+ ", item=" + item.getItemTitle() + ", quantity=" + item.getQuantity()
+				+", buyer=" + account.getEmail() + ", seller="
 				+ item.getSellerName() + '}';
 	}
 
