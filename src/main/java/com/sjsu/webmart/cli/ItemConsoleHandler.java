@@ -16,6 +16,8 @@ import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.item.Bidable;
+import com.sjsu.webmart.model.item.Buyable;
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.MediaItem;
@@ -147,6 +149,18 @@ public class ItemConsoleHandler {
 					isi.addToRentList(item);
 					isi.addItem(item);
 				}
+				else if (choice == 2){
+					Buyable rent = new Buyable(item);
+					isi.addToBuyList(item);
+					isi.addItem(item);
+				}
+				else if (choice == 1){
+					Bidable rent = new Bidable(item);
+					isi.addToBidList(item);
+					isi.addItem(item);
+				}
+				else 
+					System.out.println("Invalid Choice");
 			}
 				break;
 			case OPTION_TWO:
