@@ -19,4 +19,10 @@ public class InActive implements AccountState{
 	{
 		return "Account is Inactive";
 	}
+
+	@Override
+	public boolean isActive() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

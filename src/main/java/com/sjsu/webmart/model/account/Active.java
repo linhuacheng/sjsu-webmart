@@ -34,4 +34,10 @@ public class Active implements AccountState{
 		return "Account is Active";
 	}
 
+	@Override
+	public boolean isActive() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
