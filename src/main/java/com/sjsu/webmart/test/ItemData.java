@@ -50,7 +50,7 @@ public class ItemData {
 		citem3.setItemDescription("5.0-inch WQVGA TFT touchscreen display");
 		citem3.setPrice(151.95f);
 		citem3.setDiscount(0);
-		citem3.setQuantity(1);
+		citem3.setQuantity(5);
 		citem3.setSize("5 in.");
 		citem3.setWeight("0.5 lb");
 		id = new Buyable(citem3);
@@ -63,7 +63,7 @@ public class ItemData {
 		mitem1.setItemDescription("Mac OS X Intel");
 		mitem1.setPrice(122.95f);
 		mitem1.setDiscount(0);
-		mitem1.setQuantity(1);
+		mitem1.setQuantity(3);
 		mitem1.setSize("7.6 x 5.5 x 1.2 inches");
 		mitem1.setDuration("");
 		mitem1.setQuality("");
