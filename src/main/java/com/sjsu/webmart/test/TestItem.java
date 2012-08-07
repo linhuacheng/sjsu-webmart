@@ -148,22 +148,22 @@ public class TestItem {
 			if (choice == 1){
 				Rentable rent = new Rentable(item);
 				isi.addToRentList(item);
-				isi.addItem(item);
+		//		isi.addItem(item);
 			}
 			else if (choice == 2){
 				Buyable rent = new Buyable(item);
 				isi.addToBuyList(item);
-				isi.addItem(item);
+			//	isi.addItem(item);
 			}
 			else if (choice == 1){
 				Bidable rent = new Bidable(item);
 				isi.addToBidList(item);
-				isi.addItem(item);
+				//isi.addItem(item);
 			}
 			else 
 				System.out.println("Invalid Choice");
 			//item.setItemId(isi.lastItemId());
-			isi.addItem(item);
+			//isi.addItem(item);
 			isi.viewAllItems();
 		}
 		
