@@ -3,6 +3,7 @@ package com.sjsu.webmart.service;
 import java.util.List;
 
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.account.AccountType;
 
 public interface AccountService {
 
@@ -21,4 +22,8 @@ public interface AccountService {
 	public List<Account> getAllAccounts();
 
     Account findAccountById(int accountId);
+
+	boolean isSeller(int accountId);
+
+	List<Account> getAccountsByType(AccountType accountType);
 }

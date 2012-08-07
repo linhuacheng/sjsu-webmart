@@ -12,7 +12,9 @@ import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
 import com.sjsu.webmart.model.payment.PayMerchandise;
 import com.sjsu.webmart.model.payment.PaymentInfo;
+import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 public class AccountServiceImpl implements AccountService{
 
@@ -21,7 +23,7 @@ public class AccountServiceImpl implements AccountService{
 	private static int id = 1;
 	private Account a;
 	private List<AddressInfo> addresses;
-//	private List<PaymentInfo> payment_details;
+	private List<PaymentInfo> payment_details;
 	
 	
 	private AccountServiceImpl() {
@@ -52,6 +54,7 @@ public class AccountServiceImpl implements AccountService{
 		AddressInfo addInfo;
 		addresses = new ArrayList<AddressInfo>();
 		String input;
+		Date expDate;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		try {
@@ -122,6 +125,64 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println("Do you want to add one more address (Y/N) : ");
 				if(br.readLine().startsWith("n"))
 					break;
+			}
+			
+			
+			while(true)
+			{
+				PaymentInfo p_info = new PayMerchandise();
+
+				System.out.println("Enter Payment Type (CASH/CHEQUE) : ");
+				while((input=br.readLine()).isEmpty())
+					System.out.println("Please enter payment type : ");
+				
+				if(input.equalsIgnoreCase("card"))
+				{
+					p_info.setPaymentType(PaymentType.CARD);
+					p_info.setPaymentInfoId(PaymentInfo.getNextId());
+				
+					System.out.println("Enter Card Number : ");
+					while((input=br.readLine()).isEmpty())
+						System.out.println("Please enter card number : ");
+					p_info.setCardNumber(input);
+				
+					System.out.println("Enter Expiration Date (MM/DD/YYYY) : ");
+					while((expDate=ConsoleUtil.getDateValue(br)) != null)
+						System.out.println("Please enter expiration date : ");
+					p_info.setExpirationDate(expDate);
+				
+					System.out.println("Enter Security Code : ");
+					while((input=br.readLine()).isEmpty())
+						System.out.println("Please security code : ");
+					int inputInt = Integer.parseInt(input);
+					p_info.setSecurityCode(inputInt);
+					
+				}
+					
+				else if(input.equalsIgnoreCase("cheque"))
+				{
+					p_info.setPaymentType(PaymentType.CHEQUE);
+					p_info.setPaymentInfoId(PaymentInfo.getNextId());
+				
+					System.out.println("Enter Cheque Number : ");
+					while((input=br.readLine()).isEmpty())
+						System.out.println("Please enter cheque number : ");
+					p_info.setChequeNumber(input);
+				
+				}
+				
+				else
+				{
+					System.out.println("Incorrect input");
+					continue;
+				}
+					
+				
+				System.out.println("Do you want to add one more payment info? (Y/N) : ");
+				if(br.readLine().startsWith("n"))
+					break;
+				
+				payment_details.add(p_info);
 			}
 			
 			a.setAddressInfo(addresses);
@@ -355,5 +416,42 @@ public class AccountServiceImpl implements AccountService{
 		
 		accounts.add(a);
 	}
+
+	@Override
+	public boolean isSeller(int accountId) {
+		// TODO Auto-generated method stub
+		Account a = findAccountById(accountId);
+		if(a!=null)
+		{
+			if(a.getAccountType().equals(AccountType.SELLER))
+				return true;
+			else
+				return false;
+		}
+		else
+			System.out.println("Invalid Account ID");
+		return false;
+	}
+
 	
+	@Override
+	public List<Account> getAccountsByType(AccountType accountType) {
+		// TODO Auto-generated method stub
+		List<Account> sellerAccounts = new ArrayList<Account>();
+		List<Account> buyerAccounts = new ArrayList<Account>();
+		for(Account a: accounts)
+		{
+			if(a.getAccountType().equals(AccountType.SELLER))
+				sellerAccounts.add(a);
+			else
+				buyerAccounts.add(a);
+		}
+		
+		if(accountType.equals(AccountType.BUYER))
+			return buyerAccounts;
+		else
+			return sellerAccounts;
+	}
+
+
 }
