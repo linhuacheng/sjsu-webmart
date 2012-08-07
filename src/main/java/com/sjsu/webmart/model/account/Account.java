@@ -25,7 +25,7 @@ public class Account {
 	
 	private String password;
 	
-	private String accountType;
+	private AccountType accountType;
 	
 	List<PaymentInfo> paymentInfo;
 	
@@ -88,11 +88,11 @@ public class Account {
 		this.password = password;
 	}
 
-	public String getAccountType() {
+	public AccountType getAccountType() {
 		return accountType;
 	}
 
-	public void setAccountType(String accountType) {
+	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
 
