@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ConsoleUtil {
-    public static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy");
     /**
      * prints entered options
      * @param options
@@ -119,8 +119,17 @@ public class ConsoleUtil {
 
     public static void printText(PrintWriter out, String text){
         out.println(text);
+        out.flush();
     }
 
+    public static void printText(PrintWriter out, String text, boolean newLine){
+        if (newLine){
+            out.println(text);
+        } else {
+            out.print(text);
+        }
+        out.flush();
+    }
     public static void printItemDetails(PrintWriter out, List<Item> itemList){
         for (Item item: itemList){
             out.println(String.format("Item Id =(%s), Item Price=(%s), Item Type=(%s), Item Title =(%s),Item Description=(%s)"

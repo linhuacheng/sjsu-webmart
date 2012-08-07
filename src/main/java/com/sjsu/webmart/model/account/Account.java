@@ -6,7 +6,9 @@ import com.sjsu.webmart.model.payment.PaymentInfo;
 
 public class Account {
 
+
 	private AccountState state;
+
 
 	public boolean isValidAccount()
 	{

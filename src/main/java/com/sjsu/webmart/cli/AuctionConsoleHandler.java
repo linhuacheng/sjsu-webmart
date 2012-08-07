@@ -4,6 +4,7 @@ import com.sjsu.webmart.common.*;
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.account.AccountCLI;
 import com.sjsu.webmart.model.auction.AuctionInfo;
+import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
@@ -92,10 +93,12 @@ public class AuctionConsoleHandler {
                 case OPTION_FOUR:
                     //place bid
                     printEnteredOption(out, auctionOptions, secondOption);
+                    handlePlaceBid();
                     break;
                 case OPTION_FIVE:
                     //close Auction
                     printEnteredOption(out, auctionOptions, secondOption);
+                    handleCloseAuction();
                     break;
                 case OPTION_EXIT:
                     //printEnteredOption(auctionOptions, secondOption);
@@ -127,7 +130,9 @@ public class AuctionConsoleHandler {
                         , auctionInfo.getBidList()
                 ));
             }
+            return;
         }
+        printText(out,String.format("No Auction with Type (%s)", stateType));
     }
 
     private void handleSetupAuction() throws IOException {
@@ -145,7 +150,7 @@ public class AuctionConsoleHandler {
             return;
         }
         printItemDetails(out, itemList);
-        printText(out, "Enter item Id:");
+        printText(out,"Enter item Id:", false);
 
 
         if ((itemId = getIntValue(reader)) != -1) {
@@ -161,13 +166,13 @@ public class AuctionConsoleHandler {
             printText(out, "Auction Form Item is scheduled/Inprogress");
             return;
         }
-        printText(out, "Enter Max Bid Price:");
+        printText(out,"Enter Max Bid Price:", false);
 
         if ((price = getFloatValue(reader)) == -1) {
             printText(out, "Invalid Price");
             return;
         }
-        printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()));
+        printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()), false);
         auctionEndTime = getDateValue(reader);
         auctionStartTime = new Date(System.currentTimeMillis()-10000);
 
@@ -193,9 +198,68 @@ public class AuctionConsoleHandler {
                 return;
             }
         }
-        printText(out, "Invalid Input");
+        printText(out, "Invalid Auction Id");
     }
 
+    private void handleCloseAuction() throws IOException {
+
+        int input;
+        printText(out, "Select from the Following Auctions to close an auction");
+        printAuction(AuctionStateType.scheduled);
+        printAuction(AuctionStateType.inprogress);
+
+        if ((input = getIntValue(reader)) != -1) {
+            AuctionResponse response = auctionService.closeAuction(input);
+            if (AuctionResponse.success.equals(response)) {
+                return;
+            }
+       }
+        printText(out, "Invalid Auction Id");
+    }
+
+    private void handlePlaceBid() throws IOException {
+
+        int auctionId;
+        AuctionInfo auctionInfo = null;
+        float bidPrice;
+        int accountId;
+        printText(out, "Select from the Following Auctions to place bid");
+        printAuction(AuctionStateType.inprogress);
+
+        if ((auctionId = getIntValue(reader)) == -1) {
+            printText(out, "Invalid Auction Id");
+            return;
+        }
+        auctionInfo = auctionService.getAuctionByAuctionId(auctionId);
+
+        if (auctionInfo == null || !AuctionStateType.inprogress.equals(auctionInfo.getAuctionState().getStateType())) {
+            printText(out, "Invalid Auction Id");
+            return;
+        }
+        printText(out, "Enter Account Id:", false);
+
+        if ((accountId = getIntValue(reader)) == -1) {
+            printText(out, "Invalid Account Id");
+            return;
+        }
+
+        Account account = accountService.findAccountById(accountId);
+        if (account== null){
+            printText(out, "Invalid account id");
+            return;
+        }
+
+        printText(out,"Enter Max Bid Price:", false);
+
+        if ((bidPrice = getFloatValue(reader)) == -1) {
+            printText(out, "Invalid Price");
+            return;
+        }
+
+        AuctionResponse auctionResponse = auctionService.placeBid(auctionId, account, auctionInfo.getItem(), bidPrice);
+        printText(out, String.format("Status of the bid (%s)", auctionResponse));
+
+    }
 
     public void createAuctionOptions() {
         ConsoleOption viewAuction = new ConsoleOption("View Auction", OptionNum.OPTION_ONE, null);

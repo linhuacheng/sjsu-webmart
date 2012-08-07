@@ -3,14 +3,17 @@ package com.sjsu.webmart.service.impl;
 import com.sjsu.webmart.common.AuctionResponse;
 import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.AuctionType;
+import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.AuctionInterface;
 import com.sjsu.webmart.model.auction.AuctionState;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.service.AuctionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import sun.rmi.runtime.NewThreadAction;
 
 import java.util.*;
 
@@ -25,6 +28,7 @@ public class AuctionServiceImpl implements AuctionService {
     private Log LOG = LogFactory.getLog(AuctionServiceImpl.class);
     private HashMap<Integer, AuctionInfo> auctionInfoList = new HashMap<Integer, AuctionInfo>();
     private static int nextAuctionId = 1;
+    private static int bidId=1;
     private static AuctionService auctionService = new AuctionServiceImpl();
 
 
@@ -82,9 +86,42 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Bid> findWinningBidByAccount(int accountId) {
+
+        Set<AuctionInfo> auctionSet = auctionService.getAuctionByState(AuctionStateType.closed);
+        List<Bid> wonbids = new ArrayList<Bid>();
+        if (CollectionUtils.isNotEmpty(auctionSet)){
+            for (AuctionInfo auctionInfo: auctionSet){
+
+                Bid bid = auctionService.getWinner(auctionInfo.getAuctionId());
+                if (bid != null && accountId== bid.getBidder().getAccountId()){
+                    wonbids.add(bid);
+                }
+            }
+        }
+        return wonbids;
+    }
+
+    @Override
     public Collection<AuctionInfo> getAllAuctions(){
 
         return auctionInfoList.values();
+    }
+    
+    @Override
+    public AuctionResponse placeBid(int auctionId, Account account, Item item, float bidPrice) {
+        AuctionInfo auctionInfo = getAuctionByAuctionId(auctionId);
+        if (auctionInfo == null) {
+            return AuctionResponse.invalid_auction_id; 
+        }
+        Bid bid1 = new Bid();
+        bid1.setBidder(account);
+        bid1.setBidId(bidId);
+        bid1.setBidPrice(bidPrice);
+        bid1.setItem(item);
+        bid1.setTimeOfBid(new Date());
+        bidId = bidId+1;
+        return auctionInfo.processBid(bid1);
     }
 
     @Override
@@ -145,6 +182,17 @@ public class AuctionServiceImpl implements AuctionService {
         for (Map.Entry<Integer,AuctionInfo> auctionInfoEntry: auctionInfoList.entrySet()){
             AuctionInfo auctionInfo = auctionInfoEntry.getValue();
             if(auctionInfo.getItem().getItemId() == itemId){
+                return auctionInfo;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public AuctionInfo getAuctionByAuctionId(int auctionId){
+        for (Map.Entry<Integer,AuctionInfo> auctionInfoEntry: auctionInfoList.entrySet()){
+            AuctionInfo auctionInfo = auctionInfoEntry.getValue();
+            if(auctionInfo.getAuctionId() == auctionId){
                 return auctionInfo;
             }
         }

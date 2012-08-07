@@ -17,5 +17,6 @@ public enum AuctionResponse {
     , success
     , time_not_reached
     , invalid_start_auction_argument
+    , invalid_auction_id
     ;
 }

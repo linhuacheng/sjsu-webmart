@@ -99,8 +99,9 @@ public class AuctionInfo implements AuctionInterface{
         auctionStrategy.sendNotification();
     }
 
-    public void getWinner(){
-        auctionStrategy.computeWinner(bidList);
+    public Bid getWinner(){
+        return auctionStrategy.computeWinner(bidList);
+
     }
 
     //getters and setters

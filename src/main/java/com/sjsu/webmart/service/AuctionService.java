@@ -3,12 +3,14 @@ package com.sjsu.webmart.service;
 import com.sjsu.webmart.common.AuctionResponse;
 import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.AuctionType;
+import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,4 +43,10 @@ public interface AuctionService {
     AuctionResponse startAuctionByAuctionId(int auctionId);
 
     AuctionInfo getAuctionByItemId(int itemId);
+
+    AuctionInfo getAuctionByAuctionId(int auctionId);
+
+    AuctionResponse placeBid(int auctionId, Account account, Item item, float bidPrice);
+
+    List<Bid> findWinningBidByAccount(int accountId);
 }
