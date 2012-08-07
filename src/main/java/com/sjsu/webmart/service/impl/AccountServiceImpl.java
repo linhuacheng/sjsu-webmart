@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.account.AccountType;
 import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
 import com.sjsu.webmart.model.payment.PayMerchandise;
@@ -77,11 +78,12 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println("Please enter Email Address : ");
 			a.setEmail(input);
 			
-			System.out.println("Enter Account Type : ");
-			if((input=br.readLine())==null)
-				a.setAccountType("Consumer");
+			System.out.println("Enter Account Type (buyer/seller) : ");
+			input = br.readLine();
+			if((input==null) || input.equalsIgnoreCase("buyer"))
+				a.setAccountType(AccountType.BUYER);
 			else
-				a.setAccountType(input);
+				a.setAccountType(AccountType.SELLER);
 			
 			while(true)
 			{
@@ -315,7 +317,7 @@ public class AccountServiceImpl implements AccountService{
 		a = new Account();
 
 		a.setAccountId(id++);
-		a.setAccountType("Customer");
+		a.setAccountType(AccountType.BUYER);
 		a.setEmail("nikitha@gmail.com");
 		a.setFirstName("Nikitha");
 		a.setLastName("Vurumalla");
