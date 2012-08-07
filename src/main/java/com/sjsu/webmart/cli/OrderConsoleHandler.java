@@ -12,43 +12,49 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 
-import com.sjsu.webmart.common.AuctionResponse;
-import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
 import com.sjsu.webmart.model.account.Account;
-import com.sjsu.webmart.model.auction.AuctionInfo;
+import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.model.order.BuyOrder;
 import com.sjsu.webmart.model.order.FulfillmentType;
 import com.sjsu.webmart.model.order.Order;
+import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.model.order.OrderParams;
+import com.sjsu.webmart.model.order.OrderStatus;
 import com.sjsu.webmart.model.order.OrderType;
+import com.sjsu.webmart.model.order.RentOrder;
+import com.sjsu.webmart.model.order.ReturnOrder;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.service.AuctionService;
 import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.OrderService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
+import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import com.sjsu.webmart.service.impl.OrderServiceImpl;
 
 public class OrderConsoleHandler {
-	protected OrderService orderService;
+	private OrderService orderService;
 	private AccountService accountService;
-	protected InventoryService inventoryService;
+	private InventoryService inventoryService;
+	private AuctionService auctionService;
 	private List<ConsoleOption> orderOptions;
 	private PrintWriter out;
 	private BufferedReader reader;
 	
 	private static SimpleDateFormat MONTH_YEAR_FORMAT = new SimpleDateFormat("MM-yyyy");
 	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy");
+	
+	private Account account;
 
 	public OrderConsoleHandler(PrintWriter out, BufferedReader reader) {
 		this.out = out;
@@ -56,6 +62,7 @@ public class OrderConsoleHandler {
 		orderService = OrderServiceImpl.getInstance();
 		inventoryService = InventoryServiceImpl.getInstance();
 		accountService = AccountServiceImpl.getInstance();
+		auctionService = AuctionServiceImpl.getInstance();
 		createOrderOptions();
 	}
 
@@ -72,6 +79,8 @@ public class OrderConsoleHandler {
 	public void handleOrderOptions() throws IOException {
 
 		OptionNum secondOption = OptionNum.OPTION_NONE;
+		
+		account = promptAccount();
 		while (true) {
 			printOptions(out, secondOption, orderOptions);
 			secondOption = getOption(reader);
@@ -86,55 +95,14 @@ public class OrderConsoleHandler {
 				break;
 			case OPTION_THREE:
 				printEnteredOption(out, orderOptions, secondOption);
-				String listRentItemformat = "|%1$-15s|%2$-15s|%3$-20s|\n";
-				System.out
-						.println("_______________________________________________________");
-				System.out.format(listRentItemformat, "ITEM ID", "DESCRIPTION",
-						"PRICE PER DAY");
-				System.out
-						.println("_______________________________________________________");
-
-				for (Item item : inventoryService.listItem(ItemType.RENTABLE)) {
-					System.out.format(listRentItemformat, item.getItemId(),
-							item.getItemDescription(), item.getPrice());
-				}
-				System.out
-						.println("_______________________________________________________");
+				handleRentItem();
 				break;
 			case OPTION_FOUR:
 				printEnteredOption(out, orderOptions, secondOption);
-				String listBidItemformat = "|%1$-15s|%2$-15s|%3$-20s|%4$-20s|\n";
-				System.out
-						.println("___________________________________________________________________________");
-				System.out.format(listBidItemformat, "ITEM ID", "DESCRIPTION",
-						"MIN PRICE", "SELLER");
-				System.out
-						.println("___________________________________________________________________________");
-				for (Item item : inventoryService.listItem(ItemType.BIDABLE)) {
-					System.out.format(listBidItemformat, item.getItemId(),
-							item.getItemDescription(), item.getPrice(),
-							item.getSellerName());
-				}
-				System.out
-						.println("___________________________________________________________________________");
-
+				handleBuyAuctionItem();
 				break;
 			case OPTION_FIVE:
-				printEnteredOption(out, orderOptions, secondOption);
-				String returnItemformat = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
-				System.out
-						.println("_________________________________________________________________");
-				System.out.format(returnItemformat, "ORDER ID", "TYPE", "ITEM",
-						"COST");
-				System.out
-						.println("_________________________________________________________________");
-				for (Order order : orderService.listOrder()) {
-					System.out.format(returnItemformat, order.getOrderId(),
-							order.getOrderType(), order.getItem()
-									.getItemDescription());
-				}
-				System.out
-						.println("_________________________________________________________________");
+				handleReturnItem();
 				break;
 			case OPTION_EXIT:
 				// printEnteredOption(auctionOptions, secondOption);
@@ -155,7 +123,9 @@ public class OrderConsoleHandler {
 		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
 		System.out
 				.println("_________________________________________________________________");
-		for (Order order : orderService.listOrder()) {
+		OrderFilter filter = new OrderFilter();
+		filter.setAccountId(account.getAccountId());
+		for (Order order : orderService.findOrders(filter)) {
 			System.out.format(format, order.getOrderId(), order
 					.getOrderType(), order.getItem()
 					.getItemDescription(), order.getCost());
@@ -166,9 +136,11 @@ public class OrderConsoleHandler {
 		int input;
 		Order order = null;
 		while (order ==null) {
-			printText(out, "Select an Order to View:");
+			printText(out, "Select an Order to View:", false);
 			try {
 				input = getIdValue(reader);
+				if (input == -1)
+					break;
 				order = orderService.getOrder(input);
 				if (order ==null) {
 					printText(out, "Invalid option, please try again.");
@@ -181,18 +153,16 @@ public class OrderConsoleHandler {
 		
 		System.out.println(order);
 	}
-	private void handleBuyItem() {
-		Account account = accountService.getAllAccounts().get(0);		
-		
+	
+	private void handleBuyItem() {	
 		Item item = promptItem(ItemType.BUYABLE);
-		PaymentType paymentType = this.promptPaymentType();
+		PaymentType paymentType = promptPaymentType();
 		PaymentInfo paymentInfo = promptPaymentDetails(account);
-		FulfillmentType fulfillmentType = promptShippingType();
+		FulfillmentType fulfillmentType = promptShippingType(item);
 		
 		Order order = new BuyOrder();
 		order.setAccount(account);
 		order.setItem(item);
-		order.setOrderDate(new Date());
 		order.setOrderType(OrderType.BUY);
 		
 		OrderParams orderParams = new OrderParams();
@@ -205,13 +175,151 @@ public class OrderConsoleHandler {
 		orderService.placeOrder(orderParams);
 	}
 	
+	private void handleRentItem() {	
+		Item item = promptItem(ItemType.RENTABLE);
+		PaymentType paymentType = promptPaymentType();
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
+		FulfillmentType fulfillmentType = promptShippingType(item);
+		
+		Order order = new RentOrder();
+		order.setAccount(account);
+		order.setItem(item);
+		order.setOrderType(OrderType.RENT);
+		
+		OrderParams orderParams = new OrderParams();
+		orderParams.setFulfillmentType(fulfillmentType);
+		orderParams.setPaymentInfo(paymentInfo);
+		orderParams.setOrderType(OrderType.RENT);
+		orderParams.setPaymentType(paymentType);
+		orderParams.setOrder(order);
+		
+		orderService.placeOrder(orderParams);
+	}
+	
+	private void handleBuyAuctionItem() {	
+		Bid bid = promptBid();
+		
+		Item item = bid.getItem();
+		
+		PaymentType paymentType = promptPaymentType();
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
+		FulfillmentType fulfillmentType = promptShippingType(item);
+		
+		Order order = new BuyOrder();
+		order.setAccount(account);
+		order.setItem(item);
+		order.setOrderType(OrderType.BUY);
+		
+		OrderParams orderParams = new OrderParams();
+		orderParams.setBid(bid);
+		orderParams.setFulfillmentType(fulfillmentType);
+		orderParams.setPaymentInfo(paymentInfo);
+		orderParams.setOrderType(OrderType.BUY);
+		orderParams.setPaymentType(paymentType);
+		orderParams.setOrder(order);
+		
+		orderService.placeOrder(orderParams);
+	}
+	
+	private void handleReturnItem() {
+		OrderFilter filter = new OrderFilter();
+		filter.setAccountId(account.getAccountId());
+		filter.setOrderType(OrderType.BUY);
+		filter.setOrderStatus(OrderStatus.COMPLETED);
+	
+		Order oldOrder = promptOrders(filter);
+		
+		if (oldOrder == null)
+			return;
+		
+		Item item = oldOrder.getItem();
+		printText(out, "Returning Item:" + item.getItemId() + "-" +  item.getItemTitle());
+		PaymentType paymentType = promptPaymentType();
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
+		FulfillmentType fulfillmentType = promptShippingType(item);
+		
+		Order order = new ReturnOrder();
+		order.setAccount(account);
+		order.setItem(item);
+		order.setOrderType(OrderType.RETURN);
+		
+		OrderParams orderParams = new OrderParams();
+		orderParams.setFulfillmentType(fulfillmentType);
+		orderParams.setPaymentInfo(paymentInfo);
+		orderParams.setOrderType(OrderType.RETURN);
+		orderParams.setPaymentType(paymentType);
+		orderParams.setOrder(order);
+		
+		// Set old order to retuned
+		oldOrder.setOrderStatus(OrderStatus.RETURNED);
+		orderService.placeOrder(orderParams);
+	}
+	
+	private Order promptOrders(OrderFilter filter) {
+		printText(out, "Available Orders.");
+		String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+		System.out
+		.println("_________________________________________________________________");
+		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
+		System.out
+			.println("_________________________________________________________________");
+		for (Order order : orderService.findOrders(filter)) {
+			System.out.format(format, order.getOrderId(), order
+				.getOrderType(), order.getItem()
+				.getItemDescription(), order.getCost());
+		}
+		System.out
+			.println("_________________________________________________________________");
+	
+		int input;
+		Order order = null;
+		while (order ==null) {
+			printText(out, "Type the Order ID to Return:", false);
+			try {
+				input = getIdValue(reader);
+				if (input == -1) 
+					return null;
+				order = orderService.getOrder(input);
+				if (order ==null) {
+					printText(out, "Invalid order ID, please try again.");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
+		return order;
+	}
+	
+	private Account promptAccount() {
+		int input;
+		Account account = null;
+		while (account ==null) {
+			printText(out, "Please input Account ID:", false);
+			try {
+				input = getIdValue(reader);
+				account = accountService.findAccountById(input);
+				if (account ==null) {
+					printText(out, "Invalid Account ID, please try again.");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		printText(out, "Welcome " + account.getFirstName() + " " + account.getLastName() + "!");
+		return account;
+	}
+	
 	private Item promptItem(ItemType type) {
 		int input;
 		printText(out, "Available items.");
 		printItem(type);
 		Item item = null;
 		while (item ==null) {
-			printText(out, "Select Item:");
+			printText(out, "Select Item:", false);
 			try {
 				input = getIdValue(reader);
 				item = inventoryService.getItem(input);
@@ -228,6 +336,7 @@ public class OrderConsoleHandler {
 
 	private void printItem(ItemType type) {
 		Collection<Item> items;
+		
 		items = inventoryService.listItem(type);
 
 		if (CollectionUtils.isNotEmpty(items)) {
@@ -248,6 +357,57 @@ public class OrderConsoleHandler {
 					.println("_________________________________________________________________");
 
 		}
+	}
+	
+	private Bid promptBid() {
+		Collection<Bid> bids;
+		bids = auctionService.findWinningBidByAccount(account.getAccountId());
+		
+		printText(out, "Auction items won.");
+		if (CollectionUtils.isNotEmpty(bids)) {
+			String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+			System.out
+					.println("_________________________________________________________________");
+			System.out.format(format, "BID ID", "DESCRIPTION", "PRICE",
+					"BID DATE");
+			System.out
+					.println("_________________________________________________________________");
+			for (Bid b : bids) {
+				System.out.format(format, b.getBidId(),
+						b.getItem().getItemTitle(), b.getBidPrice(),
+						b.getTimeOfBid());
+			}
+			System.out
+					.println("_________________________________________________________________");
+
+		}
+		
+		int input;
+		Bid bid = null;
+		while (bid ==null) {
+			printText(out, "Select Auction Item:", false);
+			try {
+				input = getIdValue(reader);
+				if (input == -1) 
+					return null;
+				for (Bid b: bids) {
+					if (b.getBidId() == input) {
+						bid = b;
+						break;
+					}
+				}
+				if (bid ==null) {
+					printText(out, "Invalid Bid ID, please try again.");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return bid;
+	}
+
+	private void printBidsItem() {
 	}
 
 	private String maskNumber(String number) {
@@ -280,17 +440,27 @@ public class OrderConsoleHandler {
 		}
 	}
 
-	private FulfillmentType promptShippingType() {
+	private FulfillmentType promptShippingType(Item item) {
+		List <FulfillmentType> fTypes = inventoryService.getShippingOptions(item);
+		FulfillmentType[] fTypeArr = new FulfillmentType[10];
+		int i = 0;
 		printText(out, "Shipping Type:");
-		printText(out, "[1] Courier");
-		printText(out, "[2] Online");
-		printText(out, "[3] Store Pickup");
+		for (FulfillmentType ft: fTypes) {
+			fTypeArr[i] = ft;
+			printText(out, "[" + (i+1) + "] " + ft.toString());
+			i++;
+		}
+
 		FulfillmentType type = null;
 		while (type ==null) {
-			printText(out, "Select Shipping Type:");
+			printText(out, "Select Shipping Type:", false);
 			try {
 				int input = getIdValue(reader);
-				type = getFulfillmentType(input);
+				try {
+					type = fTypeArr[input-1];
+				} catch (Exception e) {
+					type = null;
+				}
 				if (type ==null) {
 					printText(out, "Invalid option, please try again.");
 				}
@@ -332,7 +502,7 @@ public class OrderConsoleHandler {
 		printText(out, "[2] Cheque");
 		PaymentType type = null;
 		while (type ==null) {
-			printText(out, "Select Payment Type:");
+			printText(out, "Select Payment Type:", false);
 			try {
 				int input = getIdValue(reader);
 				type = getPaymentType(input);
@@ -352,7 +522,7 @@ public class OrderConsoleHandler {
 		printPaymentOptions(account);
 		PaymentInfo payment = null;
 		while (payment ==null) {
-			printText(out, "Select Payment Detail:");
+			printText(out, "Select Payment Detail:", false);
 			try {
 				int input = getIdValue(reader);
 				payment = getPaymentInfo(account, input);
@@ -379,21 +549,21 @@ public class OrderConsoleHandler {
 	}
 	
 	public void createOrderOptions() {
-		ConsoleOption viewOrder = new ConsoleOption("View Order",
+		ConsoleOption viewOrder = new ConsoleOption("View My Orders",
 				OptionNum.OPTION_ONE, null);
 		ConsoleOption buyItem = new ConsoleOption("Buy Item",
 				OptionNum.OPTION_TWO, null);
 		ConsoleOption rentItem = new ConsoleOption("Rent Item",
 				OptionNum.OPTION_THREE, null);
-		ConsoleOption bidItem = new ConsoleOption("Bid Item",
-				OptionNum.OPTION_THREE, null);
+		ConsoleOption buyauctionItem = new ConsoleOption("Buy Auction Item",
+				OptionNum.OPTION_FOUR, null);
 		ConsoleOption returnItem = new ConsoleOption("Return Item",
 				OptionNum.OPTION_FIVE, null);
 		orderOptions = new ArrayList<ConsoleOption>();
 		orderOptions.add(viewOrder);
 		orderOptions.add(buyItem);
 		orderOptions.add(rentItem);
-		orderOptions.add(bidItem);
+		orderOptions.add(buyauctionItem);
 		orderOptions.add(returnItem);
 	}
 

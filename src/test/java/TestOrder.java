@@ -50,7 +50,7 @@ public class TestOrder {
 		item.setPrice(20);
 		item.setQuantity(5);
 		
-		inventoryService.addItem(item);
+		inventoryService.addToBuyList(item);
 		
 		return item;
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
+import com.sjsu.webmart.model.order.FulfillmentType;
 
 public interface InventoryService {
 
@@ -25,4 +26,12 @@ public interface InventoryService {
 
 	Item createNewConsumerItem(ItemType itemType, String title, float price,
 			String description, String weight, int quantity);
+	
+	public void addToRentList(Item item);
+
+	public void addToBuyList(Item item);
+
+	public void addToBidList(Item item);
+	
+	public List<FulfillmentType> getShippingOptions(Item i);
 }

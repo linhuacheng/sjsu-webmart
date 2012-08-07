@@ -3,10 +3,14 @@ package com.sjsu.webmart.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sjsu.webmart.model.item.*;
+import com.sjsu.webmart.model.item.Bidable;
+import com.sjsu.webmart.model.item.Buyable;
+import com.sjsu.webmart.model.item.ConsumerItem;
+import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
+import com.sjsu.webmart.model.item.MediaItem;
+import com.sjsu.webmart.model.item.Rentable;
 import com.sjsu.webmart.model.order.FulfillmentType;
-import com.sjsu.webmart.model.order.OrderParams;
-import com.sjsu.webmart.processor.Fulfillment;
 import com.sjsu.webmart.service.InventoryService;
 
 public class InventoryServiceImpl implements InventoryService {
@@ -29,7 +33,7 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 
 	public List<FulfillmentType> getShippingOptions(Item i) {
-		List<FulfillmentType> fulfill = null;
+		List<FulfillmentType> fulfill = new ArrayList<FulfillmentType>();
 		if (i.getItemDescription() == "ConsumerItem"
 				|| i.getItemDescription() == "Consumer Item") {
 			fulfill.add(FulfillmentType.COURIER);

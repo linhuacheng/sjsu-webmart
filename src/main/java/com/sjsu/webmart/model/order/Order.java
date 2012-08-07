@@ -2,7 +2,9 @@ package com.sjsu.webmart.model.order;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.sjsu.webmart.model.account.Account;
@@ -44,7 +46,7 @@ public abstract class Order implements MessageObservable {
 	protected Account account;
 	protected Date fromDate;
 	protected Date toDate;
-	protected Date orderDate;
+	protected Date orderDate ;
 	protected BigDecimal cost;
 
 	public BigDecimal getCost() {
@@ -62,10 +64,13 @@ public abstract class Order implements MessageObservable {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
+	
+	
 
 	public Order() {
 		idSeq++;
 		orderId = idSeq;
+		orderDate = new Date();
 		addObserver(notificationService);
 	}
 
