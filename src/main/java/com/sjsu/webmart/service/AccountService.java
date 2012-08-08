@@ -11,7 +11,11 @@ public interface AccountService {
 	
 	public void viewAccount(int accountId);
 	
-	public void editAccount(int accountId);
+	public void editPassowrd(int accountId);
+	
+	public void editAddressInfo(int accountId);
+	
+	public void editPaymentInfo(int accountId);
 	
 	public void deleteAccount(int accountId);
 	
@@ -23,7 +27,9 @@ public interface AccountService {
 
     Account findAccountById(int accountId);
 
-	boolean isSeller(int accountId);
+	public boolean isSeller(int accountId);
 
 	List<Account> getAccountsByType(AccountType accountType);
+
+	
 }

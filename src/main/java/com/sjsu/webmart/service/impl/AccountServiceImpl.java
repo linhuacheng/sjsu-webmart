@@ -228,7 +228,21 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println(a_info.getCountry()+"\n");
 			}
 			
-//			System.out.println(a.getPaymentInfo());
+			for(PaymentInfo p_info : a.getPaymentInfo())
+			{
+				System.out.println(p_info.getPaymentType());
+				if(p_info.getPaymentType().equals(PaymentType.CARD))
+				{
+					System.out.println(p_info.getCardNumber());
+					System.out.println(p_info.getExpirationDate());
+					System.out.println(p_info.getSecurityCode());
+				}
+				else
+				{
+					System.out.println(p_info.getChequeNumber());
+				}
+			}
+			
 		}
 		
 		else
@@ -239,7 +253,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public void editAccount(int accountId) {
+	public void editPassowrd(int accountId) {
 		
 		Account ac = findAccountById(accountId);
 		String input;
@@ -255,12 +269,29 @@ public class AccountServiceImpl implements AccountService{
 				else
 					ac.setPassword(input);
 				
-				System.out.println("Edit Email Address : ");
-				System.out.println("Old Email : "+ac.getEmail());
-				System.out.println("New Email : ");
-				if((input=br.readLine()).isEmpty());
-				else
-					ac.setEmail(input);
+//				updateAccount(ac.getAccountId(), ac);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		// TODO Auto-generated method stub
+	}
+
+	
+
+	@Override
+	public void editAddressInfo(int accountId) {
+		// TODO Auto-generated method stub
+
+		Account ac = findAccountById(accountId);
+		String input;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Editing Address Information...");
+		
+		if(ac!=null)
+		{
+			try {
 				
 				for(AddressInfo a_info : ac.getAddressInfo())
 				{
@@ -309,9 +340,77 @@ public class AccountServiceImpl implements AccountService{
 				// TODO: handle exception
 			}
 					}
-		// TODO Auto-generated method stub
+
 	}
 
+
+	@Override
+	public void editPaymentInfo(int accountId) {
+		// TODO Auto-generated method stub
+
+		
+		Account ac = findAccountById(accountId);
+		String input;
+		Date expDate;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Editing Payment Information...");
+		
+		if(ac!=null)
+		{
+			try {
+				
+				for(PaymentInfo p_info : ac.getPaymentInfo())
+				{
+					System.out.println("Edit Payment Info : ");
+					
+					if(p_info.getPaymentType().equals(PaymentType.CARD))
+					{
+						System.out.println("Old Card Number : "+p_info.getCardNumber());
+						System.out.println("New Card Number : ");
+						if((input=br.readLine()).isEmpty());
+						else
+							p_info.setCardNumber(input);
+						
+						System.out.println("Old Expiration Date (MM/DD/YYYY) : "+p_info.getExpirationDate());
+						System.out.println("New Expiration Date (MM/DD/YYYY) : ");
+						if((expDate=ConsoleUtil.getDateValue(br)) == null);
+						else
+							p_info.setExpirationDate(expDate);
+					
+						System.out.println("Old Security Code : "+p_info.getSecurityCode());
+						System.out.println("New Security Code : ");
+						if((input=br.readLine()).isEmpty());
+						else
+						{
+							int inputInt = Integer.parseInt(input);
+							p_info.setSecurityCode(inputInt);
+						}
+						
+					}
+					
+					else 
+					{
+						System.out.println("Old Cheque Number : "+p_info.getChequeNumber());
+						System.out.println("New Cheque Number : ");
+						if((input=br.readLine()).isEmpty());
+						else
+							p_info.setChequeNumber(input);
+					}
+										
+				}
+				
+//				updateAccount(ac.getAccountId(), ac);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+	}
+
+	
+	
+	
 	@Override
 	public void deleteAccount(int accountId) {
 		// TODO Auto-generated method stub
@@ -397,12 +496,15 @@ public class AccountServiceImpl implements AccountService{
 
 		
 		PaymentInfo p_info1 = new PayMerchandise();
+		p_info1.setPaymentType(PaymentType.CARD);
 		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info1.setCardNumber("5432123456782345");
 		p_info1.setChequeNumber("45234456456");
+		p_info1.setSecurityCode(123);
 		p_info1.setExpirationDate(new Date());
 		
 		PaymentInfo p_info2 = new PayMerchandise();
+		p_info2.setPaymentType(PaymentType.CHEQUE);
 		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info2.setCardNumber("5432123456788332");
 		p_info2.setChequeNumber("45234451234");
@@ -452,6 +554,7 @@ public class AccountServiceImpl implements AccountService{
 		else
 			return sellerAccounts;
 	}
+
 
 
 }
