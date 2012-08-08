@@ -136,18 +136,7 @@ public class InventoryServiceImpl implements InventoryService {
 						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
 			}
 		}
-//		String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
-//		System.out
-//				.println("_________________________________________________________________");
-//		System.out.format(format, "ITEM ID", "TITLE", "QUANTITY", "SELLER NAME", "PRICE");
-//		System.out
-//				.println("_________________________________________________________________");
-//		for (Order order : orderService.findOrders(filter)) {
-//			System.out.format(format, order.getOrderId(), order.getOrderType(),
-//					order.getItem().getItemDescription(), order.getCost());
-//		}
-//		System.out
-//				.println("_________________________________________________________________");
+		
 //		for (Item i : itemtemp) {
 //			System.out
 //					.println("************************************************************");
@@ -177,7 +166,7 @@ public class InventoryServiceImpl implements InventoryService {
 //			System.out
 //					.println("************************************************************");
 //		}
-		// items.addAll(itemtemp);
+//		// items.addAll(itemtemp);
 	}
 
 	public void addToRentList(Item item) {
