@@ -2,13 +2,7 @@ package com.sjsu.webmart.test;
 
 import java.util.ArrayList;
 
-import com.sjsu.webmart.model.item.Bidable;
-import com.sjsu.webmart.model.item.Buyable;
-import com.sjsu.webmart.model.item.ConsumerItem;
-import com.sjsu.webmart.model.item.Item;
-import com.sjsu.webmart.model.item.ItemDecorator;
-import com.sjsu.webmart.model.item.MediaItem;
-import com.sjsu.webmart.model.item.Rentable;
+import com.sjsu.webmart.model.item.*;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 
 public class ItemData {
@@ -44,7 +38,7 @@ public class ItemData {
 		isi.addToBidList(citem2);
 
 		ConsumerItem citem3 = new ConsumerItem("", "");
-		citem3.setItemTitle("Garmin nüvi 1450LTM Automotive GPS Receiver");
+		citem3.setItemTitle("Garmin nï¿½vi 1450LTM Automotive GPS Receiver");
 		citem3.setSellerName("Priyanka");
 		citem3.setItemId(3);
 		citem3.setItemDescription("5.0-inch WQVGA TFT touchscreen display");
@@ -97,6 +91,10 @@ public class ItemData {
 		mitem3.setQuality("HD");
 		id = new Rentable(mitem3);
 		isi.addToRentList(mitem3);
+
+        isi.createNewConsumerItem(ItemType.BIDABLE,"Kindle Fire", 200, "Amazon Kindle Fire Tablet", ".5lbs", 10);
+        isi.createNewConsumerItem(ItemType.BIDABLE,"Sony NEX5N", 699, "Sony Compact Interchangeable Lens Touchscreen Camera\n" +
+                "With 18-55mm lens" , "3lbs", 2);
 	}
 
 }
