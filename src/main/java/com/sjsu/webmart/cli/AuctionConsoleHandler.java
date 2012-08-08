@@ -111,7 +111,7 @@ public class AuctionConsoleHandler {
         }
     }
 
-    private void printAuction(AuctionStateType stateType) {
+    private boolean printAuction(AuctionStateType stateType) {
         Collection<AuctionInfo> auctionInfos;
         if (stateType == null) {
             auctionInfos = auctionService.getAllAuctions();
@@ -121,8 +121,9 @@ public class AuctionConsoleHandler {
         if (CollectionUtils.isNotEmpty(auctionInfos)) {
 
             for (AuctionInfo auctionInfo : auctionInfos) {
-                printText(out, String.format("Auction Details Item Id =(%s), Item Desc = (%s) Auction State = (%s)" +
-                        " Max Bid Price = (%s), Bid End Time= (%s), Bid List =(%s)", auctionInfo.getItem().getItemId()
+                printText(out, String.format("Auction Details Auction Id (%s) Item Title=(%s), Auction State = (%s)" +
+                        " Max Bid Price = (%s), Bid End Time= (%s), Bid List =(%s)"
+                        , auctionInfo.getAuctionId()
                         , auctionInfo.getItem().getItemTitle()
                         , auctionInfo.getAuctionState().getStateType()
                         , auctionInfo.getMaxBidPrice()
@@ -130,9 +131,10 @@ public class AuctionConsoleHandler {
                         , auctionInfo.getBidList()
                 ));
             }
-            return;
+            return true;
         }
         printText(out,String.format("No Auction with Type (%s)", stateType));
+        return false;
     }
 
     private void handleSetupAuction() throws IOException {
@@ -163,7 +165,7 @@ public class AuctionConsoleHandler {
         existingAuction = auctionService.getAuctionByItemId(item.getItemId());
 
         if ( existingAuction!= null && ! existingAuction.getAuctionState().equals(AuctionStateType.closed)){
-            printText(out, "Auction Form Item is scheduled/Inprogress");
+            printText(out, "Auction for Item is scheduled/Inprogress");
             return;
         }
         printText(out,"Enter Max Bid Price:", false);
@@ -189,9 +191,11 @@ public class AuctionConsoleHandler {
     private void handleStartAuction() throws IOException {
 
         int input;
-        printText(out, "Select from the Following Auctions to start an auction");
-        printAuction(AuctionStateType.scheduled);
 
+        if (printAuction(AuctionStateType.scheduled) == false){
+            return;
+        }
+        printText(out, "Enter Auction id to start:", false);
         if ((input = getIntValue(reader)) != -1) {
 
             if (AuctionResponse.success.equals(auctionService.startAuctionByAuctionId(input))) {
@@ -204,10 +208,14 @@ public class AuctionConsoleHandler {
     private void handleCloseAuction() throws IOException {
 
         int input;
-        printText(out, "Select from the Following Auctions to close an auction");
-        printAuction(AuctionStateType.scheduled);
-        printAuction(AuctionStateType.inprogress);
 
+        boolean foundAuction1 = printAuction(AuctionStateType.scheduled);
+        boolean foundAuction2 = printAuction(AuctionStateType.inprogress);
+
+        if (!(foundAuction2 || foundAuction1)){
+            return;
+        }
+        printText(out, "Enter Auction Id to Close:", false);
         if ((input = getIntValue(reader)) != -1) {
             AuctionResponse response = auctionService.closeAuction(input);
             if (AuctionResponse.success.equals(response)) {
@@ -223,9 +231,12 @@ public class AuctionConsoleHandler {
         AuctionInfo auctionInfo = null;
         float bidPrice;
         int accountId;
-        printText(out, "Select from the Following Auctions to place bid");
-        printAuction(AuctionStateType.inprogress);
 
+        boolean foundAuction = printAuction(AuctionStateType.inprogress);
+        if (!foundAuction){
+            return;
+        }
+        printText(out, "Enter Auction id to place bid:",false);
         if ((auctionId = getIntValue(reader)) == -1) {
             printText(out, "Invalid Auction Id");
             return;
