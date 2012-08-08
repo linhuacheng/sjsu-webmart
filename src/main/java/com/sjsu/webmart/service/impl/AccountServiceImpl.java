@@ -469,7 +469,7 @@ public class AccountServiceImpl implements AccountService{
 		String fullname = null;
 		for (Account i: accounts){
 			if (i.getAccountId() == accountId){
-				fullname = i.getFirstName()+i.getLastName();
+				fullname = i.getFirstName()+" " +i.getLastName();
 			}
 		}
 		return fullname;
