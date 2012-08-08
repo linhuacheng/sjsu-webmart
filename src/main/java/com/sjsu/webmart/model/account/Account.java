@@ -1,19 +1,23 @@
 package com.sjsu.webmart.model.account;
 
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.sjsu.webmart.model.notification.Message;
+import com.sjsu.webmart.model.notification.MessageObservable;
+import com.sjsu.webmart.model.notification.MessageObserver;
 import com.sjsu.webmart.model.payment.PaymentInfo;
+import com.sjsu.webmart.service.NotificationService;
+import com.sjsu.webmart.service.impl.NotificationServiceImpl;
 
-public class Account {
+public class Account implements MessageObservable{
 
 
+	protected static NotificationService notificationService = NotificationServiceImpl.getInstance();
+	private List<MessageObserver> observers = new ArrayList<MessageObserver>();
+	
 	private AccountState state;
-
-
-	public boolean isValidAccount()
-	{
-		return (Boolean) null;
-	}
 
 	private int accountId;
 	
@@ -31,6 +35,10 @@ public class Account {
 	
 	List<AddressInfo> addressInfo;
 
+	public Account()
+	{
+		addObserver(notificationService);
+	}
 	
 	public AccountState getState() {
 		return state;
@@ -111,14 +119,50 @@ public class Account {
 	
 	public void suspendUser(Account ac)
 	{
+		boolean check = false;
 		state = ac.getState();
-		state.suspend(ac);
+		check = state.suspend(ac);
+		if(check)
+		sendNotification("SUSPENDED");
 	}
 
 	public void enableUser(Account ac)
 	{
+		boolean check = false;
 		state = ac.getState();
-		state.enable(ac);
+		check = state.enable(ac);
+		if(check)
+		sendNotification("ACTIVATED");
 	}
-	
+
+	public boolean isValidAccount()
+	{
+		return (Boolean) null;
+	}
+
+	@Override
+	public void addObserver(MessageObserver observer) {
+		// TODO Auto-generated method stub
+		observers.add(observer);
+	}
+
+	@Override
+	public void deleteObserver(MessageObserver observer) {
+		// TODO Auto-generated method stub
+		observers.remove(observer);
+	}
+
+	@Override
+	public void notifyObservers(Object args) {
+		// TODO Auto-generated method stub
+		for (MessageObserver observer : observers) {
+			observer.update(this, args);
+		}
+	}
+
+	public void sendNotification(String status) {
+		String content = "Account is "+status;
+		Message msg = new Message(email, content);
+		notifyObservers(msg);
+	}
 }
