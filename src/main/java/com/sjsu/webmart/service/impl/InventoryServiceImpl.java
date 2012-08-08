@@ -33,8 +33,8 @@ public class InventoryServiceImpl implements InventoryService {
 		}
 		return instance;
 	}
-	
-//	
+
+	//
 	public List<FulfillmentType> getShippingOptions(Item i) {
 		List<FulfillmentType> fulfill = new ArrayList<FulfillmentType>();
 		if (i.getItemDescription() == "ConsumerItem"
@@ -102,71 +102,82 @@ public class InventoryServiceImpl implements InventoryService {
 		itemtemp.addAll(rentitems);
 		itemtemp.addAll(biditems);
 		itemtemp.addAll(buyitems);
-				
+
 		String format = "|%1$-10s|%2$-50s|%3$-10s|%4$-15s|%5$-10s|%6$-10s|%7$-50s|%8$-10s|%9$-30s|%10$-30s| \n";
 		System.out.println("ALL CONSUMER ITEMS");
 		System.out
-		.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
-			System.out.format(format, "ITEM ID", "TITLE", "QUANTITY", "SELLER NAME","RATING" , "PRICE", "DESCRIPTION", "DISC.","SIZE","WEIGHT");
-		for (Item i: itemtemp){
-			
-			if (i instanceof ConsumerItem){
-				
+				.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+		System.out.format(format, "ITEM ID", "TITLE", "QUANTITY",
+				"SELLER NAME", "RATING", "PRICE", "DESCRIPTION", "DISC.",
+				"SIZE", "WEIGHT");
+		for (Item i : itemtemp) {
+
+			if (i instanceof ConsumerItem) {
+
 				System.out
 						.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
-				ConsumerItem it = (ConsumerItem)i;
-				System.out.format(format, i.getItemId(),i.getItemTitle(), i.getQuantity(), i.getSellerName(),i.getRating(), i.getPrice(), i.getItemDescription(), i.getDiscount(), it.getSize(), it.getWeight());
+				ConsumerItem it = (ConsumerItem) i;
+				System.out.format(format, i.getItemId(), i.getItemTitle(),
+						i.getQuantity(), i.getSellerName(), i.getRating(),
+						i.getPrice(), i.getItemDescription(), i.getDiscount(),
+						it.getSize(), it.getWeight());
 				System.out
 						.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
 			}
 		}
-		
+
 		System.out.println("\n ALL MEDIA ITEMS");
 		String format1 = "|%1$-10s|%2$-50s|%3$-10s|%4$-15s|%5$-10s|%6$-10s|%7$-50s|%8$-10s|%9$-30s|%10$-30s|%11$-10s|\n";
 		System.out
 				.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
-		System.out.format(format1, "ITEM ID", "TITLE", "QUANTITY", "SELLER NAME","RATING" , "PRICE", "DESCRIPTION", "DISC.","SIZE","DURATION","QUALITY");
-		for(Item i:itemtemp){
-			if (i instanceof MediaItem){
-								System.out
+		System.out.format(format1, "ITEM ID", "TITLE", "QUANTITY",
+				"SELLER NAME", "RATING", "PRICE", "DESCRIPTION", "DISC.",
+				"SIZE", "DURATION", "QUALITY");
+		for (Item i : itemtemp) {
+			if (i instanceof MediaItem) {
+				System.out
 						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
-				MediaItem it = (MediaItem)i;
-				System.out.format(format1, i.getItemId(),i.getItemTitle(), i.getQuantity(), i.getSellerName(),i.getRating(), i.getPrice(), i.getItemDescription(), i.getDiscount(), it.getSize(), it.getDuration(), ((MediaItem) i).getQuality());
+				MediaItem it = (MediaItem) i;
+				System.out.format(format1, i.getItemId(), i.getItemTitle(),
+						i.getQuantity(), i.getSellerName(), i.getRating(),
+						i.getPrice(), i.getItemDescription(), i.getDiscount(),
+						it.getSize(), it.getDuration(),
+						((MediaItem) i).getQuality());
 				System.out
 						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
 			}
 		}
-		
-//		for (Item i : itemtemp) {
-//			System.out
-//					.println("************************************************************");
-//			System.out.println("Item Id :" + i.getItemId());
-//			System.out.println("Item Title: " + i.getItemTitle());
-//			System.out.println("Number of Items Available: " + i.getQuantity());
-//			System.out.println("Seller Name: " + i.getSellerName());
-//			System.out.println("Item Rating: " + i.getRating());
-//			System.out.println("Price: " + i.getPrice());
-//			System.out.println("Description: " + i.getItemDescription());
-//			System.out.println("Discount Available: " + i.getDiscount());
-//			// i.getItemDescription().contains("ConsumerItem")
-//
-//			if (i instanceof ConsumerItem) {
-//				ConsumerItem ci = (ConsumerItem) i;
-//				System.out.println("Size: " + ci.getSize());
-//				System.out.println("Weight: " + ci.getWeight());
-//			} else if (i instanceof MediaItem) {
-//				MediaItem mi = (MediaItem) i;
-//				System.out.println("Size: " + mi.getSize());
-//				System.out.println("Duration: " + mi.getDuration());
-//				System.out.println("Quality: " + mi.getQuality());
-//			} else {
-//				System.out.println("Item has no type");
-//			}
-//
-//			System.out
-//					.println("************************************************************");
-//		}
-//		// items.addAll(itemtemp);
+
+		// for (Item i : itemtemp) {
+		// System.out
+		// .println("************************************************************");
+		// System.out.println("Item Id :" + i.getItemId());
+		// System.out.println("Item Title: " + i.getItemTitle());
+		// System.out.println("Number of Items Available: " + i.getQuantity());
+		// System.out.println("Seller Name: " + i.getSellerName());
+		// System.out.println("Item Rating: " + i.getRating());
+		// System.out.println("Price: " + i.getPrice());
+		// System.out.println("Description: " + i.getItemDescription());
+		// System.out.println("Discount Available: " + i.getDiscount());
+		// // i.getItemDescription().contains("ConsumerItem")
+		//
+		// if (i instanceof ConsumerItem) {
+		// ConsumerItem ci = (ConsumerItem) i;
+		// System.out.println("Size: " + ci.getSize());
+		// System.out.println("Weight: " + ci.getWeight());
+		// } else if (i instanceof MediaItem) {
+		// MediaItem mi = (MediaItem) i;
+		// System.out.println("Size: " + mi.getSize());
+		// System.out.println("Duration: " + mi.getDuration());
+		// System.out.println("Quality: " + mi.getQuality());
+		// } else {
+		// System.out.println("Item has no type");
+		// }
+		//
+		// System.out
+		// .println("************************************************************");
+		// }
+		// // items.addAll(itemtemp);
 	}
 
 	public void addToRentList(Item item) {
@@ -223,18 +234,55 @@ public class InventoryServiceImpl implements InventoryService {
 	public Item viewItem(int itemId) {
 		Item i = getItem(itemId);
 		if (i != null) {
-			System.out
-					.println("************************************************************");
-			System.out.println("Item Id :" + i.getItemId());
-			System.out.println("Item Title: " + i.getItemTitle());
-			System.out.println("Number of Items Available: " + i.getQuantity());
-			System.out.println("Seller Name: " + i.getSellerName());
-			System.out.println("Item Rating: " + i.getRating());
-			System.out.println("Price: " + i.getPrice());
-			System.out.println("Description: " + i.getItemDescription());
-			System.out.println("Discount Available: " + i.getDiscount());
-			System.out
-					.println("************************************************************");
+			if (i instanceof ConsumerItem) {
+				String format = "|%1$-10s|%2$-50s|%3$-10s|%4$-15s|%5$-10s|%6$-10s|%7$-50s|%8$-10s|%9$-30s|%10$-30s| \n";
+				System.out
+						.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+				System.out.format(format, "ITEM ID", "TITLE", "QUANTITY",
+						"SELLER NAME", "RATING", "PRICE", "DESCRIPTION",
+						"DISC.", "SIZE", "WEIGHT");
+				System.out
+						.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+				ConsumerItem it = (ConsumerItem) i;
+				System.out.format(format, i.getItemId(), i.getItemTitle(),
+						i.getQuantity(), i.getSellerName(), i.getRating(),
+						i.getPrice(), i.getItemDescription(), i.getDiscount(),
+						it.getSize(), it.getWeight());
+				System.out
+						.println("___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+			}
+
+			else if (i instanceof MediaItem) {
+				String format1 = "|%1$-10s|%2$-50s|%3$-10s|%4$-15s|%5$-10s|%6$-10s|%7$-50s|%8$-10s|%9$-30s|%10$-30s|%11$-10s|\n";
+				System.out
+						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+				System.out.format(format1, "ITEM ID", "TITLE", "QUANTITY",
+						"SELLER NAME", "RATING", "PRICE", "DESCRIPTION",
+						"DISC.", "SIZE", "DURATION", "QUALITY");
+				System.out
+						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+				MediaItem it = (MediaItem) i;
+				System.out.format(format1, i.getItemId(), i.getItemTitle(),
+						i.getQuantity(), i.getSellerName(), i.getRating(),
+						i.getPrice(), i.getItemDescription(), i.getDiscount(),
+						it.getSize(), it.getDuration(),
+						((MediaItem) i).getQuality());
+				System.out
+						.println("______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________");
+			}
+
+			// .println("************************************************************");
+			// System.out.println("Item Id :" + i.getItemId());
+			// System.out.println("Item Title: " + i.getItemTitle());
+			// System.out.println("Number of Items Available: " +
+			// i.getQuantity());
+			// System.out.println("Seller Name: " + i.getSellerName());
+			// System.out.println("Item Rating: " + i.getRating());
+			// System.out.println("Price: " + i.getPrice());
+			// System.out.println("Description: " + i.getItemDescription());
+			// System.out.println("Discount Available: " + i.getDiscount());
+			// System.out
+			// .println("************************************************************");
 			return i;
 		} else {
 			System.out.println("Item not found");

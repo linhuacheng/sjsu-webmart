@@ -26,7 +26,7 @@ public class ItemData {
 
 		ConsumerItem citem2 = new ConsumerItem("", "");
 		citem2.setItemTitle("Apple MacBook Pro ");
-		citem1.setSellerName("Priyanka");
+		citem2.setSellerName("Priyanka");
 		citem2.setItemId(2);
 		citem2.setItemDescription("15.4in. Laptop - MD103LL/A (Latest Model)");
 		citem2.setPrice(1688.00f);
@@ -92,9 +92,9 @@ public class ItemData {
 		id = new Rentable(mitem3);
 		isi.addToRentList(mitem3);
 
-        isi.createNewConsumerItem(ItemType.BIDABLE,"Kindle Fire", 200, "Amazon Kindle Fire Tablet", ".5lbs", 10);
-        isi.createNewConsumerItem(ItemType.BIDABLE,"Sony NEX5N", 699, "Sony Compact Interchangeable Lens Touchscreen Camera\n" +
-                "With 18-55mm lens" , "3lbs", 2);
+//        isi.createNewConsumerItem(ItemType.BIDABLE,"Kindle Fire", 200, "Amazon Kindle Fire Tablet", ".5lbs", 10);
+//        isi.createNewConsumerItem(ItemType.BIDABLE,"Sony NEX5N", 699, "Sony Compact Interchangeable Lens Touchscreen Camera\n" +
+//                "With 18-55mm lens" , "3lbs", 2);
 	}
 
 }

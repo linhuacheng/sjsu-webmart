@@ -16,6 +16,7 @@ import java.util.List;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
 //import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.item.Bidable;
 import com.sjsu.webmart.model.item.Buyable;
 import com.sjsu.webmart.model.item.ConsumerItem;
@@ -23,6 +24,7 @@ import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.MediaItem;
 import com.sjsu.webmart.model.item.Rentable;
 //import com.sjsu.webmart.service.impl.AuctionServiceImpl;
+import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 //import com.sjsu.webmart.test.ItemData;
 import com.sjsu.webmart.util.ConsoleUtil;
@@ -54,7 +56,7 @@ public class ItemConsoleHandler {
 		String duration = null;
 		String quality = null;
 		int itemId;
-
+		AccountService account = null;
 		int type;
 
 		OptionNum secondOption = OptionNum.OPTION_NONE;
@@ -63,6 +65,9 @@ public class ItemConsoleHandler {
 			secondOption = getOption(reader);
 			switch (secondOption) {
 			case OPTION_ONE: {
+//				System.out.println("Enter Account id :");
+//				int accId = ConsoleUtil.getIntValue(reader);
+				
 				System.out
 						.println("Do you want to add information for \n 1. Consumer item \n 2. Media item? ");
 				type = ConsoleUtil.getIntValue(reader);
@@ -85,6 +90,8 @@ public class ItemConsoleHandler {
 
 				System.out.println("Enter Seller Name: ");
 				String sn = ConsoleUtil.getInput(reader);
+				
+				
 
 				System.out.println("Enter Price");
 				float p = ConsoleUtil.getFloatValue(reader);
@@ -103,6 +110,7 @@ public class ItemConsoleHandler {
 					item = new ConsumerItem(size, weight);
 					item.setItemTitle(itemTitle);
 					item.setQuantity(q);
+					//item.setSellerName(account.getFirstNameLastName(accId));
 					item.setSellerName(sn);
 					item.setPrice(p);
 					item.setItemDescription(desc);
@@ -117,6 +125,7 @@ public class ItemConsoleHandler {
 					item = new MediaItem(duration, quality, size);
 					item.setItemTitle(itemTitle);
 					item.setQuantity(q);
+					//item.setSellerName(account.getFirstNameLastName(accId));
 					item.setSellerName(sn);
 					item.setPrice(p);
 					item.setItemDescription(desc);
