@@ -2,18 +2,24 @@ package com.sjsu.webmart.test;
 
 import java.util.ArrayList;
 
+import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.item.*;
+import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 
 public class ItemData {
 
 	ItemDecorator id;
 	InventoryServiceImpl isi = InventoryServiceImpl.getInstance();
-
+	AccountService as = AccountServiceImpl.getInstance();
+	
 	public void initializeInventory() {
 		ConsumerItem citem1 = new ConsumerItem("", "");
 		citem1.setItemTitle("Sony Cyber-shot Digital Camera W330");
-		citem1.setSellerName("Priyanka");
+		//citem1.setSellerName("Priyanka");
+		
+		citem1.setSellerName(as.getFirstNameLastName(1));
 		citem1.setItemId(1);
 		citem1.setItemDescription("Refurbished");
 		citem1.setPrice(98.9f);
@@ -26,7 +32,8 @@ public class ItemData {
 
 		ConsumerItem citem2 = new ConsumerItem("", "");
 		citem2.setItemTitle("Apple MacBook Pro ");
-		citem2.setSellerName("Priyanka");
+		//citem2.setSellerName("Priyanka");
+		citem2.setSellerName(as.getFirstNameLastName(1));
 		citem2.setItemId(2);
 		citem2.setItemDescription("15.4in. Laptop - MD103LL/A (Latest Model)");
 		citem2.setPrice(1688.00f);
@@ -39,7 +46,8 @@ public class ItemData {
 
 		ConsumerItem citem3 = new ConsumerItem("", "");
 		citem3.setItemTitle("Garmin n�vi 1450LTM Automotive GPS Receiver");
-		citem3.setSellerName("Priyanka");
+//		citem3.setSellerName("Priyanka");
+		citem3.setSellerName(as.getFirstNameLastName(1));
 		citem3.setItemId(3);
 		citem3.setItemDescription("5.0-inch WQVGA TFT touchscreen display");
 		citem3.setPrice(151.95f);
@@ -52,7 +60,8 @@ public class ItemData {
 
 		MediaItem mitem1 = new MediaItem("", "", "");
 		mitem1.setItemTitle("Microsoft Office Home & Student 2010");
-		mitem1.setSellerName("Priyanka");
+		//mitem1.setSellerName("Priyanka");
+		mitem1.setSellerName(as.getFirstNameLastName(2));
 		mitem1.setItemId(4);
 		mitem1.setItemDescription("Mac OS X Intel");
 		mitem1.setPrice(122.95f);
@@ -66,12 +75,13 @@ public class ItemData {
 
 		MediaItem mitem2 = new MediaItem("", "", "");
 		mitem2.setItemTitle("Mission: Impossible III");
-		mitem2.setSellerName("Priyanka");
+		//mitem2.setSellerName("Priyanka");
+		mitem2.setSellerName(as.getFirstNameLastName(2));
 		mitem2.setItemId(5);
 		mitem2.setItemDescription("Tom Cruise, Philip Seymour Hoffman");
 		mitem2.setPrice(1.0f);
 		mitem2.setDiscount(0);
-		mitem2.setQuantity(5);
+		mitem2.setQuantity(1);
 		mitem2.setSize("");
 		mitem2.setDuration("2 hours 6 minutes");
 		mitem2.setQuality("blu-ray");
@@ -80,8 +90,9 @@ public class ItemData {
 
 		MediaItem mitem3 = new MediaItem("", "", "");
 		mitem3.setItemTitle("The Dark Knight");
-		mitem3.setSellerName("Priyanka");
-		mitem3.setItemId(6);
+//		mitem3.setSellerName("Priyanka");
+		mitem3.setSellerName(as.getFirstNameLastName(2));
+		mitem3.setItemId(2);
 		mitem3.setItemDescription("Christian Bale, Michael Caine");
 		mitem3.setPrice(2.99f);
 		mitem3.setDiscount(0);

@@ -464,5 +464,15 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		accounts.add(account);
 	}
+	
+	public String getFirstNameLastName(int accountId){
+		String fullname = null;
+		for (Account i: accounts){
+			if (i.getAccountId() == accountId){
+				fullname = i.getFirstName()+i.getLastName();
+			}
+		}
+		return fullname;
+	}
 
 }

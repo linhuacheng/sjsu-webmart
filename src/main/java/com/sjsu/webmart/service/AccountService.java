@@ -35,4 +35,5 @@ public interface AccountService {
 	
 	public void addAccount(Account account);
 	
+	public String getFirstNameLastName(int accountId);
 }
