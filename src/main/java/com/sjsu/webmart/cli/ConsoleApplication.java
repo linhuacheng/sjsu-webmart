@@ -143,14 +143,13 @@ public class ConsoleApplication {
     }
 
     private void setupSampleData(){
-        Item item = inventoryService.createNewConsumerItem(ItemType.BIDABLE,"Kindle Fire", 200, "Amazon Kindle Fire Tablet", ".5lbs", 10);
-        inventoryService.createNewConsumerItem(ItemType.BIDABLE,"Sony NEX5N", 699, "Sony Compact Interchangeable Lens Touchscreen Camera\n" +
-                "With 18-55mm lens" , "3lbs", 2);
+        Item item;
+        //Initialize Item data
+        ItemData id = new ItemData();
+		id.initializeInventory();
+        item = inventoryService.listItem(ItemType.BIDABLE).get(0);
         auctionService.setupNewAuction(item, AuctionType.open, 200
                 , new Date(System.currentTimeMillis() - 10000), new Date(System.currentTimeMillis() + 10000));
-        
-        // Initialize Item data
-    	ItemData id = new ItemData();
-		id.initializeInventory();
+
     }
 }
