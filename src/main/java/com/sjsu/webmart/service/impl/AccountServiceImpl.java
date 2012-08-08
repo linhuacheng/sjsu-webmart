@@ -10,28 +10,31 @@ import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.account.AccountType;
 import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
+import com.sjsu.webmart.model.notification.Message;
+import com.sjsu.webmart.model.notification.MessageObservable;
+import com.sjsu.webmart.model.notification.MessageObserver;
 import com.sjsu.webmart.model.payment.PayMerchandise;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.service.NotificationService;
 import com.sjsu.webmart.util.ConsoleUtil;
 
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService, MessageObservable{
 
 	private static AccountServiceImpl instance = null;
+	protected static NotificationService notificationService = NotificationServiceImpl.getInstance();
+	private List<MessageObserver> observers = new ArrayList<MessageObserver>();
 	private static List<Account> accounts = new ArrayList<Account>();
 	private static int id = 1;
 	private Account a;
 	private List<AddressInfo> addresses;
 	private List<PaymentInfo> payment_details;
 	
-	
 	private AccountServiceImpl() {
 		// TODO Auto-generated constructor stub
-		System.out.println("Constructor initialized");
-
 		createInitialAccounts();
-
+		addObserver(notificationService);
 	}
 
 	
@@ -40,8 +43,7 @@ public class AccountServiceImpl implements AccountService{
 	synchronized (AccountServiceImpl.class){
 	if (instance == null) {
 	instance = new AccountServiceImpl();
-	}
-	}
+	}}
 	}
 	return instance;
 	}
@@ -126,8 +128,6 @@ public class AccountServiceImpl implements AccountService{
 				if(br.readLine().startsWith("n"))
 					break;
 			}
-			
-			
 			while(true)
 			{
 				PaymentInfo p_info = new PayMerchandise();
@@ -158,7 +158,6 @@ public class AccountServiceImpl implements AccountService{
 					p_info.setSecurityCode(inputInt);
 					
 				}
-					
 				else if(input.equalsIgnoreCase("cheque"))
 				{
 					p_info.setPaymentType(PaymentType.CHEQUE);
@@ -168,44 +167,33 @@ public class AccountServiceImpl implements AccountService{
 					while((input=br.readLine()).isEmpty())
 						System.out.println("Please enter cheque number : ");
 					p_info.setChequeNumber(input);
-				
 				}
-				
 				else
 				{
 					System.out.println("Incorrect input");
 					continue;
 				}
-					
-				
 				System.out.println("Do you want to add one more payment info? (Y/N) : ");
 				if(br.readLine().startsWith("n"))
 					break;
-				
 				payment_details.add(p_info);
 			}
 			
 			a.setAddressInfo(addresses);
-			a.setPaymentInfo(null);
+			a.setPaymentInfo(payment_details);
 			a.setState(new Active());
 			accounts.add(a);
-			
-			
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("Exception");
 		}
-		
-		System.out.println(a.getAccountId());
-		
-		System.out.println("User Registered...");
+		System.out.println("User Registered with Account Id : "+a.getAccountId());
 	}
 
 	
 	@Override
 	public void viewAccount(int accountId) {
 		// TODO Auto-generated method stub
-	
 		Account a;
 		a = findAccountById(accountId);
 		int i = 1;
@@ -228,23 +216,32 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println(a_info.getCountry()+"\n");
 			}
 			
-//			System.out.println(a.getPaymentInfo());
+			for(PaymentInfo p_info : a.getPaymentInfo())
+			{
+				System.out.println(p_info.getPaymentType());
+				if(p_info.getPaymentType().equals(PaymentType.CARD)){
+					System.out.println(p_info.getCardNumber());
+					System.out.println(p_info.getExpirationDate());
+					System.out.println(p_info.getSecurityCode());
+				}
+				else{
+					System.out.println(p_info.getChequeNumber());
+				}
+			}
 		}
 		
-		else
-		{
+		else{
 			System.out.println("User not found !!");
 		}
 		
 	}
 
 	@Override
-	public void editAccount(int accountId) {
+	public void editPassowrd(int accountId) {
 		
 		Account ac = findAccountById(accountId);
 		String input;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("Editing account...");
 		
 		if(ac!=null)
 		{
@@ -254,13 +251,25 @@ public class AccountServiceImpl implements AccountService{
 				if((input=br.readLine()).isEmpty());
 				else
 					ac.setPassword(input);
-				
-				System.out.println("Edit Email Address : ");
-				System.out.println("Old Email : "+ac.getEmail());
-				System.out.println("New Email : ");
-				if((input=br.readLine()).isEmpty());
-				else
-					ac.setEmail(input);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+	}
+	
+
+	@Override
+	public void editAddressInfo(int accountId) {
+		// TODO Auto-generated method stub
+
+		Account ac = findAccountById(accountId);
+		String input;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Editing Address Information...");
+		
+		if(ac!=null)
+		{
+			try {
 				
 				for(AddressInfo a_info : ac.getAddressInfo())
 				{
@@ -302,16 +311,72 @@ public class AccountServiceImpl implements AccountService{
 						a_info.setCountry(input);
 					
 				}
-				
-//				updateAccount(ac.getAccountId(), ac);
-
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-					}
-		// TODO Auto-generated method stub
+		}
 	}
 
+
+	@Override
+	public void editPaymentInfo(int accountId) {
+		// TODO Auto-generated method stub
+		
+		Account ac = findAccountById(accountId);
+		String input;
+		Date expDate;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Editing Payment Information...");
+		
+		if(ac!=null)
+		{
+			try {
+				
+				for(PaymentInfo p_info : ac.getPaymentInfo())
+				{
+					System.out.println("Edit Payment Info : ");
+					
+					if(p_info.getPaymentType().equals(PaymentType.CARD))
+					{
+						System.out.println("Old Card Number : "+p_info.getCardNumber());
+						System.out.println("New Card Number : ");
+						if((input=br.readLine()).isEmpty());
+						else
+							p_info.setCardNumber(input);
+						
+						System.out.println("Old Expiration Date (MM/DD/YYYY) : "+p_info.getExpirationDate());
+						System.out.println("New Expiration Date (MM/DD/YYYY) : ");
+						if((expDate=ConsoleUtil.getDateValue(br)) == null);
+						else
+							p_info.setExpirationDate(expDate);
+					
+						System.out.println("Old Security Code : "+p_info.getSecurityCode());
+						System.out.println("New Security Code : ");
+						if((input=br.readLine()).isEmpty());
+						else
+						{
+							int inputInt = Integer.parseInt(input);
+							p_info.setSecurityCode(inputInt);
+						}
+					}
+					
+					else 
+					{
+						System.out.println("Old Cheque Number : "+p_info.getChequeNumber());
+						System.out.println("New Cheque Number : ");
+						if((input=br.readLine()).isEmpty());
+						else
+							p_info.setChequeNumber(input);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+//			sendNotification(ac.getEmail());
+		}
+	}
+
+	
 	@Override
 	public void deleteAccount(int accountId) {
 		// TODO Auto-generated method stub
@@ -338,14 +403,6 @@ public class AccountServiceImpl implements AccountService{
 		return null;
 	}
 
-//	public void updateAccount(int accountId, Account a) {
-//		
-//		for(Account ac: accounts)
-//		{
-//			if(ac.getAccountId() == accountId)
-//				ac = a;
-//		}
-//	}
 
 	@Override
 	public void processEnableUserAccount(int accountId) {
@@ -397,12 +454,15 @@ public class AccountServiceImpl implements AccountService{
 
 		
 		PaymentInfo p_info1 = new PayMerchandise();
+		p_info1.setPaymentType(PaymentType.CARD);
 		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info1.setCardNumber("5432123456782345");
 		p_info1.setChequeNumber("45234456456");
+		p_info1.setSecurityCode(123);
 		p_info1.setExpirationDate(new Date());
 		
 		PaymentInfo p_info2 = new PayMerchandise();
+		p_info2.setPaymentType(PaymentType.CHEQUE);
 		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info2.setCardNumber("5432123456788332");
 		p_info2.setChequeNumber("45234451234");
@@ -454,4 +514,32 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 
+	@Override
+	public void addObserver(MessageObserver observer) {
+		// TODO Auto-generated method stub
+		observers.add(observer);
+	}
+
+
+	@Override
+	public void deleteObserver(MessageObserver observer) {
+		// TODO Auto-generated method stub
+		observers.remove(observer);
+	}
+
+
+	@Override
+	public void notifyObservers(Object args) {
+		// TODO Auto-generated method stub
+		for (MessageObserver observer : observers) {
+			observer.update(this, args);
+		}
+	}
+
+	public void sendNotification(int accountId) {
+		Account a = findAccountById(accountId);
+		String content = "Account details modified";
+		Message msg = new Message(a.getEmail(), content);
+		notifyObservers(msg);
+	}
 }

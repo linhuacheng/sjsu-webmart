@@ -44,9 +44,16 @@ public class AccountCLI {
 			case '3':
 				System.out.println("Enter Account Id : ");
 				accountId = getUserInput();
-				as.editAccount(accountId);
+				System.out.println("Do you want to update Password? (Y/N) : ");
+				if(getUserInputString().startsWith("y"))
+					as.editPassowrd(accountId);
+				System.out.println("Do you want to update Address Information? (Y/N) : ");
+				if(getUserInputString().startsWith("y"))
+					as.editAddressInfo(accountId);
+				System.out.println("Do you want to update Payment Information? (Y/N) : ");
+				if(getUserInputString().startsWith("y"))
+					as.editPassowrd(accountId);
 				break;
-
 			case '4':
 				System.out.println("Enter Account Id : ");
 				accountId = getUserInput();
@@ -82,5 +89,12 @@ public class AccountCLI {
 		int inputInt = Integer.parseInt(input); 
 		return inputInt; 
 	}
-	
+
+	public static String getUserInputString() throws IOException{
+		InputStreamReader istream = new InputStreamReader(System.in) ;
+        BufferedReader bufRead = new BufferedReader(istream) ;
+		String input = bufRead.readLine();
+		return input; 
+	}
+
 }

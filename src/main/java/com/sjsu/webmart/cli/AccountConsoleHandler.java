@@ -44,6 +44,7 @@ public class AccountConsoleHandler {
 	public void handleAccountOptions() throws IOException {
 		AccountService accountService = AccountServiceImpl.getInstance();
 		int accountId;
+		int i=0;
 
 		OptionNum secondOption = OptionNum.OPTION_NONE;
 		while (true) {
@@ -65,7 +66,23 @@ public class AccountConsoleHandler {
 				printEnteredOption(out, accountOptions, secondOption);
 				System.out.println("Enter Account Id : ");
 				accountId = getUserInput();
-				accountService.editAccount(accountId);
+				System.out.println("Do you want to update Password? (Y/N) : ");
+				if(getUserInputString().startsWith("y")){
+					accountService.editPassowrd(accountId);
+					i++;
+				}
+				System.out.println("Do you want to update Address Information? (Y/N) : ");
+				if(getUserInputString().startsWith("y")){
+					accountService.editAddressInfo(accountId);
+					i++;
+				}
+				System.out.println("Do you want to update Payment Information? (Y/N) : ");
+				if(getUserInputString().startsWith("y")){
+					accountService.editPaymentInfo(accountId);
+					i++;
+				}
+				if(i>0)
+					accountService.sendNotification(accountId);
 				break;
 
 			case OPTION_FOUR:
@@ -108,6 +125,15 @@ public class AccountConsoleHandler {
 		return inputInt; 
 	}
 
+	
+	public static String getUserInputString() throws IOException{
+		InputStreamReader istream = new InputStreamReader(System.in) ;
+        BufferedReader bufRead = new BufferedReader(istream) ;
+		String input = bufRead.readLine();
+		return input; 
+	}
+
+	
 	public void createAccountOptions() {
 		ConsoleOption createAccount = new ConsoleOption("Create Account",
 				OptionNum.OPTION_ONE, null);
