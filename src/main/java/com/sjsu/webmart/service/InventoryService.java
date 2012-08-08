@@ -33,5 +33,7 @@ public interface InventoryService {
 
 	public void addToBidList(Item item);
 	
+	public void viewAllItems();
+	
 	public List<FulfillmentType> getShippingOptions(Item i);
 }
