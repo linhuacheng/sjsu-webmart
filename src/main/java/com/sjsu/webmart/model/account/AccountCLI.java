@@ -44,7 +44,7 @@ public class AccountCLI {
 			case '3':
 				System.out.println("Enter Account Id : ");
 				accountId = getUserInput();
-				System.out.println("Do you want to update Address Information? (Y/N) : ");
+				System.out.println("Do you want to update Password? (Y/N) : ");
 				if(getUserInputString().startsWith("y"))
 					as.editPassowrd(accountId);
 				System.out.println("Do you want to update Address Information? (Y/N) : ");

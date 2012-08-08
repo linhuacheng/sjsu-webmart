@@ -25,11 +25,13 @@ public interface AccountService {
 	
 	public List<Account> getAllAccounts();
 
-    Account findAccountById(int accountId);
+    public Account findAccountById(int accountId);
 
 	public boolean isSeller(int accountId);
 
-	List<Account> getAccountsByType(AccountType accountType);
+	public List<Account> getAccountsByType(AccountType accountType);
+	
+	public void sendNotification(int accountId);
 
 	
 }
