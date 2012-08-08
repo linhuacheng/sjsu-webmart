@@ -3,11 +3,14 @@ package com.sjsu.webmart.service;
 import java.util.List;
 
 import com.sjsu.webmart.model.order.Order;
+import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.model.order.OrderParams;
 
 public interface OrderService {
 
 	public List<Order> listOrder();
+		
+	public List<Order> findOrders(OrderFilter filter);
 	
 	public Order placeOrder(OrderParams orderParams);
 	

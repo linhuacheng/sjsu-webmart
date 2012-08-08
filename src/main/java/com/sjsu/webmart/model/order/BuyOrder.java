@@ -21,8 +21,8 @@ public class BuyOrder extends Order {
 
 	@Override
 	public void updateOrder() {
-		System.out.println("ORDER STATUS updated to: " + OrderStatus.SHIPPED);
-		this.setOrderStatus(OrderStatus.SHIPPED);
+		System.out.println("ORDER STATUS updated to: " + OrderStatus.COMPLETED);
+		this.setOrderStatus(OrderStatus.COMPLETED);
 	}
 
 	@Override
@@ -37,7 +37,12 @@ public class BuyOrder extends Order {
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
-		BigDecimal cost = new BigDecimal(item.getPrice());
+		BigDecimal cost = null;
+		if (orderParams.getBid() != null) {
+			cost = new BigDecimal(orderParams.getBid().getBidPrice());
+		} else {
+			cost = new BigDecimal(item.getPrice());
+		}
 		
 		System.out.println("ORDER COST calculated: " + cost);
 		return cost;

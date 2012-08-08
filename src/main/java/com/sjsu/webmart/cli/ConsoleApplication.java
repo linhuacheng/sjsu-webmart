@@ -14,6 +14,8 @@ import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
+import com.sjsu.webmart.test.ItemData;
+
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -146,5 +148,9 @@ public class ConsoleApplication {
                 "With 18-55mm lens" , "3lbs", 2);
         auctionService.setupNewAuction(item, AuctionType.open, 200
                 , new Date(System.currentTimeMillis() - 10000), new Date(System.currentTimeMillis() + 10000));
+        
+        // Initialize Item data
+    	ItemData id = new ItemData();
+		id.initializeInventory();
     }
 }

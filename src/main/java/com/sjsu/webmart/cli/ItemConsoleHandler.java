@@ -6,25 +6,26 @@ import static com.sjsu.webmart.util.ConsoleUtil.printOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 
-import com.sjsu.webmart.common.AuctionType;
+//import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
-import com.sjsu.webmart.model.account.Account;
+//import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.item.Bidable;
 import com.sjsu.webmart.model.item.Buyable;
 import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.MediaItem;
 import com.sjsu.webmart.model.item.Rentable;
-import com.sjsu.webmart.service.impl.AuctionServiceImpl;
+//import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
-import com.sjsu.webmart.test.ItemData;
+//import com.sjsu.webmart.test.ItemData;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 public class ItemConsoleHandler {
 	protected InventoryServiceImpl itemService;
@@ -46,15 +47,15 @@ public class ItemConsoleHandler {
 	 */
 	public void handleItemOptions() throws IOException {
 		Item item = null;
+		// ConsoleUtil consoleUtil = new ConsoleUtil();
 		InventoryServiceImpl isi = InventoryServiceImpl.getInstance();
 		String size = null;
 		String weight = null;
 		String duration = null;
 		String quality = null;
 		int itemId;
-		String desc;
-		ItemData id = new ItemData();
-		id.initializeInventory();
+
+		int type;
 
 		OptionNum secondOption = OptionNum.OPTION_NONE;
 		while (true) {
@@ -63,130 +64,114 @@ public class ItemConsoleHandler {
 			switch (secondOption) {
 			case OPTION_ONE: {
 				System.out
-						.println("Enter Description (ConsumerItem/ MediaItem): ");
-				// bufRead = new BufferedReader(new
-				// InputStreamReader(System.in));
-				desc = getUserInput();
-				;
-				if (desc.equalsIgnoreCase("ConsumerItem")
-						|| desc.equalsIgnoreCase("Consumer Item")) {
+						.println("Do you want to add information for \n 1. Consumer item \n 2. Media item? ");
+				type = ConsoleUtil.getIntValue(reader);
+				if (type == 1) {
 					item = new ConsumerItem(size, weight);
-				} else
-					item = new MediaItem(duration, quality, weight);
+				} else if (type == 2) {
+					item = new MediaItem(duration, quality, size);
+				}
 
-				item.setItemId(isi.lastItemId() + 1);
+				else {
+					System.out.println("Invalid choice:");
+				}
+				item.setItemId(isi.lastItemId());
 
 				System.out.println("Enter item Name: ");
-
-				String itemTitle = getUserInput();
+				String itemTitle = ConsoleUtil.getInput(reader);
 
 				System.out.println("Enter quantity :");
-
-				int q = (Integer.parseInt(getUserInput()));
+				int q = ConsoleUtil.getIntValue(reader);
 
 				System.out.println("Enter Seller Name: ");
-
-				String sn = getUserInput();
+				String sn = ConsoleUtil.getInput(reader);
 
 				System.out.println("Enter Price");
+				float p = ConsoleUtil.getFloatValue(reader);
 
-				int p = (Integer.parseInt(getUserInput()));
+				System.out.println("Enter Item Description: ");
+				String desc = ConsoleUtil.getInput(reader);
 
-				if (desc.equalsIgnoreCase("ConsumerItem")
-						|| desc.equalsIgnoreCase("Consumer Item")) {
+				System.out.println("Enter Discount: ");
+				float d = ConsoleUtil.getFloatValue(reader);
+
+				if (type == 1) {
 					System.out.println("Enter dimension:");
-
-					size = getUserInput();
-
+					size = ConsoleUtil.getInput(reader);
 					System.out.println("Enter Weight");
-
-					weight = getUserInput();
-
+					weight = ConsoleUtil.getInput(reader);
 					item = new ConsumerItem(size, weight);
 					item.setItemTitle(itemTitle);
 					item.setQuantity(q);
 					item.setSellerName(sn);
 					item.setPrice(p);
-
-				}
-
-				else {
-					System.out.println("Enter duration:");
-
-					duration = getUserInput();
-
+					item.setItemDescription(desc);
+					item.setDiscount(d);
+				} else if (type == 2) {
+					System.out.println("Enter Duration:");
+					duration = ConsoleUtil.getInput(reader);
 					System.out.println("Enter Quality:");
-
-					quality = getUserInput();
-
-					System.out.println("Enter size:");
-
-					size = getUserInput();
-
+					quality = ConsoleUtil.getInput(reader);
+					System.out.println("Enter Size:");
+					size = ConsoleUtil.getInput(reader);
 					item = new MediaItem(duration, quality, size);
 					item.setItemTitle(itemTitle);
 					item.setQuantity(q);
 					item.setSellerName(sn);
 					item.setPrice(p);
-
+					item.setItemDescription(desc);
+					item.setDiscount(d);
+				} else {
+					System.out.println("Invalid choice:");
 				}
-
-				item.setItemDescription(desc);
-
-				System.out.println("Enter Discount: ");
-
-				float d = (Integer.parseInt(getUserInput()));
-				item.setDiscount(d);
 
 				System.out.println("Enter choice to make this Item");
 				System.out.println("1. Rentable");
 				System.out.println("2. Buyable");
 				System.out.println("3. Biddable");
 
-				int choice = (Integer.parseInt(getUserInput()));
+				int choice = ConsoleUtil.getIntValue(reader);
 				if (choice == 1) {
 					Rentable rent = new Rentable(item);
 					isi.addToRentList(item);
-					isi.addItem(item);
-				}
-				else if (choice == 2){
+					// isi.addItem(item);
+				} else if (choice == 2) {
 					Buyable rent = new Buyable(item);
 					isi.addToBuyList(item);
-					isi.addItem(item);
-				}
-				else if (choice == 1){
+					// isi.addItem(item);
+				} else if (choice == 3) {
 					Bidable rent = new Bidable(item);
 					isi.addToBidList(item);
-					isi.addItem(item);
-				}
-				else 
+					// isi.addItem(item);
+				} else
 					System.out.println("Invalid Choice");
+
 			}
 				break;
 			case OPTION_TWO:
 				printEnteredOption(out, itemOptions, secondOption);
 				System.out.println("Enter Item Number :");
-				itemId = Integer.parseInt(getUserInput());
+				itemId = ConsoleUtil.getIntValue(reader);
 				// System.out.println("itemId : "+itemId);
 				isi.viewItem(itemId);
 				break;
 			case OPTION_THREE:
 				printEnteredOption(out, itemOptions, secondOption);
 				System.out.println("Enter Item Number :");
-				itemId = Integer.parseInt(getUserInput());
+				itemId = ConsoleUtil.getIntValue(reader);
 				System.out.println("Enter new information for item " + itemId);
 				System.out.println("Enter new Item Title :");
-				String title = getUserInput();
+				String title = ConsoleUtil.getInput(reader);
 				System.out.println("Enter new Price :");
-				float price = Integer.parseInt(getUserInput());
+				float price = ConsoleUtil.getFloatValue(reader);
 				System.out.println("Enter new Discount: ");
-				float dis = Integer.parseInt(getUserInput());
+				float dis = ConsoleUtil.getFloatValue(reader);
 				isi.updateItem(itemId, title, price, dis);
 				break;
 			case OPTION_FOUR:
 				printEnteredOption(out, itemOptions, secondOption);
 				System.out.println("Enter Item Number :");
-				itemId = Integer.parseInt(getUserInput());
+				itemId = ConsoleUtil.getIntValue(reader);
 				isi.deleteItem(itemId);
 				break;
 			case OPTION_FIVE:
@@ -202,14 +187,6 @@ public class ItemConsoleHandler {
 				break;
 			}
 		}
-	}
-
-	public static String getUserInput() throws IOException {
-		InputStreamReader istream = new InputStreamReader(System.in);
-		System.out.println("\n");
-		BufferedReader bufRead = new BufferedReader(istream);
-		String input = bufRead.readLine();
-		return input;
 	}
 
 	public void createItemOptions() {
