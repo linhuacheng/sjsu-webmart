@@ -1,22 +1,8 @@
 package com.sjsu.webmart.cli;
 
-import com.sjsu.webmart.common.AuctionType;
-import com.sjsu.webmart.common.ConsoleOption;
-import com.sjsu.webmart.common.OptionNum;
-import com.sjsu.webmart.model.account.Account;
-import com.sjsu.webmart.model.item.Bidable;
-import com.sjsu.webmart.model.item.ConsumerItem;
-import com.sjsu.webmart.model.item.Item;
-import com.sjsu.webmart.model.item.ItemType;
-import com.sjsu.webmart.service.AccountService;
-import com.sjsu.webmart.service.AuctionService;
-import com.sjsu.webmart.service.InventoryService;
-import com.sjsu.webmart.service.impl.AccountServiceImpl;
-import com.sjsu.webmart.service.impl.AuctionServiceImpl;
-import com.sjsu.webmart.service.impl.InventoryServiceImpl;
-import com.sjsu.webmart.test.ItemData;
-
-import org.apache.commons.lang.StringUtils;
+import static com.sjsu.webmart.util.ConsoleUtil.getOption;
+import static com.sjsu.webmart.util.ConsoleUtil.printEnteredOption;
+import static com.sjsu.webmart.util.ConsoleUtil.printOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +11,21 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import static com.sjsu.webmart.util.ConsoleUtil.*;
+
+import com.sjsu.webmart.common.AuctionType;
+import com.sjsu.webmart.common.ConsoleOption;
+import com.sjsu.webmart.common.OptionNum;
+import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.item.ItemType;
+import com.sjsu.webmart.service.AccountService;
+import com.sjsu.webmart.service.AuctionService;
+import com.sjsu.webmart.service.InventoryService;
+import com.sjsu.webmart.service.ReportService;
+import com.sjsu.webmart.service.impl.AccountServiceImpl;
+import com.sjsu.webmart.service.impl.AuctionServiceImpl;
+import com.sjsu.webmart.service.impl.InventoryServiceImpl;
+import com.sjsu.webmart.service.impl.ReportServiceImpl;
+import com.sjsu.webmart.test.ItemData;
 
 /**
  * Console application
@@ -39,13 +39,16 @@ public class ConsoleApplication {
     private PrintWriter out;
     private BufferedReader reader;
     private List<ConsoleOption> mainOptions;
+    AccountConsoleHandler accountConsoleHandler;
     AuctionConsoleHandler auctionConsoleHandler;
     OrderConsoleHandler orderConsoleHandler;
     ItemConsoleHandler itemConsoleHandler;
+    ReportConsoleHandler reportConsoleHandler;
     AuctionService auctionService= AuctionServiceImpl.getInstance();
     AccountService accountService = AccountServiceImpl.getInstance();
     InventoryService inventoryService = InventoryServiceImpl.getInstance();
-
+    ReportService reportService = ReportServiceImpl.getInstance();
+    
     /**
      *
      * @param reader
@@ -68,9 +71,11 @@ public class ConsoleApplication {
         ConsoleApplication consoleApplication = new ConsoleApplication(reader, out);
 
         consoleApplication.createConsoleOptions();
+        consoleApplication.accountConsoleHandler = new AccountConsoleHandler(out, reader);
         consoleApplication.auctionConsoleHandler = new AuctionConsoleHandler(out, reader);
         consoleApplication.itemConsoleHandler = new ItemConsoleHandler(out, reader);
         consoleApplication.orderConsoleHandler = new OrderConsoleHandler(out, reader);
+        consoleApplication.reportConsoleHandler = new ReportConsoleHandler(out, reader);
         consoleApplication.setupSampleData();
         consoleApplication.start();
 
@@ -91,7 +96,7 @@ public class ConsoleApplication {
             switch (optionNum) {
                 case OPTION_ONE:
                     printEnteredOption(out,mainOptions, optionNum);
-
+                    accountConsoleHandler.handleAccountOptions();
                     break;
                 case OPTION_TWO:
                     printEnteredOption(out,mainOptions, optionNum);
@@ -108,6 +113,7 @@ public class ConsoleApplication {
                     break;
                 case OPTION_FIVE:
                     printEnteredOption(out,mainOptions, optionNum);
+                    reportConsoleHandler.handleReportOptions();
                     break;
                 case OPTION_EXIT:
                     //printEnteredOption(out,mainOptions, optionNum);

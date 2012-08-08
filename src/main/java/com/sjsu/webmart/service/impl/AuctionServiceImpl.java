@@ -78,7 +78,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         AuctionInfo auctionInfo = auctionInfoList.get(auctionId);
         if (auctionInfo != null) {
-            auctionInfo.getWinner();
+            return auctionInfo.getWinner();
         }
         return null;
     }

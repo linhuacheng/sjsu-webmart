@@ -22,6 +22,7 @@ import com.sjsu.webmart.model.order.Order;
 import com.sjsu.webmart.model.order.OrderParams;
 import com.sjsu.webmart.model.order.OrderType;
 import com.sjsu.webmart.model.order.RentOrder;
+import com.sjsu.webmart.model.order.RentPeriod;
 import com.sjsu.webmart.model.order.ReturnOrder;
 import com.sjsu.webmart.model.payment.PayMerchandise;
 import com.sjsu.webmart.model.payment.PaymentInfo;
@@ -75,6 +76,7 @@ public class TestOrder {
 		Order buyOrder = new BuyOrder();
 		buyOrder.setItem(getItem());
 		buyOrder.setAccount(getAccount());
+		buyOrder.setOrderType(OrderType.BUY);
 
 		return buyOrder;
 	}
@@ -83,11 +85,12 @@ public class TestOrder {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 5);
 
+		RentPeriod rentPeriod = new RentPeriod(new Date(), cal.getTime());
 		Order rentOrder = new RentOrder();
+		rentOrder.setOrderType(OrderType.RENT);
 		rentOrder.setItem(getItem());
 		rentOrder.setAccount(getAccount());
-		rentOrder.setFromDate(new Date());
-		rentOrder.setToDate(cal.getTime());
+		rentOrder.setRentPeriod(rentPeriod);
 
 		return rentOrder;
 	}
@@ -96,6 +99,7 @@ public class TestOrder {
 		Order returnOrder = new ReturnOrder();
 		returnOrder.setItem(getItem());
 		returnOrder.setAccount(getAccount());
+		returnOrder.setOrderType(OrderType.RETURN);
 
 		return returnOrder;
 	}
@@ -147,11 +151,9 @@ public class TestOrder {
 		Assert.assertNotNull(orderParams, "New Order Param should not be null");
 		Assert.assertNotNull(order, "New Order should not be null");
 
-		Assert.assertNull(orderParams.getOrder().getFromDate(),
-				"Rent start date must be null");
-		Assert.assertNull(orderParams.getOrder().getToDate(),
-				"Rent end date must be null");
-
+		Assert.assertNull(orderParams.getOrder().getRentPeriod(),
+				"Rent period must be null");
+		
 		Assert.assertNotNull(orderParams.getOrder().getItem(),
 				"Item must not be null");
 		Assert.assertEquals(order.calculateCost(orderParams),
@@ -170,16 +172,14 @@ public class TestOrder {
 		Assert.assertNotNull(orderParams, "New Order Param should not be null");
 		Assert.assertNotNull(order, "New Order should not be null");
 
-		Assert.assertNotNull(orderParams.getOrder().getFromDate(),
-				"Rent start date must not be null");
-		Assert.assertNotNull(orderParams.getOrder().getToDate(),
-				"Rent end date must not be null");
+		Assert.assertNotNull(orderParams.getOrder().getRentPeriod(),
+				"Rent period must not be null");
 
 		Assert.assertNotNull(orderParams.getOrder().getItem(),
 				"Item must not be null");
 		Assert.assertEquals(order.calculateCost(orderParams),
-				new BigDecimal(100),				
-				"Calculated rental cost must be 100.");
+				new BigDecimal(80),				
+				"Calculated rental cost must be 80.");
 	}
 	
 	public void testReturnOrder() {

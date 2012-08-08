@@ -10,21 +10,15 @@ import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.account.AccountType;
 import com.sjsu.webmart.model.account.Active;
 import com.sjsu.webmart.model.account.AddressInfo;
-import com.sjsu.webmart.model.notification.Message;
-import com.sjsu.webmart.model.notification.MessageObservable;
-import com.sjsu.webmart.model.notification.MessageObserver;
 import com.sjsu.webmart.model.payment.PayMerchandise;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.service.AccountService;
-import com.sjsu.webmart.service.NotificationService;
 import com.sjsu.webmart.util.ConsoleUtil;
 
-public class AccountServiceImpl implements AccountService, MessageObservable{
+public class AccountServiceImpl implements AccountService{
 
 	private static AccountServiceImpl instance = null;
-	protected static NotificationService notificationService = NotificationServiceImpl.getInstance();
-	private List<MessageObserver> observers = new ArrayList<MessageObserver>();
 	private static List<Account> accounts = new ArrayList<Account>();
 	private static int id = 1;
 	private Account a;
@@ -34,7 +28,6 @@ public class AccountServiceImpl implements AccountService, MessageObservable{
 	private AccountServiceImpl() {
 		// TODO Auto-generated constructor stub
 		createInitialAccounts();
-		addObserver(notificationService);
 	}
 
 	
@@ -425,6 +418,43 @@ public class AccountServiceImpl implements AccountService, MessageObservable{
 		return accounts;
 	}
 
+	@Override
+	public boolean isSeller(int accountId) {
+		// TODO Auto-generated method stub
+		Account a = findAccountById(accountId);
+		if(a!=null)
+		{
+			if(a.getAccountType().equals(AccountType.SELLER))
+				return true;
+			else
+				return false;
+		}
+		else
+			System.out.println("Invalid Account ID");
+		return false;
+	}
+
+	
+	@Override
+	public List<Account> getAccountsByType(AccountType accountType) {
+		// TODO Auto-generated method stub
+		List<Account> sellerAccounts = new ArrayList<Account>();
+		List<Account> buyerAccounts = new ArrayList<Account>();
+		for(Account a: accounts)
+		{
+			if(a.getAccountType().equals(AccountType.SELLER))
+				sellerAccounts.add(a);
+			else
+				buyerAccounts.add(a);
+		}
+		
+		if(accountType.equals(AccountType.BUYER))
+			return buyerAccounts;
+		else
+			return sellerAccounts;
+	}
+
+
 	private void createInitialAccounts(){
 		
 		AddressInfo a_info = new AddressInfo();
@@ -435,7 +465,7 @@ public class AccountServiceImpl implements AccountService, MessageObservable{
 		a = new Account();
 
 		a.setAccountId(id++);
-		a.setAccountType(AccountType.BUYER);
+		a.setAccountType(AccountType.SELLER);
 		a.setEmail("nikitha@gmail.com");
 		a.setFirstName("Nikitha");
 		a.setLastName("Vurumalla");
@@ -475,71 +505,44 @@ public class AccountServiceImpl implements AccountService, MessageObservable{
 		a.setPaymentInfo(payments);
 		
 		accounts.add(a);
-	}
-
-	@Override
-	public boolean isSeller(int accountId) {
-		// TODO Auto-generated method stub
-		Account a = findAccountById(accountId);
-		if(a!=null)
-		{
-			if(a.getAccountType().equals(AccountType.SELLER))
-				return true;
-			else
-				return false;
-		}
-		else
-			System.out.println("Invalid Account ID");
-		return false;
-	}
-
-	
-	@Override
-	public List<Account> getAccountsByType(AccountType accountType) {
-		// TODO Auto-generated method stub
-		List<Account> sellerAccounts = new ArrayList<Account>();
-		List<Account> buyerAccounts = new ArrayList<Account>();
-		for(Account a: accounts)
-		{
-			if(a.getAccountType().equals(AccountType.SELLER))
-				sellerAccounts.add(a);
-			else
-				buyerAccounts.add(a);
-		}
 		
-		if(accountType.equals(AccountType.BUYER))
-			return buyerAccounts;
-		else
-			return sellerAccounts;
+		/***************/
+		
+		/*a = new Account();
+
+		a.setAccountId(id++);
+		a.setAccountType(AccountType.SELLER);
+		a.setEmail("priyanka@gmail.com");
+		a.setFirstName("Priyanka");
+		a.setLastName("B");
+		a.setPassword("priyanka");
+		a.setPaymentInfo(null);
+		a.setState(new Active());
+		
+		a_info.setAddress1("3475 Granada Ave");
+		a_info.setAddress2("#321");
+		a_info.setCity("Santa Clara");
+		a_info.setState("CA");
+		a_info.setZip("95034");
+		a_info.setCountry("USA");
+		addresses.add(a_info);
+		a.setAddressInfo(addresses);
+
+		
+		PaymentInfo p_info3 = new PayMerchandise();
+		p_info1.setPaymentType(PaymentType.CARD);
+		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p_info1.setCardNumber("5432123456782345");
+		p_info1.setSecurityCode(123);
+		p_info1.setExpirationDate(new Date());
+		
+		List<PaymentInfo> payments1 = new ArrayList<PaymentInfo>();
+		payments.add(p_info3);
+		
+		a.setPaymentInfo(payments1);
+		
+		accounts.add(a);  */
+
 	}
 
-
-	@Override
-	public void addObserver(MessageObserver observer) {
-		// TODO Auto-generated method stub
-		observers.add(observer);
-	}
-
-
-	@Override
-	public void deleteObserver(MessageObserver observer) {
-		// TODO Auto-generated method stub
-		observers.remove(observer);
-	}
-
-
-	@Override
-	public void notifyObservers(Object args) {
-		// TODO Auto-generated method stub
-		for (MessageObserver observer : observers) {
-			observer.update(this, args);
-		}
-	}
-
-	public void sendNotification(int accountId) {
-		Account a = findAccountById(accountId);
-		String content = "Account details modified";
-		Message msg = new Message(a.getEmail(), content);
-		notifyObservers(msg);
-	}
 }

@@ -31,7 +31,4 @@ public interface AccountService {
 
 	public List<Account> getAccountsByType(AccountType accountType);
 	
-	public void sendNotification(int accountId);
-
-	
 }
