@@ -5,6 +5,7 @@ import java.util.List;
 import com.sjsu.webmart.model.order.Order;
 import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.model.order.OrderParams;
+import com.sjsu.webmart.model.order.RentPeriod;
 
 public interface OrderService {
 
@@ -19,6 +20,8 @@ public interface OrderService {
 	public Order updateOrder(Order order);
 	
 	public boolean removeOrder(Integer orderId);
+	
+	public boolean itemAvailable(Integer itemId, RentPeriod rentPeriod);
 	/*
 	Mange Order	(Buyer)
 	List Item

@@ -1,5 +1,7 @@
 package com.sjsu.webmart.cli;
 
+import static com.sjsu.webmart.util.ConsoleUtil.SDF;
+import static com.sjsu.webmart.util.ConsoleUtil.getDateValue;
 import static com.sjsu.webmart.util.ConsoleUtil.getIdValue;
 import static com.sjsu.webmart.util.ConsoleUtil.getOption;
 import static com.sjsu.webmart.util.ConsoleUtil.printEnteredOption;
@@ -9,9 +11,11 @@ import static com.sjsu.webmart.util.ConsoleUtil.printText;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -30,6 +34,7 @@ import com.sjsu.webmart.model.order.OrderParams;
 import com.sjsu.webmart.model.order.OrderStatus;
 import com.sjsu.webmart.model.order.OrderType;
 import com.sjsu.webmart.model.order.RentOrder;
+import com.sjsu.webmart.model.order.RentPeriod;
 import com.sjsu.webmart.model.order.ReturnOrder;
 import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
@@ -41,6 +46,7 @@ import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import com.sjsu.webmart.service.impl.OrderServiceImpl;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 public class OrderConsoleHandler {
 	private OrderService orderService;
@@ -52,9 +58,10 @@ public class OrderConsoleHandler {
 	private BufferedReader reader;
 
 	private static SimpleDateFormat MONTH_YEAR_FORMAT = new SimpleDateFormat(
-			"MM-yyyy");
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-			"MM-dd-yyyy");
+			"MM/yyyy");
+
+	private static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
+			"MM/dd/yyyy HH:mm");
 
 	private Account account;
 
@@ -119,20 +126,27 @@ public class OrderConsoleHandler {
 
 	private void handleViewOrder() {
 		printText(out, "Available Orders.");
-		String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+		String format = "|%1$-15s|%2$-15s|%3$-35s|%4$-10s|%5$-15s|%6$-15s|\n";
 		System.out
-				.println("_________________________________________________________________");
-		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
+				.println("________________________________________________________________________________________________________________");
+		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST",
+				"RENT START", "RENT END");
 		System.out
-				.println("_________________________________________________________________");
+				.println("________________________________________________________________________________________________________________");
 		OrderFilter filter = new OrderFilter();
 		filter.setAccountId(account.getAccountId());
 		for (Order order : orderService.findOrders(filter)) {
+			RentPeriod rentPeriod = order.getRentPeriod();
+			String start = (rentPeriod == null) ? "" : ConsoleUtil.SDF
+					.format(rentPeriod.getBegin());
+			String end = (rentPeriod == null) ? "" : ConsoleUtil.SDF
+					.format(rentPeriod.getEnd());
 			System.out.format(format, order.getOrderId(), order.getOrderType(),
-					order.getItem().getItemDescription(), order.getCost());
+					order.getItem().getItemDescription(), order.getCost(),
+					start, end);
 		}
 		System.out
-				.println("_________________________________________________________________");
+				.println("________________________________________________________________________________________________________________");
 
 		int input;
 		Order order = null;
@@ -176,16 +190,26 @@ public class OrderConsoleHandler {
 		orderService.placeOrder(orderParams);
 	}
 
-	private void handleRentItem() {
+	private void handleRentItem() throws IOException {
 		Item item = promptItem(ItemType.RENTABLE);
+
+		printText(out,
+				String.format("Enter Rent Start (%s):", SDF.toPattern()), false);
+		Date rentStartTime = getDateValue(reader);
+		printText(out, String.format("Enter Rent End (%s):", SDF.toPattern()),
+				false);
+		Date rentEndTime = getDateValue(reader);
+
 		PaymentType paymentType = promptPaymentType();
 		PaymentInfo paymentInfo = promptPaymentDetails(account);
 		FulfillmentType fulfillmentType = promptShippingType(item);
 
+		RentPeriod rentPeriod = new RentPeriod(rentStartTime, rentEndTime);
 		Order order = new RentOrder();
 		order.setAccount(account);
 		order.setItem(item);
 		order.setOrderType(OrderType.RENT);
+		order.setRentPeriod(rentPeriod);
 
 		OrderParams orderParams = new OrderParams();
 		orderParams.setFulfillmentType(fulfillmentType);
@@ -199,6 +223,9 @@ public class OrderConsoleHandler {
 
 	private void handleBuyAuctionItem() {
 		Bid bid = promptBid();
+
+		if (bid == null)
+			return;
 
 		Item item = bid.getItem();
 
@@ -246,6 +273,7 @@ public class OrderConsoleHandler {
 		order.setAccount(account);
 		order.setItem(item);
 		order.setOrderType(OrderType.RETURN);
+		order.setCost(new BigDecimal(-oldOrder.getCost().doubleValue()));
 
 		OrderParams orderParams = new OrderParams();
 		orderParams.setFulfillmentType(fulfillmentType);
@@ -261,18 +289,18 @@ public class OrderConsoleHandler {
 
 	private Order promptOrders(OrderFilter filter) {
 		printText(out, "Available Orders.");
-		String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+		String format = "|%1$-15s|%2$-15s|%3$-40s|%4$-10s|\n";
 		System.out
-				.println("_________________________________________________________________");
+				.println("_____________________________________________________________________________________");
 		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
 		System.out
-				.println("_________________________________________________________________");
+				.println("_____________________________________________________________________________________");
 		for (Order order : orderService.findOrders(filter)) {
 			System.out.format(format, order.getOrderId(), order.getOrderType(),
 					order.getItem().getItemDescription(), order.getCost());
 		}
 		System.out
-				.println("_________________________________________________________________");
+				.println("_____________________________________________________________________________________");
 
 		int input;
 		Order order = null;
@@ -314,8 +342,8 @@ public class OrderConsoleHandler {
 
 		printText(
 				out,
-				"Welcome " + account.getFirstName() + " "
-						+ account.getLastName() + "!");
+				"*** Welcome " + account.getFirstName() + " "
+						+ account.getLastName() + "! ***");
 		return account;
 	}
 
@@ -371,19 +399,20 @@ public class OrderConsoleHandler {
 
 		printText(out, "Auction items won.");
 		if (CollectionUtils.isNotEmpty(bids)) {
-			String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+			String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-20s|\n";
 			System.out
-					.println("_________________________________________________________________");
+					.println("___________________________________________________________________________");
 			System.out.format(format, "BID ID", "DESCRIPTION", "PRICE",
 					"BID DATE");
 			System.out
-					.println("_________________________________________________________________");
+					.println("___________________________________________________________________________");
 			for (Bid b : bids) {
 				System.out.format(format, b.getBidId(), b.getItem()
-						.getItemTitle(), b.getBidPrice(), b.getTimeOfBid());
+						.getItemTitle(), b.getBidPrice(), DATE_TIME_FORMAT
+						.format(b.getTimeOfBid()));
 			}
 			System.out
-					.println("_________________________________________________________________");
+					.println("___________________________________________________________________________");
 
 		}
 

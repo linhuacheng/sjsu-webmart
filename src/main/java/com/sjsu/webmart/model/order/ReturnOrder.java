@@ -34,7 +34,9 @@ public class ReturnOrder extends Order {
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
-		BigDecimal cost = new BigDecimal(- item.getPrice());
+		if (cost == null) {
+			cost = new BigDecimal(- item.getPrice());
+		}
 		// return negative cost
 		System.out.println("ORDER COST calculated:" + cost);
 		return cost;

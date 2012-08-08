@@ -11,6 +11,7 @@ import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.model.order.OrderParams;
 import com.sjsu.webmart.model.order.OrderStatus;
 import com.sjsu.webmart.model.order.OrderType;
+import com.sjsu.webmart.model.order.RentPeriod;
 import com.sjsu.webmart.service.OrderService;
 
 public class OrderServiceImpl implements OrderService {
@@ -42,8 +43,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Order placeOrder(OrderParams orderParams) {
-		orders.add(orderParams.getOrder());
 		orderParams.getOrder().processOrder(orderParams);
+		orders.add(orderParams.getOrder());
 		return orderParams.getOrder();
 	}
 
@@ -87,6 +88,9 @@ public class OrderServiceImpl implements OrderService {
 			Integer accountId = filter.getAccountId();
 			if (accountId != null && order.getAccount().getAccountId() != accountId)
 				continue;
+			Integer itemId = filter.getItemId();
+			if (itemId != null && order.getItem().getItemId() != itemId)
+				continue;
 			Date start = filter.getStart();
 			if (start != null) {
 				Date startDt = getMidnight(start);
@@ -100,10 +104,10 @@ public class OrderServiceImpl implements OrderService {
 					continue;
 			}
 			OrderStatus status = filter.getOrderStatus();
-			if (status != null && !order.getOrderStatus().equals(status)) 
+			if (status != null && order.getOrderStatus() != null && !order.getOrderStatus().equals(status)) 
 				continue;
 			OrderType type = filter.getOrderType();
-			if (type != null && !order.getOrderType().equals(type)) 
+			if (type != null && order.getOrderType()!= null && !order.getOrderType().equals(type)) 
 				continue;
 			// seems like everthing looks good
 			filteredOrder.add(order);
@@ -136,4 +140,22 @@ public class OrderServiceImpl implements OrderService {
 		date.add(Calendar.DAY_OF_MONTH, 1);
 		return date.getTime();
 	}
+	
+	public boolean itemAvailable(Integer itemId, RentPeriod rentPeriod) {
+		OrderFilter filter = new OrderFilter();
+		filter.setOrderType(OrderType.RENT);
+		filter.setItemId(itemId);
+		
+		List<Order> orders = findOrders(filter);
+		// Check the rent period
+		for (Order order: orders) {
+			if (order.getRentPeriod().contains(rentPeriod.getBegin()) || 
+				order.getRentPeriod().contains(rentPeriod.getEnd())) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
 }

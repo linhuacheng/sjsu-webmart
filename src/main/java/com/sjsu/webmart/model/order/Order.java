@@ -20,8 +20,11 @@ import com.sjsu.webmart.processor.impl.CardProcessor;
 import com.sjsu.webmart.processor.impl.ChequeProcessor;
 import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.NotificationService;
+import com.sjsu.webmart.service.OrderService;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import com.sjsu.webmart.service.impl.NotificationServiceImpl;
+import com.sjsu.webmart.service.impl.OrderServiceImpl;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 /**
  * @author chenglin
@@ -37,6 +40,9 @@ public abstract class Order implements MessageObservable {
 	protected static NotificationService notificationService = NotificationServiceImpl
 			.getInstance();
 	
+	protected static OrderService orderService = OrderServiceImpl
+			.getInstance();
+	
 	private List<MessageObserver> observers = new ArrayList<MessageObserver>();
 
 	protected Integer orderId;
@@ -44,8 +50,7 @@ public abstract class Order implements MessageObservable {
 	protected OrderStatus orderStatus;
 	protected Item item;
 	protected Account account;
-	protected Date fromDate;
-	protected Date toDate;
+	protected RentPeriod rentPeriod;
 	protected Date orderDate ;
 	protected BigDecimal cost;
 
@@ -114,20 +119,12 @@ public abstract class Order implements MessageObservable {
 		this.account = account;
 	}
 
-	public Date getFromDate() {
-		return fromDate;
+	public RentPeriod getRentPeriod() {
+		return rentPeriod;
 	}
 
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
-
-	public Date getToDate() {
-		return toDate;
-	}
-
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
+	public void setRentPeriod(RentPeriod rentPeriod) {
+		this.rentPeriod = rentPeriod;
 	}
 
 	public void processOrder(OrderParams orderParams) {
@@ -175,10 +172,13 @@ public abstract class Order implements MessageObservable {
 
 	@Override
 	public String toString() {
+		String start = (rentPeriod==null)? "": ConsoleUtil.SDF.format(rentPeriod.getBegin());
+		String end = (rentPeriod==null)? "": ConsoleUtil.SDF.format(rentPeriod.getEnd());
+		
 		return "Order{" + "orderId=" + orderId + ", orderType=" + orderType
 				+ ", item=" + item.getItemTitle() + ", quantity=" + item.getQuantity()
 				+", buyer=" + account.getEmail() + ", seller="
-				+ item.getSellerName() + '}';
+				+ item.getSellerName() + ", start=" + start + ", end=" + end + "}";
 	}
 
 	public void addObserver(MessageObserver observer) {

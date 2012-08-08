@@ -8,8 +8,15 @@ public class RentOrder extends Order {
 
 	@Override
 	public boolean itemAvailable() {
-		// TODO Auto-generated method stub
-		return true;
+		boolean available =  orderService.itemAvailable(item.getItemId(), rentPeriod);
+		if (available) {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is AVAILABLE for " + rentPeriod);
+		} else {
+			System.out.println("Item ID: " + item.getItemId()
+					+ " is NOT AVAILABLE for " + rentPeriod);
+		}
+		return available;
 	}
 
 	@Override
@@ -27,8 +34,8 @@ public class RentOrder extends Order {
 
 	@Override
 	public BigDecimal calculateCost(OrderParams orderParams) {
-		Date rentStart = orderParams.getOrder().getFromDate();
-		Date rentEnd = orderParams.getOrder().getToDate();
+		Date rentStart = orderParams.getOrder().getRentPeriod().getBegin();
+		Date rentEnd = orderParams.getOrder().getRentPeriod().getEnd();
 		int numDays = getDaysDiff(rentStart, rentEnd);
 
 		BigDecimal cost = new BigDecimal(numDays * item.getPrice());

@@ -5,11 +5,21 @@ import java.util.Date;
 public class OrderFilter {
 
 	private Integer accountId;
-	
+
+	private Integer itemId;
+
 	private Date start;
-	
+
 	private Date end;
-	
+
+	public Integer getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
+
 	public Integer getAccountId() {
 		return accountId;
 	}
@@ -51,6 +61,6 @@ public class OrderFilter {
 	}
 
 	private OrderType orderType;
-	
+
 	private OrderStatus orderStatus;
 }
