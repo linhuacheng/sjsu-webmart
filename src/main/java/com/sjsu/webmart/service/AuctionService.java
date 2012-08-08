@@ -3,6 +3,7 @@ package com.sjsu.webmart.service;
 import com.sjsu.webmart.common.AuctionResponse;
 import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.AuctionType;
+import com.sjsu.webmart.model.auction.AuctionFilter;
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
@@ -49,4 +50,6 @@ public interface AuctionService {
     AuctionResponse placeBid(int auctionId, Account account, Item item, float bidPrice);
 
     List<Bid> findWinningBidByAccount(int accountId);
+
+    List<AuctionInfo> findAuctionInfoByReportFilter(AuctionFilter filter);
 }
