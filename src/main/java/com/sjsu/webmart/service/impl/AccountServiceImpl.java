@@ -27,9 +27,7 @@ public class AccountServiceImpl implements AccountService{
 	
 	private AccountServiceImpl() {
 		// TODO Auto-generated constructor stub
-		createInitialAccounts();
 	}
-
 	
 	public static AccountService getInstance() {
 	if (instance == null) {
@@ -41,7 +39,6 @@ public class AccountServiceImpl implements AccountService{
 	return instance;
 	}
 	
-	
 	@Override
 	public void registerUser() {
 		// TODO Auto-generated method stub
@@ -51,11 +48,9 @@ public class AccountServiceImpl implements AccountService{
 		String input;
 		Date expDate;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
 		try {
 			
 			a.setAccountId(id++);
-			
 			System.out.println("Enter Password : ");
 			while((input=br.readLine()).isEmpty())
 				System.out.println("Please enter password : ");
@@ -149,7 +144,6 @@ public class AccountServiceImpl implements AccountService{
 						System.out.println("Please security code : ");
 					int inputInt = Integer.parseInt(input);
 					p_info.setSecurityCode(inputInt);
-					
 				}
 				else if(input.equalsIgnoreCase("cheque"))
 				{
@@ -209,16 +203,19 @@ public class AccountServiceImpl implements AccountService{
 				System.out.println(a_info.getCountry()+"\n");
 			}
 			
-			for(PaymentInfo p_info : a.getPaymentInfo())
+			if(a.getPaymentInfo()!=null)
 			{
-				System.out.println(p_info.getPaymentType());
-				if(p_info.getPaymentType().equals(PaymentType.CARD)){
-					System.out.println(p_info.getCardNumber());
-					System.out.println(p_info.getExpirationDate());
-					System.out.println(p_info.getSecurityCode());
-				}
-				else{
-					System.out.println(p_info.getChequeNumber());
+				for(PaymentInfo p_info : a.getPaymentInfo())
+				{
+					System.out.println(p_info.getPaymentType());
+					if(p_info.getPaymentType().equals(PaymentType.CARD)){
+						System.out.println(p_info.getCardNumber());
+						System.out.println(p_info.getExpirationDate());
+						System.out.println(p_info.getSecurityCode());
+					}
+					else{
+						System.out.println(p_info.getChequeNumber());
+					}
 				}
 			}
 		}
@@ -455,94 +452,17 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 
-	private void createInitialAccounts(){
-		
-		AddressInfo a_info = new AddressInfo();
-//		PaymentInfo p = null;
-//		payment_details = new ArrayList<PaymentInfo>();
-		addresses = new ArrayList<AddressInfo>();
-		
-		a = new Account();
+	@Override
+	public int getNextId() {
+		// TODO Auto-generated method stub
+		return id++;
+	}
 
-		a.setAccountId(id++);
-		a.setAccountType(AccountType.SELLER);
-		a.setEmail("nikitha@gmail.com");
-		a.setFirstName("Nikitha");
-		a.setLastName("Vurumalla");
-		a.setPassword("nikitha");
-		a.setPaymentInfo(null);
-		a.setState(new Active());
-		
-		a_info.setAddress1("1234 Pebble Dr");
-		a_info.setAddress2("#345");
-		a_info.setCity("Sunnyvale");
-		a_info.setState("CA");
-		a_info.setZip("95039");
-		a_info.setCountry("USA");
-		addresses.add(a_info);
-		a.setAddressInfo(addresses);
 
-		
-		PaymentInfo p_info1 = new PayMerchandise();
-		p_info1.setPaymentType(PaymentType.CARD);
-		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info1.setCardNumber("5432123456782345");
-		p_info1.setChequeNumber("45234456456");
-		p_info1.setSecurityCode(123);
-		p_info1.setExpirationDate(new Date());
-		
-		PaymentInfo p_info2 = new PayMerchandise();
-		p_info2.setPaymentType(PaymentType.CHEQUE);
-		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info2.setCardNumber("5432123456788332");
-		p_info2.setChequeNumber("45234451234");
-		p_info2.setExpirationDate(new Date());
-		
-		List<PaymentInfo> payments = new ArrayList<PaymentInfo>();
-		payments.add(p_info1);
-		payments.add(p_info2);
-		
-		a.setPaymentInfo(payments);
-		
-		accounts.add(a);
-		
-		/***************/
-		
-		/*a = new Account();
-
-		a.setAccountId(id++);
-		a.setAccountType(AccountType.SELLER);
-		a.setEmail("priyanka@gmail.com");
-		a.setFirstName("Priyanka");
-		a.setLastName("B");
-		a.setPassword("priyanka");
-		a.setPaymentInfo(null);
-		a.setState(new Active());
-		
-		a_info.setAddress1("3475 Granada Ave");
-		a_info.setAddress2("#321");
-		a_info.setCity("Santa Clara");
-		a_info.setState("CA");
-		a_info.setZip("95034");
-		a_info.setCountry("USA");
-		addresses.add(a_info);
-		a.setAddressInfo(addresses);
-
-		
-		PaymentInfo p_info3 = new PayMerchandise();
-		p_info1.setPaymentType(PaymentType.CARD);
-		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info1.setCardNumber("5432123456782345");
-		p_info1.setSecurityCode(123);
-		p_info1.setExpirationDate(new Date());
-		
-		List<PaymentInfo> payments1 = new ArrayList<PaymentInfo>();
-		payments.add(p_info3);
-		
-		a.setPaymentInfo(payments1);
-		
-		accounts.add(a);  */
-
+	@Override
+	public void addAccount(Account account) {
+		// TODO Auto-generated method stub
+		accounts.add(account);
 	}
 
 }

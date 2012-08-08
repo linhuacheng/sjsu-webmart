@@ -31,4 +31,8 @@ public interface AccountService {
 
 	public List<Account> getAccountsByType(AccountType accountType);
 	
+	public int getNextId();
+	
+	public void addAccount(Account account);
+	
 }

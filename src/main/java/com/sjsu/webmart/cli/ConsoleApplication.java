@@ -15,6 +15,7 @@ import java.util.List;
 import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
+import com.sjsu.webmart.model.account.AccountInitialization;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.service.AccountService;
@@ -150,6 +151,10 @@ public class ConsoleApplication {
 
     private void setupSampleData(){
         Item item;
+        
+        AccountInitialization accountInitialize = new AccountInitialization();
+        accountInitialize.initializeAccount();
+        
         //Initialize Item data
         ItemData id = new ItemData();
 		id.initializeInventory();
@@ -157,5 +162,6 @@ public class ConsoleApplication {
         auctionService.setupNewAuction(item, AuctionType.open, 200
                 , new Date(System.currentTimeMillis() - 10000), new Date(System.currentTimeMillis() + 10000));
 
+        
     }
 }
