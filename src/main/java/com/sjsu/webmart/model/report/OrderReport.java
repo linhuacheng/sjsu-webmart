@@ -1,7 +1,5 @@
 package com.sjsu.webmart.model.report;
 
-import static com.sjsu.webmart.util.ConsoleUtil.printText;
-
 import java.util.ArrayList;
 import java.util.List;
 

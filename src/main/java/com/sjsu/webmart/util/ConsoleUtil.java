@@ -36,7 +36,7 @@ public class ConsoleUtil {
      */
     public static void printEnteredOption(PrintWriter out, List<ConsoleOption> options, OptionNum optionNum) {
 
-        out.println("Entered" + options.get(optionNum.getOptionNum() - 1));
+        out.println("Entered " + options.get(optionNum.getOptionNum() - 1)+" - ");
     }
 
     /**
@@ -128,10 +128,10 @@ public class ConsoleUtil {
      */
     public static void printOptions(PrintWriter out, OptionNum optionNum, List<ConsoleOption> options) {
         //if (OptionNum.OPTION_NONE.equals(optionNum)) {
-        out.println("Available Options");
+        out.println("\nAvailable Options");
         out.println(StringUtils.join(options, "\n"));
         //}
-        out.print("Enter Option:");
+        out.print("Enter Option: ");
         out.flush();
     }
 

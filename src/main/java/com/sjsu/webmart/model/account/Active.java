@@ -2,13 +2,7 @@ package com.sjsu.webmart.model.account;
 
 public class Active implements AccountState{
 
-	private Account account;
 	
-	public Active(Account acc)
-	{
-		account = acc;
-	}
-
 	public Active() {
 		// TODO Auto-generated constructor stub
 	}
