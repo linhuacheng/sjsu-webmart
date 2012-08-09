@@ -110,18 +110,18 @@ public class AccountInitialization {
 		d3.setYear(115);
 		
 		a3.setAccountId(accountService.getNextId());
-		a3.setAccountType(AccountType.SELLER);
+		a3.setAccountType(AccountType.BUYER);
 		a3.setEmail("priyanka@gmail.com");
-		a3.setFirstName("Priyanka");
-		a3.setLastName("Bhardwaj");
-		a3.setPassword("priyanka");
+		a3.setFirstName("Chandu");
+		a3.setLastName("Kempiah");
+		a3.setPassword("chandu");
 		a3.setState(new Active());
 		
-		a_info3.setAddress1("5392 Flora Vista");
+		a_info3.setAddress1("492 Walsh Ave");
 		a_info3.setAddress2("#242");
 		a_info3.setCity("Santa Clara");
 		a_info3.setState("CA");
-		a_info3.setZip("95054");
+		a_info3.setZip("95051");
 		a_info3.setCountry("USA");
 		addresses3.add(a_info3);
 		a3.setAddressInfo(addresses3);
@@ -141,9 +141,88 @@ public class AccountInitialization {
 		p3_info2.setExpirationDate(d3);
 		
 		payments3.add(p3_info1);
+		payments3.add(p3_info2);
 		a3.setPaymentInfo(payments3);
 		
 		accountService.addAccount(a3);
+
+		
+		Account a4 = new Account();
+		AddressInfo a_info4 = new AddressInfo();
+		List<PaymentInfo>payments4 = new ArrayList<PaymentInfo>();
+		List<AddressInfo> addresses4 = new ArrayList<AddressInfo>();
+		Date d4 = new Date();
+		d4.setMonth(5);
+		d4.setYear(119);
+		
+		a4.setAccountId(accountService.getNextId());
+		a4.setAccountType(AccountType.BUYER);
+		a4.setEmail("priyanka@gmail.com");
+		a4.setFirstName("Lin");
+		a4.setLastName("Cheng");
+		a4.setPassword("cheng");
+		a4.setState(new Active());
+		
+		a_info4.setAddress1("593 Kiely Blvd");
+		a_info4.setAddress2("");
+		a_info4.setCity("Santa Clara");
+		a_info4.setState("CA");
+		a_info4.setZip("95051");
+		a_info4.setCountry("USA");
+		addresses4.add(a_info4);
+		a4.setAddressInfo(addresses4);
+
+		
+		PaymentInfo p4_info1 = new PayMerchandise();
+		
+		p4_info1.setPaymentType(PaymentType.CHEQUE);
+		p4_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p4_info1.setChequeNumber("4960285");
+		p4_info1.setExpirationDate(d4);
+		
+		payments4.add(p4_info1);
+		a4.setPaymentInfo(payments4);
+		
+		accountService.addAccount(a4);
+		
+		Account a5 = new Account();
+		AddressInfo a_info5 = new AddressInfo();
+		List<PaymentInfo>payments5 = new ArrayList<PaymentInfo>();
+		List<AddressInfo> addresses5 = new ArrayList<AddressInfo>();
+		Date d5 = new Date();
+		d5.setMonth(3);
+		d5.setYear(118);
+		
+		a5.setAccountId(accountService.getNextId());
+		a5.setAccountType(AccountType.SELLER);
+		a5.setEmail("ram@gmail.com");
+		a5.setFirstName("Venkat");
+		a5.setLastName("Mamidi");
+		a5.setPassword("ram");
+		a5.setState(new Active());
+		
+		a_info5.setAddress1("1137 Mary Ave");
+		a_info5.setAddress2("");
+		a_info5.setCity("Sunnyvale");
+		a_info5.setState("CA");
+		a_info5.setZip("95054");
+		a_info5.setCountry("USA");
+		addresses5.add(a_info5);
+		a5.setAddressInfo(addresses5);
+
+		
+		PaymentInfo p5_info1 = new PayMerchandise();
+		
+		p5_info1.setPaymentType(PaymentType.CARD);
+		p5_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p5_info1.setCardNumber("735689023813792");
+		p5_info1.setSecurityCode(367);
+		p5_info1.setExpirationDate(d5);
+		
+		payments5.add(p5_info1);
+		a5.setPaymentInfo(payments5);
+		
+		accountService.addAccount(a5);
 
 	}
 }

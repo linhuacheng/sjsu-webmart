@@ -183,7 +183,7 @@ public class AccountConsoleHandler {
 		}
 		
 		else
-			System.out.println("You are not authorized to view all the accounts \n");
+			System.out.println("You are not authorized to view all the accounts ");
 	}
 	
 }
