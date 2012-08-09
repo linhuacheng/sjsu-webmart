@@ -114,11 +114,11 @@ public abstract class Item {
 		this.buyNowPrice = buyNowPrice;
 	}*/
 
-	/*public float getMaxBidPrice() {
+	/*public float getStartBidPrice() {
 		return maxBidPrice;
 	}
 
-	public void setMaxBidPrice(float maxBidPrice) {
+	public void setStartBidPrice(float maxBidPrice) {
 		this.maxBidPrice = maxBidPrice;
 	}*/
 

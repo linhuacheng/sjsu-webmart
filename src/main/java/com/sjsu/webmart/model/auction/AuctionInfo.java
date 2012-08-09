@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.sjsu.webmart.common.AuctionResponse;
-import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.model.item.Item;
 import org.apache.commons.logging.Log;
@@ -25,7 +24,7 @@ public class AuctionInfo implements AuctionInterface{
     int auctionId;
     Date auctionStartTime;
     Date auctionEndTime;
-    float maxBidPrice;
+    float startBidPrice;
     List<Bid> bidList;
     private AuctionStrategy auctionStrategy;
     private Bid currentActiveBid;
@@ -39,7 +38,7 @@ public class AuctionInfo implements AuctionInterface{
     public void setAuctionState(AuctionState auctionState) {
         this.auctionState = auctionState;
     }
-    public AuctionInfo(AuctionType auctionType, float maxBidPrice
+    public AuctionInfo(AuctionType auctionType, float startBidPrice
             ,Date bidStartTime, Date bidEndTime, Item item){
 
         setAuctionStrategy(auctionType);
@@ -47,7 +46,7 @@ public class AuctionInfo implements AuctionInterface{
         this.auctionEndTime = bidEndTime;
         bidList = new ArrayList<Bid>();
         this.item = item;
-        this.maxBidPrice = maxBidPrice;
+        this.startBidPrice = startBidPrice;
         auctionState = new Scheduled(this);
     }
 
@@ -139,12 +138,12 @@ public class AuctionInfo implements AuctionInterface{
         this.auctionEndTime = auctionEndTime;
     }
 
-    public float getMaxBidPrice() {
-        return maxBidPrice;
+    public float getStartBidPrice() {
+        return startBidPrice;
     }
 
-    public void setMaxBidPrice(float maxBidPrice) {
-        this.maxBidPrice = maxBidPrice;
+    public void setStartBidPrice(float startBidPrice) {
+        this.startBidPrice = startBidPrice;
     }
 
     public List<Bid> getBidList() {

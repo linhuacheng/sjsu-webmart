@@ -2,10 +2,8 @@ package com.sjsu.webmart.cli;
 
 import com.sjsu.webmart.common.*;
 import com.sjsu.webmart.model.account.Account;
-import com.sjsu.webmart.model.account.AccountCLI;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
-import com.sjsu.webmart.model.item.ConsumerItem;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
 import com.sjsu.webmart.service.AccountService;
@@ -118,11 +116,11 @@ public class AuctionConsoleHandler {
 
             for (AuctionInfo auctionInfo : auctionInfos) {
                 printText(out, String.format("Auction Details Auction Id=(%s) Item Title=(%s), Auction State=(%s)" +
-                        " Max Bid Price=(%s), Bid End Time=(%s), Bid List=(%s)"
+                        " Start Bid Price=(%s), Bid End Time=(%s), Bid List=(%s)"
                         , auctionInfo.getAuctionId()
                         , auctionInfo.getItem().getItemTitle()
                         , auctionInfo.getAuctionState().getStateType()
-                        , auctionInfo.getMaxBidPrice()
+                        , auctionInfo.getStartBidPrice()
                         , auctionInfo.getAuctionEndTime()
                         , auctionInfo.getBidList()
                 ));
@@ -191,7 +189,7 @@ public class AuctionConsoleHandler {
             printText(out, "Auction for Item is scheduled/Inprogress");
             return;
         }
-        printText(out, "Enter Max Bid Price:", false);
+        printText(out, "Enter Start Bid Price:", false);
 
         if ((price = getFloatValue(reader)) == -1) {
             printText(out, "Invalid Price");
@@ -284,7 +282,7 @@ public class AuctionConsoleHandler {
             return;
         }
 
-        printText(out, "Enter Max Bid Price:", false);
+        printText(out, "Enter Start Bid Price:", false);
 
         if ((bidPrice = getFloatValue(reader)) == -1) {
             printText(out, "Invalid Price");

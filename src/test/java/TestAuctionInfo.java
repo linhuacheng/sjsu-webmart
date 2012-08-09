@@ -1,5 +1,4 @@
 import com.sjsu.webmart.common.AuctionResponse;
-import com.sjsu.webmart.common.AuctionStateType;
 import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.model.account.Account;
 import com.sjsu.webmart.model.auction.*;
@@ -48,7 +47,7 @@ public class TestAuctionInfo {
         AuctionInfo auctionInfo = getNewAuctionInfo();
 
         Assert.assertNotNull(auctionInfo, "New Auction Info Should not be null");
-        Assert.assertTrue(auctionInfo.getMaxBidPrice() > 0, "Max bid price > 0");
+        Assert.assertTrue(auctionInfo.getStartBidPrice() > 0, "Start bid price > 0");
         Assert.assertNotNull(auctionInfo.getAuctionState(), "Auction state must not be null");
         Assert.assertNotNull(auctionInfo.getAuctionStrategy(), "Auction strategy must not null");
         Assert.assertNotNull(auctionInfo.getAuctionStartTime(), "Bid start time must not null");
