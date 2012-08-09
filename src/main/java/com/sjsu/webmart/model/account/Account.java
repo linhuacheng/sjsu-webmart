@@ -117,20 +117,20 @@ public class Account implements MessageObservable{
 		return (Boolean) null;
 	}
 	
-	public void suspendUser(Account ac)
+	public void suspendUser()
 	{
 		boolean check = false;
-		state = ac.getState();
-		check = state.suspend(ac);
+		state = getState();
+		check = state.suspend(this);
 		if(check)
 		sendNotification("SUSPENDED");
 	}
 
-	public void enableUser(Account ac)
+	public void enableUser()
 	{
 		boolean check = false;
-		state = ac.getState();
-		check = state.enable(ac);
+		state = getState();
+		check = state.enable(this);
 		if(check)
 		sendNotification("ACTIVATED");
 	}

@@ -43,21 +43,21 @@ public class AccountInitialization {
 		a1.setAddressInfo(addresses1);
 
 		
-		PaymentInfo p_info1 = new PayMerchandise();
-		p_info1.setPaymentType(PaymentType.CARD);
-		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info1.setCardNumber("5432123456782345");
-		p_info1.setSecurityCode(123);
-		p_info1.setExpirationDate(d1);
+		PaymentInfo p1_info1 = new PayMerchandise();
+		p1_info1.setPaymentType(PaymentType.CARD);
+		p1_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p1_info1.setCardNumber("5432123456782345");
+		p1_info1.setSecurityCode(123);
+		p1_info1.setExpirationDate(d1);
 		
-		PaymentInfo p_info2 = new PayMerchandise();
-		p_info2.setPaymentType(PaymentType.CHEQUE);
-		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info2.setChequeNumber("45234451234");
-		p_info2.setExpirationDate(d1);
+		PaymentInfo p1_info2 = new PayMerchandise();
+		p1_info2.setPaymentType(PaymentType.CHEQUE);
+		p1_info2.setPaymentInfoId(PaymentInfo.getNextId());
+		p1_info2.setChequeNumber("45234451234");
+		p1_info2.setExpirationDate(d1);
 		
-		payments1.add(p_info1);
-		payments1.add(p_info2);
+		payments1.add(p1_info1);
+		payments1.add(p1_info2);
 		a1.setPaymentInfo(payments1);
 		
 		accountService.addAccount(a1);
@@ -67,8 +67,8 @@ public class AccountInitialization {
 		List<PaymentInfo>payments2 = new ArrayList<PaymentInfo>();
 		List<AddressInfo> addresses2 = new ArrayList<AddressInfo>();
 		Date d2 = new Date();
-		d1.setMonth(3);
-		d1.setYear(117);
+		d2.setMonth(3);
+		d2.setYear(117);
 		
 		a2.setAccountId(accountService.getNextId());
 		a2.setAccountType(AccountType.SELLER);
@@ -88,16 +88,62 @@ public class AccountInitialization {
 		a2.setAddressInfo(addresses2);
 
 		
-		PaymentInfo p_info3 = new PayMerchandise();
-		p_info3.setPaymentType(PaymentType.CARD);
-		p_info3.setPaymentInfoId(PaymentInfo.getNextId());
-		p_info3.setCardNumber("1234567896782345");
-		p_info3.setSecurityCode(321);
-		p_info3.setExpirationDate(d2);
+		PaymentInfo p2_info1 = new PayMerchandise();
+		p2_info1.setPaymentType(PaymentType.CARD);
+		p2_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p2_info1.setCardNumber("1234567896782345");
+		p2_info1.setSecurityCode(321);
+		p2_info1.setExpirationDate(d2);
 		
-		payments2.add(p_info3);
+		payments2.add(p2_info1);
 		a2.setPaymentInfo(payments2);
 		
 		accountService.addAccount(a2);
+		
+		
+		Account a3 = new Account();
+		AddressInfo a_info3 = new AddressInfo();
+		List<PaymentInfo>payments3 = new ArrayList<PaymentInfo>();
+		List<AddressInfo> addresses3 = new ArrayList<AddressInfo>();
+		Date d3 = new Date();
+		d3.setMonth(6);
+		d3.setYear(115);
+		
+		a3.setAccountId(accountService.getNextId());
+		a3.setAccountType(AccountType.SELLER);
+		a3.setEmail("priyanka@gmail.com");
+		a3.setFirstName("Priyanka");
+		a3.setLastName("Bhardwaj");
+		a3.setPassword("priyanka");
+		a3.setState(new Active());
+		
+		a_info3.setAddress1("5392 Flora Vista");
+		a_info3.setAddress2("#242");
+		a_info3.setCity("Santa Clara");
+		a_info3.setState("CA");
+		a_info3.setZip("95054");
+		a_info3.setCountry("USA");
+		addresses3.add(a_info3);
+		a3.setAddressInfo(addresses3);
+
+		
+		PaymentInfo p3_info1 = new PayMerchandise();
+		PaymentInfo p3_info2 = new PayMerchandise();
+		p3_info1.setPaymentType(PaymentType.CARD);
+		p3_info1.setPaymentInfoId(PaymentInfo.getNextId());
+		p3_info1.setCardNumber("679134567424345");
+		p3_info1.setSecurityCode(352);
+		p3_info1.setExpirationDate(d3);
+		
+		p3_info2.setPaymentType(PaymentType.CHEQUE);
+		p3_info2.setPaymentInfoId(PaymentInfo.getNextId());
+		p3_info2.setChequeNumber("96434451234");
+		p3_info2.setExpirationDate(d3);
+		
+		payments3.add(p3_info1);
+		a3.setPaymentInfo(payments3);
+		
+		accountService.addAccount(a3);
+
 	}
 }
