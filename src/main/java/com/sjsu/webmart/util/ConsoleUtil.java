@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class ConsoleUtil {
     public static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy");
+    public static final NumberFormat NF = new DecimalFormat("#0.00");
     /**
      * prints entered options
      * @param options

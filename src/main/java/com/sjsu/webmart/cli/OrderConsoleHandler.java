@@ -1,6 +1,7 @@
 package com.sjsu.webmart.cli;
 
 import static com.sjsu.webmart.util.ConsoleUtil.SDF;
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
 import static com.sjsu.webmart.util.ConsoleUtil.getDateValue;
 import static com.sjsu.webmart.util.ConsoleUtil.getIdValue;
 import static com.sjsu.webmart.util.ConsoleUtil.getOption;
@@ -23,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.account.AccountType;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.model.item.ItemType;
@@ -126,27 +128,27 @@ public class OrderConsoleHandler {
 
 	private void handleViewOrder() {
 		printText(out, "Available Orders.");
-		String format = "|%1$-15s|%2$-15s|%3$-35s|%4$-10s|%5$-15s|%6$-15s|\n";
+		String format = "|%1$-15s|%2$-15s|%3$-45s|%4$-10s|%5$-15s|%6$-15s|\n";
 		System.out
-				.println("________________________________________________________________________________________________________________");
+				.println("_________________________________________________________________________________________________________________________");
 		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST",
 				"RENT START", "RENT END");
 		System.out
-				.println("________________________________________________________________________________________________________________");
+				.println("_________________________________________________________________________________________________________________________");
 		OrderFilter filter = new OrderFilter();
 		filter.setAccountId(account.getAccountId());
 		for (Order order : orderService.findOrders(filter)) {
 			RentPeriod rentPeriod = order.getRentPeriod();
-			String start = (rentPeriod == null) ? "" : ConsoleUtil.SDF
-					.format(rentPeriod.getBegin());
-			String end = (rentPeriod == null) ? "" : ConsoleUtil.SDF
-					.format(rentPeriod.getEnd());
+			String start = (rentPeriod == null) ? "" : SDF.format(rentPeriod
+					.getBegin());
+			String end = (rentPeriod == null) ? "" : SDF.format(rentPeriod
+					.getEnd());
 			System.out.format(format, order.getOrderId(), order.getOrderType(),
-					order.getItem().getItemDescription(), order.getCost(),
-					start, end);
+					order.getItem().getItemDescription(),
+					NF.format(order.getCost().doubleValue()), start, end);
 		}
 		System.out
-				.println("________________________________________________________________________________________________________________");
+				.println("_________________________________________________________________________________________________________________________");
 
 		int input;
 		Order order = null;
@@ -166,7 +168,21 @@ public class OrderConsoleHandler {
 			}
 		}
 
-		System.out.println(order);
+		RentPeriod rentPeriod = order.getRentPeriod();
+		String start = (rentPeriod == null) ? "" : SDF.format(rentPeriod
+				.getBegin());
+		String end = (rentPeriod == null) ? "" : SDF
+				.format(rentPeriod.getEnd());
+
+		printText(out, "Order Details:");
+		printText(out, "  ORDER ID: " + order.getOrderId());
+		printText(out, "  ORDER TYPE: " + order.getOrderType());
+		printText(out, "  ITEM: " + order.getItem().getItemTitle());
+		printText(out, "  BUYER: " + order.getAccount().getEmail());
+		printText(out, "  SELLER: " + order.getItem().getSellerName());
+		printText(out, "  RENT START: " + start);
+		printText(out, "  RENT END: " + end);
+		printText(out, "  COST: " + NF.format(order.getCost().doubleValue()));
 	}
 
 	private void handleBuyItem() {
@@ -289,18 +305,19 @@ public class OrderConsoleHandler {
 
 	private Order promptOrders(OrderFilter filter) {
 		printText(out, "Available Orders.");
-		String format = "|%1$-15s|%2$-15s|%3$-40s|%4$-10s|\n";
+		String format = "|%1$-15s|%2$-15s|%3$-50s|%4$-10s|\n";
 		System.out
-				.println("_____________________________________________________________________________________");
+				.println("_______________________________________________________________________________________________");
 		System.out.format(format, "ORDER ID", "TYPE", "ITEM", "COST");
 		System.out
-				.println("_____________________________________________________________________________________");
+				.println("_______________________________________________________________________________________________");
 		for (Order order : orderService.findOrders(filter)) {
 			System.out.format(format, order.getOrderId(), order.getOrderType(),
-					order.getItem().getItemDescription(), order.getCost());
+					order.getItem().getItemDescription(),
+					NF.format(order.getCost()));
 		}
 		System.out
-				.println("_____________________________________________________________________________________");
+				.println("_______________________________________________________________________________________________");
 
 		int input;
 		Order order = null;
@@ -325,6 +342,8 @@ public class OrderConsoleHandler {
 
 	private Account promptAccount() {
 		int input;
+		printText(out, "Available accounts.");
+		printAccount(AccountType.BUYER);
 		Account account = null;
 		while (account == null) {
 			printText(out, "Please input Account ID:", false);
@@ -333,6 +352,10 @@ public class OrderConsoleHandler {
 				account = accountService.findAccountById(input);
 				if (account == null) {
 					printText(out, "Invalid Account ID, please try again.");
+				}
+				if (!account.getState().isActive()) {
+					account = null;
+					printText(out, "Account is inactive, please try again.");
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -366,6 +389,31 @@ public class OrderConsoleHandler {
 			}
 		}
 		return item;
+	}
+
+	private void printAccount(AccountType accountType) {
+		Collection<Account> accounts;
+
+		accounts = accountService.getAccountsByType(accountType);
+
+		if (CollectionUtils.isNotEmpty(accounts)) {
+
+			String format = "|%1$-15s|%2$-20s|%3$-20s|%4$-20s|\n";
+			System.out
+					.println("________________________________________________________________________________");
+			System.out.format(format, "ACCOUNT ID", "FIRST NAME", "LAST NAME",
+					"STATUS");
+			System.out
+					.println("________________________________________________________________________________");
+			for (Account account : accounts) {
+				System.out.format(format, account.getAccountId(),
+						account.getFirstName(), account.getLastName(),
+						account.getState());
+			}
+			System.out
+					.println("________________________________________________________________________________");
+
+		}
 	}
 
 	private void printItem(ItemType type) {

@@ -2,6 +2,7 @@ package com.sjsu.webmart.service.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,8 @@ public class AccountServiceImpl implements AccountService{
 	private Account a;
 	private List<AddressInfo> addresses;
 	private List<PaymentInfo> payment_details;
+	private static SimpleDateFormat MONTH_YEAR_FORMAT = new SimpleDateFormat(
+			"MM/yyyy");
 	
 	private AccountServiceImpl() {
 		// TODO Auto-generated constructor stub
@@ -45,6 +48,7 @@ public class AccountServiceImpl implements AccountService{
 		a = new Account();
 		AddressInfo addInfo;
 		addresses = new ArrayList<AddressInfo>();
+		payment_details = new ArrayList<PaymentInfo>();
 		String input;
 		Date expDate;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -120,7 +124,7 @@ public class AccountServiceImpl implements AccountService{
 			{
 				PaymentInfo p_info = new PayMerchandise();
 
-				System.out.println("Enter Payment Type (CASH/CHEQUE) : ");
+				System.out.println("Enter Payment Type (CARD/CHEQUE) : ");
 				while((input=br.readLine()).isEmpty())
 					System.out.println("Please enter payment type : ");
 				
@@ -135,7 +139,7 @@ public class AccountServiceImpl implements AccountService{
 					p_info.setCardNumber(input);
 				
 					System.out.println("Enter Expiration Date (MM/DD/YYYY) : ");
-					while((expDate=ConsoleUtil.getDateValue(br)) != null)
+					while((expDate=ConsoleUtil.getDateValue(br)) == null)
 						System.out.println("Please enter expiration date : ");
 					p_info.setExpirationDate(expDate);
 				
@@ -162,10 +166,12 @@ public class AccountServiceImpl implements AccountService{
 					System.out.println("Incorrect input");
 					continue;
 				}
+				System.out.println("Before adding p_info to payment_details");
+				payment_details.add(p_info);
 				System.out.println("Do you want to add one more payment info? (Y/N) : ");
 				if(br.readLine().startsWith("n"))
 					break;
-				payment_details.add(p_info);
+				
 			}
 			
 			a.setAddressInfo(addresses);
@@ -174,7 +180,7 @@ public class AccountServiceImpl implements AccountService{
 			accounts.add(a);
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("Exception");
+			System.out.println(e);
 		}
 		System.out.println("User Registered with Account Id : "+a.getAccountId());
 	}
@@ -212,10 +218,10 @@ public class AccountServiceImpl implements AccountService{
 					System.out.println(p_info.getPaymentType());
 					if(p_info.getPaymentType().equals(PaymentType.CARD)){
 						System.out.println(p_info.getCardNumber());
-						System.out.println(p_info.getExpirationDate());
+						System.out.println(MONTH_YEAR_FORMAT.format(p_info.getExpirationDate())+"\n");
 					}
 					else{
-						System.out.println(p_info.getChequeNumber());
+						System.out.println(p_info.getChequeNumber()+"\n");
 					}
 				}
 			}
@@ -399,14 +405,14 @@ public class AccountServiceImpl implements AccountService{
 	public void processEnableUserAccount(int accountId) {
 		// TODO Auto-generated method stub
 		Account ac = findAccountById(accountId);
-		a.enableUser(ac);
+		ac.enableUser();
 	}
 
 	@Override
 	public void processSuspendUserAccount(int accountId) {
 		// TODO Auto-generated method stub
 		Account ac = findAccountById(accountId);
-		a.suspendUser(ac);
+		ac.suspendUser();
 	}
 
 

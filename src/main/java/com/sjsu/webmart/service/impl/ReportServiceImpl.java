@@ -2,6 +2,7 @@ package com.sjsu.webmart.service.impl;
 
 import java.util.Date;
 
+import com.sjsu.webmart.model.auction.AuctionFilter;
 import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.model.report.AccountReport;
 import com.sjsu.webmart.model.report.InventoryReport;
@@ -35,6 +36,8 @@ public class ReportServiceImpl implements ReportService {
 	public void generateMonthlyReport(int accountId, int month, int year) {
 		// TODO Auto-generated method stub
 		OrderFilter orderFilter = new OrderFilter();
+		AuctionFilter auctionFilter = new AuctionFilter();
+		
 		year = year-1900;
 		
 		dStart.setYear(year);
@@ -59,16 +62,24 @@ public class ReportServiceImpl implements ReportService {
 		orderFilter.setStart(dStart);
 		orderFilter.setEnd(dEnd);
 		
+		auctionFilter.setAccountId(accountId);
+		auctionFilter.setStartDate(dStart);
+		auctionFilter.setEndDate(dEnd);
+		
 		AccountReport a_report = new MonthlyReport();
 		a_report.showReport(orderFilter);
+		a_report.showReport(auctionFilter);
 		
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void generateYearlyReport(int accountId, int year) {
 		// TODO Auto-generated method stub
 		OrderFilter orderFilter = new OrderFilter();
+		AuctionFilter auctionFilter = new AuctionFilter();
+		year = year-1900;
 		dStart.setYear(year);
 		dStart.setMonth(0);
 		dStart.setDate(1);
@@ -79,8 +90,14 @@ public class ReportServiceImpl implements ReportService {
 		orderFilter.setStart(dStart);
 		orderFilter.setEnd(dEnd);
 		orderFilter.setAccountId(accountId);
+		
+		auctionFilter.setStartDate(dStart);
+		auctionFilter.setEndDate(dEnd);
+		auctionFilter.setAccountId(accountId);
+		
 		AccountReport a_report = new YearlyReport();
 		a_report.showReport(orderFilter);
+		a_report.showReport(auctionFilter);
 	}
 
 	@Override

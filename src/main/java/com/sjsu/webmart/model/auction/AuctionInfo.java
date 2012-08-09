@@ -22,6 +22,7 @@ public class AuctionInfo implements AuctionInterface{
     Log log = LogFactory.getLog(AuctionInfo.class);
 
     int auctionId;
+    //String itemTitle;
     Date auctionStartTime;
     Date auctionEndTime;
     float startBidPrice;
@@ -50,7 +51,13 @@ public class AuctionInfo implements AuctionInterface{
         auctionState = new Scheduled(this);
     }
 
-    @Override
+    public String getItemTitle() {
+    	String itemTitle = item.getItemTitle();
+		return itemTitle;
+	}
+
+	
+	@Override
     public AuctionStrategy getAuctionStrategy() {
         return auctionStrategy;
     }
