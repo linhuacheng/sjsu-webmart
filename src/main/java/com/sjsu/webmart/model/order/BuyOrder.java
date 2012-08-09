@@ -1,8 +1,11 @@
 package com.sjsu.webmart.model.order;
 
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
+
 import java.math.BigDecimal;
 
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 public class BuyOrder extends Order {
 
@@ -44,7 +47,7 @@ public class BuyOrder extends Order {
 			cost = new BigDecimal(item.getPrice());
 		}
 		
-		System.out.println("ORDER COST calculated: " + cost);
+		System.out.println("ORDER COST calculated: " + ConsoleUtil.NF.format(cost.doubleValue()));
 		return cost;
 	}
 

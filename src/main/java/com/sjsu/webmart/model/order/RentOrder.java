@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.sjsu.webmart.util.ConsoleUtil;
+
 public class RentOrder extends Order {
 
 	@Override
@@ -40,7 +42,7 @@ public class RentOrder extends Order {
 
 		BigDecimal cost = new BigDecimal(numDays * item.getPrice());
 		
-		System.out.println("ORDER COST calculated:" + cost);
+		System.out.println("ORDER COST calculated:" + ConsoleUtil.NF.format(cost));
 		return cost;
 	}
 

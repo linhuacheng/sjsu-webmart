@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.processor.FulfillmentContext;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 
 public class ReturnOrder extends Order {
@@ -38,7 +39,7 @@ public class ReturnOrder extends Order {
 			cost = new BigDecimal(- item.getPrice());
 		}
 		// return negative cost
-		System.out.println("ORDER COST calculated:" + cost);
+		System.out.println("ORDER COST calculated:" + ConsoleUtil.NF.format(cost.doubleValue()));
 		return cost;
 	}
 	
