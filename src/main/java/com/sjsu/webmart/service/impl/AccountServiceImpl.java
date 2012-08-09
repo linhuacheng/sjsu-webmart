@@ -154,6 +154,8 @@ public class AccountServiceImpl implements AccountService{
 					while((input=br.readLine()).isEmpty())
 						System.out.println("Please enter cheque number : ");
 					p_info.setChequeNumber(input);
+					
+					p_info.setExpirationDate(new Date());
 				}
 				else
 				{
@@ -211,7 +213,6 @@ public class AccountServiceImpl implements AccountService{
 					if(p_info.getPaymentType().equals(PaymentType.CARD)){
 						System.out.println(p_info.getCardNumber());
 						System.out.println(p_info.getExpirationDate());
-						System.out.println(p_info.getSecurityCode());
 					}
 					else{
 						System.out.println(p_info.getChequeNumber());

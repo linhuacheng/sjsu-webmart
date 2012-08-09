@@ -14,12 +14,16 @@ public class AccountInitialization {
 
 	AccountService accountService = AccountServiceImpl.getInstance();
 	
+	@SuppressWarnings("deprecation")
 	public void initializeAccount()
 	{
 		Account a1 = new Account();
 		AddressInfo a_info1 = new AddressInfo();
 		List<PaymentInfo>payments1 = new ArrayList<PaymentInfo>();
 		List<AddressInfo> addresses1 = new ArrayList<AddressInfo>();
+		Date d1 = new Date();
+		d1.setMonth(10);
+		d1.setYear(114);
 		
 		a1.setAccountId(accountService.getNextId());
 		a1.setAccountType(AccountType.BUYER);
@@ -44,12 +48,13 @@ public class AccountInitialization {
 		p_info1.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info1.setCardNumber("5432123456782345");
 		p_info1.setSecurityCode(123);
-		p_info1.setExpirationDate(new Date());
+		p_info1.setExpirationDate(d1);
 		
 		PaymentInfo p_info2 = new PayMerchandise();
 		p_info2.setPaymentType(PaymentType.CHEQUE);
 		p_info2.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info2.setChequeNumber("45234451234");
+		p_info2.setExpirationDate(d1);
 		
 		payments1.add(p_info1);
 		payments1.add(p_info2);
@@ -61,6 +66,9 @@ public class AccountInitialization {
 		AddressInfo a_info2 = new AddressInfo();
 		List<PaymentInfo>payments2 = new ArrayList<PaymentInfo>();
 		List<AddressInfo> addresses2 = new ArrayList<AddressInfo>();
+		Date d2 = new Date();
+		d1.setMonth(3);
+		d1.setYear(117);
 		
 		a2.setAccountId(accountService.getNextId());
 		a2.setAccountType(AccountType.SELLER);
@@ -85,7 +93,7 @@ public class AccountInitialization {
 		p_info3.setPaymentInfoId(PaymentInfo.getNextId());
 		p_info3.setCardNumber("1234567896782345");
 		p_info3.setSecurityCode(321);
-		p_info3.setExpirationDate(new Date());
+		p_info3.setExpirationDate(d2);
 		
 		payments2.add(p_info3);
 		a2.setPaymentInfo(payments2);
