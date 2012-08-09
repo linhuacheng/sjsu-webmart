@@ -13,6 +13,10 @@ public class AuctionFilter {
     private int accountId;
     private Date startDate;
     private Date endDate;
+    
+    public AuctionFilter(){
+    	
+    }
 
     public AuctionFilter(int accountId, Date startDate, Date endDate) {
         this.accountId = accountId;
