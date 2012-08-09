@@ -14,7 +14,7 @@ import java.util.List;
 public class ClosedAuctionStrategy implements AuctionStrategy {
     //TODO: ck, provide implementation
     @Override
-    public AuctionResponse acceptBid(List<Bid> bids, Bid bid, Bid currentBid) {
+    public AuctionResponse acceptBid(List<Bid> bids, Bid bid, float  minBidPrice) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

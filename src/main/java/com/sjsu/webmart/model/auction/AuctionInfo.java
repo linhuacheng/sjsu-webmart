@@ -85,7 +85,8 @@ public class AuctionInfo implements AuctionInterface{
 
     public AuctionResponse processBid(Bid newBid){
 
-        log.info("Process Bid:" + newBid);
+        log.info("--------------------Processing Bid----------------");
+        log.info("Bid:" + newBid);
         AuctionResponse response = auctionState.placeBid(newBid);
         if (AuctionResponse.accepted.equals(response)){
             log.info("New Bid accepted");
@@ -93,6 +94,7 @@ public class AuctionInfo implements AuctionInterface{
         } else{
             log.info("New Bid Rejected");
         }
+        log.info("--------------------End Processing Bid:----------------");
         return response;
     }
 

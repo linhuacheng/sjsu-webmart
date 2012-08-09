@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface AuctionStrategy {
 
-    public AuctionResponse acceptBid(List<Bid> bids,Bid bid, Bid currentBid);
+    public AuctionResponse acceptBid(List<Bid> bids,Bid bid, float minBidPrice);
 
     public Bid viewMaxBid(List<Bid> bids);
 

@@ -43,7 +43,8 @@ public class InProgress implements AuctionState {
         List<Bid> bids = auctionInfo.getBidList();
         Bid currentMaxBid = auctionInfo.getCurrentActiveBid();
         log.info("Auction Inprogress, accept bid");
-        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, currentMaxBid);
+        float minBidPrice = bid != null ? bid.getBidPrice() : 0.0f;
+        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, minBidPrice);
     }
 
     @Override

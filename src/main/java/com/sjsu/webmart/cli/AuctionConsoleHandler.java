@@ -269,6 +269,7 @@ public class AuctionConsoleHandler {
             printText(out, "Invalid Auction Id");
             return;
         }
+
         printText(out, "Enter Account Id:", false);
 
         if ((accountId = getIntValue(reader)) == -1) {
@@ -282,7 +283,7 @@ public class AuctionConsoleHandler {
             return;
         }
 
-        printText(out, "Enter Start Bid Price:", false);
+        printText(out, "Enter Bid Price:", false);
 
         if ((bidPrice = getFloatValue(reader)) == -1) {
             printText(out, "Invalid Price");

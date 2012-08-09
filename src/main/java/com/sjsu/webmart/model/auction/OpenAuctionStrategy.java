@@ -32,14 +32,14 @@ public class OpenAuctionStrategy implements AuctionStrategy {
         }
     };
     @Override
-    public AuctionResponse acceptBid(List<Bid> bids, Bid bid, Bid currentBid) {
+    public AuctionResponse acceptBid(List<Bid> bids, Bid bid, float minBidPrice) {
 
-        if (currentBid == null || bid.getBidPrice() > currentBid.getBidPrice()) {
-            log.info("accepting bid " + bid);
+        if (minBidPrice == 0.0 || bid.getBidPrice() > minBidPrice) {
+            log.info("Accepting bid: " + bid);
             bids.add(bid);
             return AuctionResponse.accepted;
         } else {
-            log.info("Rejecting bid " + bid);
+            log.info("Rejecting bid: " + bid);
             return AuctionResponse.rejected_invalid_price;
         }
 
