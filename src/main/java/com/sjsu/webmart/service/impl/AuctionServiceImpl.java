@@ -13,6 +13,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -78,7 +79,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         AuctionInfo auctionInfo = auctionInfoList.get(auctionId);
         if (auctionInfo != null) {
-            return auctionInfo.getWinner();
+            auctionInfo.getWinner();
         }
         return null;
     }
@@ -224,4 +225,6 @@ public class AuctionServiceImpl implements AuctionService {
         }
         return null;
     }
+
+
 }

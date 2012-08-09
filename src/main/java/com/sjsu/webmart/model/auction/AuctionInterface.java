@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
+import com.sjsu.webmart.common.AuctionType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,4 +26,7 @@ public interface AuctionInterface {
 
     public Bid getCurrentActiveBid();
 
+    float getStartBidPrice();
+
+    AuctionType getAuctionType();
 }

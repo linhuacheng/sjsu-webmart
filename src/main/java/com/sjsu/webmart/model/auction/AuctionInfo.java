@@ -31,6 +31,7 @@ public class AuctionInfo implements AuctionInterface{
     private Bid currentActiveBid;
     private AuctionState auctionState;
     private Item item;
+    private AuctionType auctionType;
 
     public AuctionState getAuctionState() {
         return auctionState;
@@ -42,6 +43,8 @@ public class AuctionInfo implements AuctionInterface{
     public AuctionInfo(AuctionType auctionType, float startBidPrice
             ,Date bidStartTime, Date bidEndTime, Item item){
 
+
+        this.auctionType = auctionType;
         setAuctionStrategy(auctionType);
         this.auctionStartTime = bidStartTime;
         this.auctionEndTime = bidEndTime;
@@ -81,6 +84,12 @@ public class AuctionInfo implements AuctionInterface{
         } else if (AuctionType.closed.equals(auctionType)){
             auctionStrategy = new ClosedAuctionStrategy();
         }
+    }
+
+
+    @Override
+    public AuctionType getAuctionType() {
+        return auctionType;
     }
 
     public AuctionResponse processBid(Bid newBid){
@@ -147,6 +156,7 @@ public class AuctionInfo implements AuctionInterface{
         this.auctionEndTime = auctionEndTime;
     }
 
+    @Override
     public float getStartBidPrice() {
         return startBidPrice;
     }

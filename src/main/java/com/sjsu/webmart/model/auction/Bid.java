@@ -74,9 +74,8 @@ public class Bid {
     public String toString() {
         return "Bid{" +
                 "bidder=" + (bidder != null? bidder.getFirstName() +" "+bidder.getLastName(): "") +
-                ", item=" + item +
+                ", item=" + item.getItemTitle() +
                 ", bidPrice=" + bidPrice +
-                ", offerRejected=" + offerRejected +
                 '}';
     }
 }

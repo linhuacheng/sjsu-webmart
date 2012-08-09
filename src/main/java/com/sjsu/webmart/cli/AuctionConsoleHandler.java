@@ -2,6 +2,7 @@ package com.sjsu.webmart.cli;
 
 import com.sjsu.webmart.common.*;
 import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.account.AccountType;
 import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
@@ -13,16 +14,14 @@ import com.sjsu.webmart.service.impl.AccountServiceImpl;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.sjsu.webmart.util.ConsoleUtil.*;
 
@@ -66,7 +65,9 @@ public class AuctionConsoleHandler {
                 case OPTION_ONE:
                     //view auction
                     printEnteredOption(out, auctionOptions, option);
-                    printAuction(null);
+                    Collection<AuctionInfo> auctions = auctionService.getAllAuctions();
+                    printAuctionInfo(out, auctions);
+                    //printAuction(null);
                     break;
                 case OPTION_TWO:
                     //setup auction
@@ -105,31 +106,31 @@ public class AuctionConsoleHandler {
         }
     }
 
-    private boolean printAuction(AuctionStateType stateType) {
-        Collection<AuctionInfo> auctionInfos;
-        if (stateType == null) {
-            auctionInfos = auctionService.getAllAuctions();
-        } else {
-            auctionInfos = auctionService.getAuctionByState(stateType);
-        }
-        if (CollectionUtils.isNotEmpty(auctionInfos)) {
-
-            for (AuctionInfo auctionInfo : auctionInfos) {
-                printText(out, String.format("Auction Details Auction Id=(%s) Item Title=(%s), Auction State=(%s)" +
-                        " Start Bid Price=(%s), Bid End Time=(%s), Bid List=(%s)"
-                        , auctionInfo.getAuctionId()
-                        , auctionInfo.getItem().getItemTitle()
-                        , auctionInfo.getAuctionState().getStateType()
-                        , auctionInfo.getStartBidPrice()
-                        , auctionInfo.getAuctionEndTime()
-                        , auctionInfo.getBidList()
-                ));
-            }
-            return true;
-        }
-        printText(out, String.format("No Auction with Type (%s)", stateType));
-        return false;
-    }
+//    private boolean printAuction(AuctionStateType stateType) {
+//        Collection<AuctionInfo> auctionInfos;
+//        if (stateType == null) {
+//            auctionInfos = auctionService.getAllAuctions();
+//        } else {
+//            auctionInfos = auctionService.getAuctionByState(stateType);
+//        }
+//        if (CollectionUtils.isNotEmpty(auctionInfos)) {
+//
+//            for (AuctionInfo auctionInfo : auctionInfos) {
+//                printText(out, String.format("Auction Details Auction Id=(%s) Item Title=(%s), Auction State=(%s)" +
+//                        " Start Bid Price=(%s), Bid End Time=(%s), Bid List=(%s)"
+//                        , auctionInfo.getAuctionId()
+//                        , auctionInfo.getItem().getItemTitle()
+//                        , auctionInfo.getAuctionState().getStateType()
+//                        , auctionInfo.getStartBidPrice()
+//                        , auctionInfo.getAuctionEndTime()
+//                        , auctionInfo.getBidList()
+//                ));
+//            }
+//            return true;
+//        }
+//        printText(out, String.format("No Auction with Type (%s)", stateType));
+//        return false;
+//    }
 
     private void handlePrintWinner() {
         Collection<AuctionInfo> auctionInfos;
@@ -139,23 +140,7 @@ public class AuctionConsoleHandler {
             return;
         }
 
-        for (AuctionInfo auctionInfo : auctionInfos) {
-            Bid bid = auctionInfo.getWinner();
-            String winningBidInfo = "";
-            if (bid != null) {
-                winningBidInfo = String.format("Winner Account Id=(%s), Bid Price=(%s)", bid.getBidder().getAccountId(), bid.getBidPrice());
-            }
-            printText(out, String.format("Auction Details Auction Id=(%s) Item Title=(%s) " +
-                    " Auction End Time=%s) Total Bids=(%s), %s"
-                    , auctionInfo.getAuctionId()
-                    , auctionInfo.getItem().getItemTitle()
-                    , auctionInfo.getAuctionEndTime()
-                    , auctionInfo.getBidList().size()
-                    , winningBidInfo
-            ));
-        }
-
-
+        printAuctionInfo(out, auctionInfos);
     }
 
     private void handleSetupAuction() throws IOException {
@@ -177,7 +162,7 @@ public class AuctionConsoleHandler {
 
 
         if ((itemId = getIntValue(reader)) != -1) {
-            item = inventoryService.viewItem(itemId);
+            item = inventoryService.getItem(itemId);
         }
         if (item == null) {
             printText(out, "Invalid Item Id");
@@ -213,8 +198,9 @@ public class AuctionConsoleHandler {
     private void handleStartAuction() throws IOException {
 
         int input;
-
-        if (printAuction(AuctionStateType.scheduled) == false) {
+        Set<AuctionInfo> auctionInfoSet = auctionService.getAuctionByState(AuctionStateType.scheduled);
+        printAuctionInfo(out, auctionInfoSet);
+        if (CollectionUtils.isEmpty(auctionInfoSet)) {
             return;
         }
         printText(out, "Enter Auction id to start:", false);
@@ -231,10 +217,16 @@ public class AuctionConsoleHandler {
 
         int input;
 
-        boolean foundAuction1 = printAuction(AuctionStateType.scheduled);
-        boolean foundAuction2 = printAuction(AuctionStateType.inprogress);
-
-        if (!(foundAuction2 || foundAuction1)) {
+        //boolean foundAuction1 = printAuction(AuctionStateType.scheduled);
+        //boolean foundAuction2 = printAuction(AuctionStateType.inprogress);
+        Set<AuctionInfo> auctionInfoSet = auctionService.getAuctionByState(AuctionStateType.scheduled);
+        if (CollectionUtils.isNotEmpty(auctionInfoSet)){
+            auctionInfoSet.addAll(auctionService.getAuctionByState(AuctionStateType.inprogress));
+        } else {
+            auctionInfoSet= auctionService.getAuctionByState(AuctionStateType.inprogress);
+        }
+        printAuctionInfo(out, auctionInfoSet);
+        if (CollectionUtils.isEmpty(auctionInfoSet)) {
             return;
         }
         printText(out, "Enter Auction Id to Close:", false);
@@ -252,10 +244,12 @@ public class AuctionConsoleHandler {
         int auctionId;
         AuctionInfo auctionInfo = null;
         float bidPrice;
-        int accountId;
+        final int accountId;
+        Set<AuctionInfo> auctionInfos = auctionService.getAuctionByState(AuctionStateType.inprogress);
+        //boolean foundAuction = printAuction(AuctionStateType.inprogress);
+        printAuctionInfo(out, auctionInfos);
 
-        boolean foundAuction = printAuction(AuctionStateType.inprogress);
-        if (!foundAuction) {
+        if (CollectionUtils.isEmpty(auctionInfos)) {
             return;
         }
         printText(out, "Enter Auction id to place bid:", false);
@@ -269,15 +263,27 @@ public class AuctionConsoleHandler {
             printText(out, "Invalid Auction Id");
             return;
         }
+        List<Account> accountList = accountService.getAccountsByType(AccountType.BUYER);
+        if (CollectionUtils.isEmpty(accountList)){
+            printText(out, "Require buyer type of account to place bid");
+            return;
 
+        }
+        printAccountInfo(out, accountList);
         printText(out, "Enter Account Id:", false);
 
-        if ((accountId = getIntValue(reader)) == -1) {
-            printText(out, "Invalid Account Id");
-            return;
-        }
+        accountId = getIntValue(reader);
 
-        Account account = accountService.findAccountById(accountId);
+        Account account = (Account)CollectionUtils.find(accountList, new Predicate(){
+            @Override
+            public boolean evaluate(Object o) {
+                if (((Account)o).getAccountId() == accountId){
+                    return true;
+                }
+                return false;
+            }
+        });
+
         if (account == null) {
             printText(out, "Invalid account id");
             return;

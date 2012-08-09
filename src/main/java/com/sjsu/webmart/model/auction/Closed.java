@@ -41,4 +41,8 @@ public class Closed implements AuctionState {
     public AuctionStateType getStateType() {
         return AuctionStateType.closed;
     }
+
+    public Bid computeWinner() {
+        return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
+    }
 }

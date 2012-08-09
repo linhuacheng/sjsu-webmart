@@ -52,4 +52,10 @@ public class Scheduled implements AuctionState {
     public AuctionStateType getStateType() {
         return AuctionStateType.scheduled;
     }
+
+    @Override
+    public Bid computeWinner() {
+        log.debug(String.format("Auction is in (%s) state, it must be closed to compute winner", getStateType()));
+        return null;
+    }
 }

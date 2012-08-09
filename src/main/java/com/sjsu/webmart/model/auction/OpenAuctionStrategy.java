@@ -34,7 +34,7 @@ public class OpenAuctionStrategy implements AuctionStrategy {
     @Override
     public AuctionResponse acceptBid(List<Bid> bids, Bid bid, float minBidPrice) {
 
-        if (minBidPrice == 0.0 || bid.getBidPrice() > minBidPrice) {
+        if (bid.getBidPrice() > minBidPrice) {
             log.info("Accepting bid: " + bid);
             bids.add(bid);
             return AuctionResponse.accepted;

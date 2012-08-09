@@ -28,4 +28,6 @@ public interface AuctionState {
 
     public AuctionStateType getStateType();
 
+    public Bid computeWinner();
+
 }

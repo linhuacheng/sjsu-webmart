@@ -2,6 +2,7 @@ package com.sjsu.webmart.service.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,7 @@ import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.model.payment.PaymentType;
 import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.util.ConsoleUtil;
+import org.apache.commons.collections.CollectionUtils;
 
 public class AccountServiceImpl implements AccountService{
 
@@ -182,7 +184,7 @@ public class AccountServiceImpl implements AccountService{
 			// TODO: handle exception
 			System.out.println(e);
 		}
-		System.out.println("User Registered with Account Id : "+a.getAccountId());
+		System.out.println("User Registered with Account Id : " + a.getAccountId());
 	}
 
 	
@@ -481,5 +483,6 @@ public class AccountServiceImpl implements AccountService{
 		}
 		return fullname;
 	}
+
 
 }

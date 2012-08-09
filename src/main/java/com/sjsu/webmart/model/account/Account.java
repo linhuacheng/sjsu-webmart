@@ -165,4 +165,8 @@ public class Account implements MessageObservable{
 		Message msg = new Message(email, content);
 		notifyObservers(msg);
 	}
+
+    public String getName(){
+        return firstName + " " + lastName;
+    }
 }
