@@ -55,7 +55,6 @@ public abstract class Order implements MessageObservable {
 	protected BigDecimal cost;
 	protected FulfillmentType fulfillmentType;
 	protected PaymentInfo paymentInfo;
-	protected PaymentType paymentType;	
 
 
 	public Order() {
@@ -130,14 +129,6 @@ public abstract class Order implements MessageObservable {
 		this.paymentInfo = paymentInfo;
 	}
 
-	public PaymentType getPaymentType() {
-		return paymentType;
-	}
-
-	public void setPaymentType(PaymentType paymentType) {
-		this.paymentType = paymentType;
-	}
-
 	public BigDecimal getCost() {
 		return cost;
 	}
@@ -174,7 +165,7 @@ public abstract class Order implements MessageObservable {
 	public boolean processPayment(OrderParams orderParams) {
 		cost = calculateCost(orderParams);
 
-		PaymentProcessor paymentProcessor = getPaymentProcessor(paymentType);
+		PaymentProcessor paymentProcessor = getPaymentProcessor(paymentInfo.getPaymentType());
 		paymentInfo.setPaymentProcessor(paymentProcessor);
 
 		return paymentInfo.processPayment(cost);

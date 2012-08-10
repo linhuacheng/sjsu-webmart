@@ -60,6 +60,7 @@ public class TestOrder {
 		PaymentInfo paymentInfo = new PayMerchandise();
 		paymentInfo.setCardNumber("1234567899012");
 		paymentInfo.setChequeNumber("111122223333");
+		paymentInfo.setPaymentType(PaymentType.CARD);
 		return paymentInfo;
 	}
 
@@ -104,7 +105,6 @@ public class TestOrder {
 	private OrderParams getNewBuyOrderParams() {
 		Order order = getNewBuyOrder();
 		order.setFulfillmentType(FulfillmentType.COURIER);
-		order.setPaymentType(PaymentType.CARD);
 		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 
 		
@@ -117,7 +117,6 @@ public class TestOrder {
 	private OrderParams getNewRentOrderParams() {
 		Order order = getNewRentOrder();
 		order.setFulfillmentType(FulfillmentType.STORE);
-		order.setPaymentType(PaymentType.CHEQUE);
 		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 		
 		OrderParams params = new OrderParams();
@@ -129,7 +128,6 @@ public class TestOrder {
 	private OrderParams getNewReturnOrderParams() {
 		Order order = getNewReturnOrder();
 		order.setFulfillmentType(FulfillmentType.COURIER);
-		order.setPaymentType(PaymentType.CARD);
 		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 		
 		OrderParams params = new OrderParams();

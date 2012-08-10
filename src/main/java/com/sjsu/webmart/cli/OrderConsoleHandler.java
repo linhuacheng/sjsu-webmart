@@ -177,8 +177,7 @@ public class OrderConsoleHandler {
 
 	private void handleBuyItem() {
 		Item item = promptItem(ItemType.BUYABLE);
-		PaymentType paymentType = promptPaymentType();
-		PaymentInfo paymentInfo = promptPaymentDetails(account, paymentType);
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
 		FulfillmentType fulfillmentType = promptShippingType(item);
 
 		Order order = new BuyOrder();
@@ -187,7 +186,6 @@ public class OrderConsoleHandler {
 		order.setOrderType(OrderType.BUY);
 		order.setFulfillmentType(fulfillmentType);
 		order.setPaymentInfo(paymentInfo);
-		order.setPaymentType(paymentType);
 
 		OrderParams orderParams = new OrderParams();
 		orderParams.setOrder(order);
@@ -208,8 +206,7 @@ public class OrderConsoleHandler {
 
 		Date rentStartTime = new Date();
 
-		PaymentType paymentType = promptPaymentType();
-		PaymentInfo paymentInfo = promptPaymentDetails(account, paymentType);
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
 		FulfillmentType fulfillmentType = promptShippingType(item);
 
 		RentPeriod rentPeriod = new RentPeriod(rentStartTime, null);
@@ -219,7 +216,6 @@ public class OrderConsoleHandler {
 		order.setOrderType(OrderType.RENT);
 		order.setFulfillmentType(fulfillmentType);
 		order.setPaymentInfo(paymentInfo);
-		order.setPaymentType(paymentType);
 		order.setRentPeriod(rentPeriod);
 
 		OrderParams orderParams = new OrderParams();
@@ -235,9 +231,8 @@ public class OrderConsoleHandler {
 			return;
 
 		Item item = bid.getItem();
-
-		PaymentType paymentType = promptPaymentType();
-		PaymentInfo paymentInfo = promptPaymentDetails(account, paymentType);
+		
+		PaymentInfo paymentInfo = promptPaymentDetails(account);
 		FulfillmentType fulfillmentType = promptShippingType(item);
 
 		Order order = new BuyOrder();
@@ -245,7 +240,6 @@ public class OrderConsoleHandler {
 		order.setItem(item);
 		order.setFulfillmentType(fulfillmentType);
 		order.setPaymentInfo(paymentInfo);
-		order.setPaymentType(paymentType);
 		order.setOrderType(OrderType.BUY);
 
 		OrderParams orderParams = new OrderParams();
@@ -282,7 +276,6 @@ public class OrderConsoleHandler {
 		order.setFulfillmentType(oldOrder.getFulfillmentType());
 		order.setPaymentInfo(oldOrder.getPaymentInfo());
 		order.setOrderType(OrderType.RETURN);
-		order.setPaymentType(oldOrder.getPaymentType());
 		order.setCost(new BigDecimal(-oldOrder.getCost().doubleValue()));
 
 		OrderParams orderParams = new OrderParams();
@@ -549,27 +542,26 @@ public class OrderConsoleHandler {
 		}
 	}
 
-	private void printPaymentOptions(Account account, PaymentType paymentType) {
+	private void printPaymentOptions(Account account) {
 		if (CollectionUtils.isNotEmpty(account.getPaymentInfo())) {
 
-			String format = "|%1$-15s|%2$-15s|%3$-20s|%4$-10s|\n";
+			String format = "|%1$-15s|%2$-15s|%3$-15s|%4$-20s|%5$-10s|\n";
+			String line = "________________________________________________________________________________";
 			System.out
-					.println("_________________________________________________________________");
-			System.out.format(format, "PAYMENT ID", "CARD NUMBER",
+					.println(line);
+			System.out.format(format, "PAYMENT ID", "TYPE", "CARD NUMBER",
 					"CHEQUE NUMBER", "EXPIRATION");
 			System.out
-					.println("_________________________________________________________________");
+					.println(line);
 			for (PaymentInfo payment : account.getPaymentInfo()) {
-				// skip if the payment type does not match
-				if (paymentType != null && !paymentType.equals(payment.getPaymentType()))
-					continue;
 				System.out.format(format, payment.getPaymentInfoId(),
+						payment.getPaymentType(),
 						maskNumber(payment.getCardNumber()),
 						maskNumber(payment.getChequeNumber()),
 						MONTH_YEAR_FORMAT.format(payment.getExpirationDate()));
 			}
 			System.out
-					.println("_________________________________________________________________");
+					.println(line);
 
 		}
 	}
@@ -631,6 +623,7 @@ public class OrderConsoleHandler {
 		}
 	}
 
+	/*
 	private PaymentType promptPaymentType() {
 		printText(out, "Payment Type:");
 		printText(out, "[1] Card");
@@ -651,10 +644,11 @@ public class OrderConsoleHandler {
 		}
 		return type;
 	}
+	*/
 
-	private PaymentInfo promptPaymentDetails(Account account, PaymentType paymentType) {
+	private PaymentInfo promptPaymentDetails(Account account) {
 
-		printPaymentOptions(account, paymentType);
+		printPaymentOptions(account);
 		PaymentInfo payment = null;
 		while (payment == null) {
 			printText(out, "Select Payment Detail:", false);
