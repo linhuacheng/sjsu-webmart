@@ -157,7 +157,7 @@ public class AccountInitialization {
 		
 		a4.setAccountId(accountService.getNextId());
 		a4.setAccountType(AccountType.BUYER);
-		a4.setEmail("lin@gmail.com");
+		a4.setEmail("cheng@gmail.com");
 		a4.setFirstName("Lin");
 		a4.setLastName("Cheng");
 		a4.setPassword("cheng");

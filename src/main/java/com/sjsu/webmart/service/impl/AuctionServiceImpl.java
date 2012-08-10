@@ -117,7 +117,6 @@ public class AuctionServiceImpl implements AuctionService {
                 }
                 Date auctionEndTime = auctionInfo.getAuctionEndTime();
                 if (auctionEndTime != null) {
-
                     if (auctionEndTime.before(filter.getStartDate()) || auctionEndTime.after(filter.getEndDate())) {
                         continue;
                     }

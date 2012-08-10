@@ -9,14 +9,11 @@ import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -25,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConsoleUtil {
     public static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy");
@@ -162,13 +157,14 @@ public class ConsoleUtil {
                 dataRow.add(item.getItemTitle());
                 dataRow.add(item.getClass().getSimpleName());
                 dataRow.add(formatFloat(item.getPrice()));
+                dataRow.add(""+item.getQuantity());
                 dataRow.add(item.getItemDescription());
                 dataRows.add(dataRow);
             }
         }
         printDataInTableFormat(out
-                , new String[]{"%-15s", "%-20.20s", "%-15s", "%-15s", "%-40s"}
-                , new String[]{"ITEM ID", "ITEM TITLE", "ITEM TYPE", "ITEM PRICE", "ITEM DESCRIPTION"}, dataRows);
+                , new String[]{"%-15s", "%-20.20s", "%-15s", "%-15s","%-15s", "%-40s"}
+                , new String[]{"ITEM ID", "ITEM TITLE", "ITEM TYPE", "ITEM PRICE", "QUANTITY","ITEM DESCRIPTION"}, dataRows);
     }
 
     public static void printDataInTableFormat(PrintWriter out, String[] formats, String[] headers, List<List<String>> dataRows) {
@@ -224,7 +220,8 @@ public class ConsoleUtil {
                 dataRow.add(auctionInfo.getAuctionState().getStateType().name());
                 dataRow.add(formatFloat(auctionInfo.getStartBidPrice()));
                 dataRow.add(SDF.format(auctionInfo.getAuctionEndTime()));
-                dataRow.add("" + auctionInfo.getBidList().size());
+                dataRow.add(auctionInfo.getAuctionType().name());
+
                 if (AuctionType.open.equals(auctionInfo.getAuctionType())){
                     dataRow.add(auctionInfo.getCurrentActiveBid() != null ? formatFloat(auctionInfo.getCurrentActiveBid().getBidPrice()) : "");
                 } else {
@@ -256,8 +253,8 @@ public class ConsoleUtil {
             }
         }
         printDataInTableFormat(out
-                , new String[]{"%-12.12s", "%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s", "%-12.12s", "%-12.12s", "%-20.20s", "%-12s"}
-                , new String[]{"AUCTION ID", "ITEM TITLE", "AUCTION STATE", "START BID PRICE", "AUCTION END TIME", "TOTAL BIDS", "CURRENT BID", "WINNER NAME", "WINNING BID"}
+                , new String[]{"%-12.12s", "%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s", "%-20.20s", "%-12.12s", "%-20.20s", "%-12s"}
+                , new String[]{"AUCTION ID", "ITEM TITLE", "AUCTION STATE", "START BID PRICE", "AUCTION END TIME", "AUCTION TYPE", "CURRENT BID", "WINNER NAME", "WINNING BID"}
                 , dataRows);
 
 //        for (AuctionInfo auctionInfo : auctionInfos) {

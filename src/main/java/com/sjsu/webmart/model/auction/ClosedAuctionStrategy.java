@@ -46,8 +46,9 @@ public class ClosedAuctionStrategy implements AuctionStrategy {
             if (!winnerSet){
                 winner = bid;
                 winnerSet=true;
+                bid.setWinner(true);
             } else {
-                bid.setOfferRejected(true);
+                bid.setWinner(false);
             }
         }
         return winner;

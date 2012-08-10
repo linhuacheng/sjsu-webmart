@@ -32,14 +32,16 @@ public class AuctionReport extends Report{
 public void generateContent(){
 		
 		super.generateContent();
-		String format = "|%1$-15s|%2$-50s|%3$-70s|%4$-50s|\n";
+		String format = "|%1$-15s|%2$-50s|%3$-50s|%4$-50s|\n";
+		
 		System.out
 				.println("_________________________________________________________________________________________________________________________________________");
 		System.out.format(format, "AUCTION ID", "ITEM", "WINNER", "PRICE");
 		System.out
 				.println("_________________________________________________________________________________________________________________________________________");
 		for (AuctionInfo auction : auctions) {
-			System.out.format(format, auction.getAuctionId(), auction.getItemTitle(), auction.getWinner().getBidder(), auction.getWinner().getBidPrice());
+			String user_name = auction.getWinner().getBidder().getFirstName()+auction.getWinner().getBidder().getLastName();
+			System.out.format(format, auction.getAuctionId(), auction.getItemTitle(), user_name, auction.getWinner().getBidPrice());
 		}
 		System.out
 				.println("_________________________________________________________________________________________________________________________________________");
