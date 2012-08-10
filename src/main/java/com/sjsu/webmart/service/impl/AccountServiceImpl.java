@@ -118,7 +118,7 @@ public class AccountServiceImpl implements AccountService{
 				
 				addresses.add(addInfo);
 				
-				System.out.println("Do you want to add one more address (Y/N) : ");
+				System.out.println("Do you want to add one more address (y/n) : ");
 				if(br.readLine().startsWith("n"))
 					break;
 			}

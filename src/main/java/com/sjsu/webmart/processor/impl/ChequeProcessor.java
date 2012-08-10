@@ -1,5 +1,7 @@
 package com.sjsu.webmart.processor.impl;
 
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
+
 import java.math.BigDecimal;
 
 import com.sjsu.webmart.model.payment.PaymentInfo;
@@ -12,7 +14,7 @@ public class ChequeProcessor implements PaymentProcessor {
 		System.out
 		.println("CHEQUE NUMBER: " + paymentInfo.getChequeNumber()
 				+ " has been successfully processed. Amount debited: "
-				+ amount);
+				+ NF.format(amount));
 		return true;
 	}
 
@@ -21,7 +23,7 @@ public class ChequeProcessor implements PaymentProcessor {
 		System.out
 		.println("CHEQUE NUMBER: " + paymentInfo.getChequeNumber()
 				+ " has been successfully processed. Amount credited: "
-				+ amount);
+				+ NF.format(amount));
 		return true;
 		
 	}

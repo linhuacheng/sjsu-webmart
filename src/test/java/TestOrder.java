@@ -82,10 +82,7 @@ public class TestOrder {
 	}
 
 	private Order getNewRentOrder() {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_YEAR, 5);
-
-		RentPeriod rentPeriod = new RentPeriod(new Date(), cal.getTime());
+		RentPeriod rentPeriod = new RentPeriod(new Date(), null);
 		Order rentOrder = new RentOrder();
 		rentOrder.setOrderType(OrderType.RENT);
 		rentOrder.setItem(getItem());
@@ -106,36 +103,37 @@ public class TestOrder {
 
 	private OrderParams getNewBuyOrderParams() {
 		Order order = getNewBuyOrder();
+		order.setFulfillmentType(FulfillmentType.COURIER);
+		order.setPaymentType(PaymentType.CARD);
+		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
+
+		
 		OrderParams params = new OrderParams();
-		params.setFulfillmentType(FulfillmentType.COURIER);
 		params.setOrder(order);
-		params.setOrderType(OrderType.BUY);
-		params.setPaymentType(PaymentType.CARD);
-		params.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 
 		return params;
 	}
 
 	private OrderParams getNewRentOrderParams() {
 		Order order = getNewRentOrder();
+		order.setFulfillmentType(FulfillmentType.STORE);
+		order.setPaymentType(PaymentType.CHEQUE);
+		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
+		
 		OrderParams params = new OrderParams();
-		params.setFulfillmentType(FulfillmentType.STORE);
 		params.setOrder(order);
-		params.setOrderType(OrderType.RENT);
-		params.setPaymentType(PaymentType.CHEQUE);
-		params.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 
 		return params;
 	}
 	
 	private OrderParams getNewReturnOrderParams() {
 		Order order = getNewReturnOrder();
+		order.setFulfillmentType(FulfillmentType.COURIER);
+		order.setPaymentType(PaymentType.CARD);
+		order.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
+		
 		OrderParams params = new OrderParams();
-		params.setFulfillmentType(FulfillmentType.COURIER);
 		params.setOrder(order);
-		params.setOrderType(OrderType.RETURN);
-		params.setPaymentType(PaymentType.CARD);
-		params.setPaymentInfo(order.getAccount().getPaymentInfo().get(0));
 
 		return params;
 	}
@@ -178,8 +176,19 @@ public class TestOrder {
 		Assert.assertNotNull(orderParams.getOrder().getItem(),
 				"Item must not be null");
 		Assert.assertEquals(order.calculateCost(orderParams),
-				new BigDecimal(80),				
-				"Calculated rental cost must be 80.");
+				new BigDecimal(0),				
+				"Calculated rental cost must be 0.");
+		
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_YEAR, 5);
+		
+		RentOrder rentOrder = (RentOrder)order;
+		rentOrder.returnOrder(cal.getTime());
+		
+		Assert.assertEquals(order.calculateCost(orderParams),
+				new BigDecimal(100),				
+				"Calculated rental cost must be 100.");
 	}
 	
 	public void testReturnOrder() {

@@ -1,5 +1,7 @@
 package com.sjsu.webmart.processor.impl;
 
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
+
 import java.math.BigDecimal;
 
 import com.sjsu.webmart.model.payment.PaymentInfo;
@@ -12,7 +14,7 @@ public class CardProcessor implements PaymentProcessor {
 		System.out
 				.println("CREDIT CARD: " + paymentInfo.getCardNumber()
 						+ " has been successfully processed. Amount debited: "
-						+ amount);
+						+ NF.format(amount));
 		return true;
 	}
 
@@ -20,7 +22,7 @@ public class CardProcessor implements PaymentProcessor {
 	public boolean credit(PaymentInfo paymentInfo, BigDecimal amount) {
 		System.out.println("CREDIT CARD " + paymentInfo.getCardNumber()
 				+ " has been successfully processed. Amount credited: "
-				+ amount);
+				+ NF.format(amount));
 		return true;
 	}
 

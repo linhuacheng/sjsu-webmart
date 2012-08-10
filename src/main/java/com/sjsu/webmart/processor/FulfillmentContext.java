@@ -17,7 +17,7 @@ public class FulfillmentContext {
 
 	private Fulfillment getFulfillmentStrategy(OrderParams orderParams) {
 		Fulfillment fulfillment;
-		FulfillmentType fulfillmentType = orderParams.getFulfillmentType();
+		FulfillmentType fulfillmentType = orderParams.getOrder().getFulfillmentType();
 		switch (fulfillmentType) {
 		case COURIER:
 			fulfillment = new Courier();

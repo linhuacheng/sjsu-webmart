@@ -3,7 +3,6 @@ package com.sjsu.webmart.model.order;
 import java.math.BigDecimal;
 
 import com.sjsu.webmart.model.item.Item;
-import com.sjsu.webmart.processor.FulfillmentContext;
 import com.sjsu.webmart.util.ConsoleUtil;
 
 

@@ -53,24 +53,10 @@ public abstract class Order implements MessageObservable {
 	protected RentPeriod rentPeriod;
 	protected Date orderDate ;
 	protected BigDecimal cost;
+	protected FulfillmentType fulfillmentType;
+	protected PaymentInfo paymentInfo;
+	protected PaymentType paymentType;	
 
-	public BigDecimal getCost() {
-		return cost;
-	}
-
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
-	}
-
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
-	
-	
 
 	public Order() {
 		idSeq++;
@@ -127,6 +113,48 @@ public abstract class Order implements MessageObservable {
 		this.rentPeriod = rentPeriod;
 	}
 
+
+	public FulfillmentType getFulfillmentType() {
+		return fulfillmentType;
+	}
+
+	public void setFulfillmentType(FulfillmentType fulfillmentType) {
+		this.fulfillmentType = fulfillmentType;
+	}
+
+	public PaymentInfo getPaymentInfo() {
+		return paymentInfo;
+	}
+
+	public void setPaymentInfo(PaymentInfo paymentInfo) {
+		this.paymentInfo = paymentInfo;
+	}
+
+	public PaymentType getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	
+	
 	public void processOrder(OrderParams orderParams) {
 		System.out
 				.println("****************** START PROCESSING ORDER ********************");
@@ -146,9 +174,7 @@ public abstract class Order implements MessageObservable {
 	public boolean processPayment(OrderParams orderParams) {
 		cost = calculateCost(orderParams);
 
-		PaymentInfo paymentInfo = orderParams.getPaymentInfo();
-		PaymentProcessor paymentProcessor = getPaymentProcessor(orderParams
-				.getPaymentType());
+		PaymentProcessor paymentProcessor = getPaymentProcessor(paymentType);
 		paymentInfo.setPaymentProcessor(paymentProcessor);
 
 		return paymentInfo.processPayment(cost);
@@ -172,10 +198,11 @@ public abstract class Order implements MessageObservable {
 
 	@Override
 	public String toString() {
-		String start = (rentPeriod==null)? "": ConsoleUtil.SDF.format(rentPeriod.getBegin());
-		String end = (rentPeriod==null)? "": ConsoleUtil.SDF.format(rentPeriod.getEnd());
+		String start = (rentPeriod==null || rentPeriod.getBegin() == null)? "": ConsoleUtil.SDF.format(rentPeriod.getBegin());
+		String end = (rentPeriod==null || rentPeriod.getEnd() == null)? "": ConsoleUtil.SDF.format(rentPeriod.getEnd());
 		
 		return "Order{" + "orderId=" + orderId + ", orderType=" + orderType
+				+ ", orderStatus=" + orderStatus
 				+ ", item=" + item.getItemTitle() + ", quantity=" + item.getQuantity()
 				+", buyer=" + account.getEmail() + ", seller="
 				+ item.getSellerName() + ", start=" + start + ", end=" + end + "}";
