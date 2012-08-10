@@ -224,7 +224,8 @@ public class ConsoleUtil {
                 dataRow.add(auctionInfo.getAuctionState().getStateType().name());
                 dataRow.add(formatFloat(auctionInfo.getStartBidPrice()));
                 dataRow.add(SDF.format(auctionInfo.getAuctionEndTime()));
-                dataRow.add("" + auctionInfo.getBidList().size());
+                dataRow.add(auctionInfo.getAuctionType().name());
+
                 if (AuctionType.open.equals(auctionInfo.getAuctionType())){
                     dataRow.add(auctionInfo.getCurrentActiveBid() != null ? formatFloat(auctionInfo.getCurrentActiveBid().getBidPrice()) : "");
                 } else {
@@ -256,8 +257,8 @@ public class ConsoleUtil {
             }
         }
         printDataInTableFormat(out
-                , new String[]{"%-12.12s", "%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s", "%-12.12s", "%-12.12s", "%-20.20s", "%-12s"}
-                , new String[]{"AUCTION ID", "ITEM TITLE", "AUCTION STATE", "START BID PRICE", "AUCTION END TIME", "TOTAL BIDS", "CURRENT BID", "WINNER NAME", "WINNING BID"}
+                , new String[]{"%-12.12s", "%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s", "%-20.20s", "%-12.12s", "%-20.20s", "%-12s"}
+                , new String[]{"AUCTION ID", "ITEM TITLE", "AUCTION STATE", "START BID PRICE", "AUCTION END TIME", "AUCTION TYPE", "CURRENT BID", "WINNER NAME", "WINNING BID"}
                 , dataRows);
 
 //        for (AuctionInfo auctionInfo : auctionInfos) {

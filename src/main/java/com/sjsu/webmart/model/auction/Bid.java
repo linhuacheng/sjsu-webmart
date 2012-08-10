@@ -20,6 +20,7 @@ public class Bid {
     private Item item;
     private float bidPrice;
     boolean offerRejected;
+    boolean winner;
 
 
     public int getBidId() {
@@ -70,12 +71,21 @@ public class Bid {
         this.offerRejected = offerRejected;
     }
 
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
     @Override
     public String toString() {
         return "Bid{" +
                 "bidder=" + (bidder != null? bidder.getName(): "") +
                 ", item=" + item.getItemTitle() +
                 ", bidPrice=" + bidPrice +
+                (winner?",WinningBid":"")+
                 '}';
     }
 }

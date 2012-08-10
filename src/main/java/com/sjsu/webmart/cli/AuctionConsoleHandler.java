@@ -68,10 +68,7 @@ public class AuctionConsoleHandler {
                     //view auction
                     printEnteredOption(out, auctionOptions, option);
                     Collection<AuctionInfo> auctions = auctionService.getAllAuctions();
-
                     printAuctionInfo(out, auctions);
-
-                    //printAuction(null);
                     break;
                 case OPTION_TWO:
                     //setup auction
@@ -79,24 +76,29 @@ public class AuctionConsoleHandler {
                     handleSetupAuction();
                     break;
                 case OPTION_THREE:
+                    //update auction
+                    printEnteredOption(out, auctionOptions, option);
+                    handleUpdateAuction();
+                    break;
+                case OPTION_FOUR:
                     //Start Auction
                     printEnteredOption(out, auctionOptions, option);
                     handleStartAuction();
                     break;
-                case OPTION_FOUR:
+                case OPTION_FIVE:
                     //place bid
                     printEnteredOption(out, auctionOptions, option);
                     handlePlaceBid();
                     break;
-                case OPTION_FIVE:
+                case OPTION_SIX:
                     //close Auction
                     printEnteredOption(out, auctionOptions, option);
                     handleCloseAuction();
                     break;
-                case OPTION_SIX:
-                    //List Winner Auction
+                case OPTION_SEVEN:
+                    //Auction detail
                     printEnteredOption(out, auctionOptions, option);
-                    handlePrintWinner();
+                    handleAuctionDetail();
                     break;
                 case OPTION_EXIT:
                     printText(out, "Enter -1 , Returning to Main Menu", false);
@@ -110,31 +112,6 @@ public class AuctionConsoleHandler {
         }
     }
 
-//    private boolean printAuction(AuctionStateType stateType) {
-//        Collection<AuctionInfo> auctionInfos;
-//        if (stateType == null) {
-//            auctionInfos = auctionService.getAllAuctions();
-//        } else {
-//            auctionInfos = auctionService.getAuctionByState(stateType);
-//        }
-//        if (CollectionUtils.isNotEmpty(auctionInfos)) {
-//
-//            for (AuctionInfo auctionInfo : auctionInfos) {
-//                printText(out, String.format("Auction Details Auction Id=(%s) Item Title=(%s), Auction State=(%s)" +
-//                        " Start Bid Price=(%s), Bid End Time=(%s), Bid List=(%s)"
-//                        , auctionInfo.getAuctionId()
-//                        , auctionInfo.getItem().getItemTitle()
-//                        , auctionInfo.getAuctionState().getStateType()
-//                        , auctionInfo.getStartBidPrice()
-//                        , auctionInfo.getAuctionEndTime()
-//                        , auctionInfo.getBidList()
-//                ));
-//            }
-//            return true;
-//        }
-//        printText(out, String.format("No Auction with Type (%s)", stateType));
-//        return false;
-//    }
 
     private void handlePrintWinner() {
         Collection<AuctionInfo> auctionInfos;
@@ -176,11 +153,11 @@ public class AuctionConsoleHandler {
         }
         existingAuction = auctionService.getAuctionByItemId(item.getItemId());
 
-        if (existingAuction != null && !existingAuction.getAuctionState().equals(AuctionStateType.closed)) {
-            printText(out, "Auction for Item is scheduled/Inprogress");
+        if (existingAuction != null && !AuctionStateType.closed.equals(existingAuction.getAuctionState().getStateType())) {
+            printText(out, "Auction for the Item is scheduled/Inprogress");
             return;
         }
-        printText(out, "Enter Start Bid Price:", false);
+        printText(out, "Enter Starting Bid Price:", false);
 
         if ((price = getFloatValue(reader)) == -1) {
             printText(out, "Invalid Price");
@@ -210,6 +187,56 @@ public class AuctionConsoleHandler {
 
     }
 
+    private void handleUpdateAuction() throws IOException {
+
+        final int auctionId;
+        float price;
+        AuctionInfo existingAuction;
+        Date auctionStartTime;
+        Date auctionEndTime;
+
+        Set<AuctionInfo> auctionInfoSet = auctionService.getAuctionByState(AuctionStateType.scheduled);
+        printAuctionInfo(out, auctionInfoSet);
+        if (CollectionUtils.isEmpty(auctionInfoSet)) {
+            return;
+        }
+        printText(out, "Enter Auction id update:", false);
+        auctionId = getIntValue(reader);
+        existingAuction = (AuctionInfo)CollectionUtils.find(auctionInfoSet, new Predicate(){
+            @Override
+            public boolean evaluate(Object o) {
+                if (((AuctionInfo)o).getAuctionId() == auctionId){
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        if (existingAuction != null && !AuctionStateType.scheduled.equals(existingAuction.getAuctionState().getStateType())) {
+            printText(out, "Cannot update auction as auction does not exist or it is not in scheduled state");
+            return;
+        }
+        printText(out, "Enter Start Bid Price:", false);
+
+        if ((price = getFloatValue(reader)) == -1) {
+            printText(out, "Invalid Price");
+            return;
+        }
+        printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()), false);
+        auctionEndTime = getDateValue(reader);
+        auctionStartTime = new Date(System.currentTimeMillis() - 10000);
+
+        if (auctionEndTime == null || auctionStartTime.after(auctionEndTime)) {
+            printText(out, "Auction end time must be greater than current time");
+            return;
+        }
+
+        existingAuction.setAuctionEndTime(auctionEndTime);
+        existingAuction.setAuctionStartTime(auctionStartTime);
+        existingAuction.setStartBidPrice(price);
+        printText(out, String.format("Successfully Updated Auction (%s)", existingAuction.getAuctionId()));
+
+    }
     private void handleStartAuction() throws IOException {
 
         int input;
@@ -316,22 +343,83 @@ public class AuctionConsoleHandler {
 
     }
 
+
+    private void handleAuctionDetail() throws IOException {
+
+        Collection<AuctionInfo> auctionInfoList =auctionService.getAllAuctions();
+        if (CollectionUtils.isEmpty(auctionInfoList)){
+            printText(out, "No Auction to print");
+            return;
+        }
+        printAuctionInfo(out, auctionInfoList);
+
+        printText(out, "Enter Auction Id:", false);
+        int auctionId = getIntValue(reader);
+        AuctionInfo auctionInfo = auctionService.getAuctionByAuctionId(auctionId);
+        if (auctionInfo == null){
+            printText(out, "Invalid Auction Id");
+            return;
+        }
+        printText(out, String.format("%s:%s", "AUCTION ID",auctionInfo.getAuctionId()));
+        printText(out, String.format("%s:%s", "ITEM TITLE",auctionInfo.getItem().getItemTitle()));
+        printText(out, String.format("%s:%s", "AUCTION STATE",auctionInfo.getAuctionState().getStateType()));
+        printText(out, String.format("%s:%s", "START BID PRICE",formatFloat(auctionInfo.getStartBidPrice())));
+        printText(out, String.format("%s:%s", "AUCTION START TIME",SDF.format(auctionInfo.getAuctionStartTime())));
+        printText(out, String.format("%s:%s", "AUCTION END TIME",SDF.format(auctionInfo.getAuctionEndTime())));
+        printText(out, String.format("%s:%s", "AUCTION TYPE",auctionInfo.getAuctionType()));
+        if (AuctionType.open.equals(auctionInfo.getAuctionType())){
+            printText(out, String.format("%s:%s", "CURRENT BID",auctionInfo.getCurrentActiveBid() != null
+                    ? formatFloat(auctionInfo.getCurrentActiveBid().getBidPrice()) : ""));
+        } else {
+            printText(out, String.format("%s:%s", "CURRENT BID","<NA>"));
+        }
+        if (AuctionStateType.closed.equals(auctionInfo.getAuctionState().getStateType())) {
+            Bid wonBid;
+            if ((wonBid = auctionInfo.getWinner()) != null) {
+                printText(out, String.format("%s:%s", "WINNER NAME",wonBid.getBidder().getName()));
+                printText(out, String.format("%s:%s", "WINNING PRICE",formatFloat(wonBid.getBidPrice())));
+            }
+        }
+        if (CollectionUtils.isNotEmpty(auctionInfo.getBidList())){
+            printText(out, String.format("%s:%s", "BID SIZE",auctionInfo.getBidList().size()));
+            List<List<String>> dataRows = new ArrayList<List<String>>();
+            for (Bid bid: auctionInfo.getBidList()){
+                List<String> dataRow = new ArrayList<String>();
+                dataRow.add(bid.getItem().getItemTitle());
+                dataRow.add(bid.getBidder().getName());
+                dataRow.add(formatFloat(bid.getBidPrice()));
+                dataRow.add(SDF.format(bid.getTimeOfBid()));
+                dataRow.add(bid.isWinner()?"true": "false");
+                dataRows.add(dataRow);
+            }
+            printDataInTableFormat(out
+                    , new String[]{ "%-30.30s","%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s"}
+                    , new String[]{"ITEM TITLE", "BIDDER NAME", "BID PRICE", "TIME OF BID", "WINNER"},dataRows);
+        }else{
+            printText(out, String.format("%s:%s", "BID SIZE","<EMPTY>"));
+        }
+
+    }
+
+
     public void createAuctionOptions() {
 
         ConsoleOption viewAuction = new ConsoleOption("View Auction", OptionNum.OPTION_ONE, null);
         ConsoleOption scheduleAuction = new ConsoleOption("Setup Auction", OptionNum.OPTION_TWO, null);
-        ConsoleOption startAuction = new ConsoleOption("Start Auction", OptionNum.OPTION_THREE, null);
-        ConsoleOption placeBid = new ConsoleOption("Place Bid", OptionNum.OPTION_FOUR, null);
-        ConsoleOption closeAuction = new ConsoleOption("Close Auction", OptionNum.OPTION_FIVE, null);
-        ConsoleOption printWinner = new ConsoleOption("List Winner", OptionNum.OPTION_SIX, null);
+        ConsoleOption updateAuction = new ConsoleOption("Update Auction", OptionNum.OPTION_THREE, null);
+        ConsoleOption startAuction = new ConsoleOption("Start Auction", OptionNum.OPTION_FOUR, null);
+        ConsoleOption placeBid = new ConsoleOption("Place Bid", OptionNum.OPTION_FIVE, null);
+        ConsoleOption closeAuction = new ConsoleOption("Close Auction", OptionNum.OPTION_SIX, null);
+        ConsoleOption auctionDetail = new ConsoleOption("View Auction Detail", OptionNum.OPTION_SEVEN, null);
         ConsoleOption mainMenu = new ConsoleOption("Return to Main Menu", OptionNum.OPTION_EXIT, null);
         auctionOptions = new ArrayList<ConsoleOption>();
         auctionOptions.add(viewAuction);
         auctionOptions.add(scheduleAuction);
+        auctionOptions.add(updateAuction);
         auctionOptions.add(startAuction);
         auctionOptions.add(placeBid);
         auctionOptions.add(closeAuction);
-        auctionOptions.add(printWinner);
+        auctionOptions.add(auctionDetail);
         auctionOptions.add(mainMenu);
     }
 
