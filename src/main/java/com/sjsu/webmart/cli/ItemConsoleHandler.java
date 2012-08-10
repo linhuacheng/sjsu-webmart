@@ -68,7 +68,7 @@ public class ItemConsoleHandler {
 			case OPTION_ONE: {
 				System.out.println("Enter Account id :");
 				int accId = ConsoleUtil.getIntValue(reader);
-				
+				if (account.isSeller(accId)){
 				System.out
 						.println("Do you want to add information for \n 1. Consumer item \n 2. Media item? ");
 				type = ConsoleUtil.getIntValue(reader);
@@ -158,6 +158,10 @@ public class ItemConsoleHandler {
 					System.out.println("Invalid Choice");
 
 			}
+				else {
+					System.out.println("You are not permitted to add an item");
+				}
+			}
 				break;
 			case OPTION_TWO:
 				printEnteredOption(out, itemOptions, secondOption);
@@ -168,6 +172,9 @@ public class ItemConsoleHandler {
 				break;
 			case OPTION_THREE:
 				printEnteredOption(out, itemOptions, secondOption);
+				System.out.println("Enter Account id :");
+				int accId = ConsoleUtil.getIntValue(reader);
+				if (account.isSeller(accId)){
 				System.out.println("Enter Item Number :");
 				itemId = ConsoleUtil.getIntValue(reader);
 				System.out.println("Enter new information for item " + itemId);
@@ -178,12 +185,24 @@ public class ItemConsoleHandler {
 				System.out.println("Enter new Discount: ");
 				float dis = ConsoleUtil.getFloatValue(reader);
 				isi.updateItem(itemId, title, price, dis);
+				}
+				else {
+					System.out.println("You are not permitted to update an item");
+				}
 				break;
+				
 			case OPTION_FOUR:
 				printEnteredOption(out, itemOptions, secondOption);
+				System.out.println("Enter Account id :");
+				int accID = ConsoleUtil.getIntValue(reader);
+				if (account.isSeller(accID)){
 				System.out.println("Enter Item Number :");
 				itemId = ConsoleUtil.getIntValue(reader);
 				isi.deleteItem(itemId);
+				}
+				else {
+					System.out.println("You are not permitted to delete an item");
+				}
 				break;
 			case OPTION_FIVE:
 				printEnteredOption(out, itemOptions, secondOption);

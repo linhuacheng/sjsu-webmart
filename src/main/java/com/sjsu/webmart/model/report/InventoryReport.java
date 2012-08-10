@@ -1,9 +1,5 @@
 package com.sjsu.webmart.model.report;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sjsu.webmart.model.item.Item;
 import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.service.InventoryService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
@@ -13,7 +9,6 @@ public class InventoryReport extends Report{
 
 	private AccountService accountService = AccountServiceImpl.getInstance();
 	private InventoryService inventoryService = InventoryServiceImpl.getInstance();
-	private List<Item> items = new ArrayList<Item>();
 	
 	public void showReport(int accountId)
 	{

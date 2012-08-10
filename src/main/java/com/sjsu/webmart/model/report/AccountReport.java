@@ -1,7 +1,5 @@
 package com.sjsu.webmart.model.report;
 
-import java.util.Date;
-
 import com.sjsu.webmart.model.auction.AuctionFilter;
 import com.sjsu.webmart.model.order.OrderFilter;
 

@@ -13,14 +13,12 @@ import java.util.List;
 
 import com.sjsu.webmart.common.ConsoleOption;
 import com.sjsu.webmart.common.OptionNum;
-import com.sjsu.webmart.model.item.ConsumerItem;
-import com.sjsu.webmart.model.item.Item;
-import com.sjsu.webmart.model.item.MediaItem;
-import com.sjsu.webmart.model.item.Rentable;
+import com.sjsu.webmart.model.account.Account;
+import com.sjsu.webmart.model.payment.PayMerchandise;
+import com.sjsu.webmart.model.payment.PaymentInfo;
 import com.sjsu.webmart.service.AccountService;
 import com.sjsu.webmart.service.impl.AccountServiceImpl;
-import com.sjsu.webmart.service.impl.InventoryServiceImpl;
-import com.sjsu.webmart.test.ItemData;
+import com.sjsu.webmart.util.ConsoleUtil;
 
 public class AccountConsoleHandler {
 
@@ -97,6 +95,13 @@ public class AccountConsoleHandler {
 				accountId = getUserInput();
 				accountService.processEnableUserAccount(accountId);
 				break;
+				
+			case OPTION_SEVEN:
+				printEnteredOption(out, accountOptions, secondOption);
+				System.out.println("Enter Your Account Id : ");
+				accountId = getUserInput();
+				handleViewAllAccounts(accountId);
+				break;
 
 			case OPTION_EXIT:
 				// printEnteredOption(itemOptions, secondOption);
@@ -139,6 +144,8 @@ public class AccountConsoleHandler {
 				OptionNum.OPTION_FIVE, null);
 		ConsoleOption activateAccount = new ConsoleOption("Activate Account",
 				OptionNum.OPTION_SIX, null);
+		ConsoleOption viewAllAccount = new ConsoleOption("View All Accounts",
+				OptionNum.OPTION_SEVEN, null);
 		accountOptions = new ArrayList<ConsoleOption>();
 		accountOptions.add(createAccount);
 		accountOptions.add(viewAccount);
@@ -146,7 +153,37 @@ public class AccountConsoleHandler {
 		accountOptions.add(deleteAccount);
 		accountOptions.add(suspendAccount);
 		accountOptions.add(activateAccount);
+		accountOptions.add(viewAllAccount);
 	}
 
+	public void handleViewAllAccounts(int accountId)
+	{
+		AccountService accountService = AccountServiceImpl.getInstance();
+		List<Account> accounts = new ArrayList<Account>();
+		if(accountService.isSeller(accountId))
+		{
+			accounts = accountService.getAllAccounts();
+			String format = "|%1$-10s|%2$-20s|%3$-50s|%4$-20s|\n";
+			System.out
+					.println("________________________________________________________________________________________________________________");
+			System.out.format(format, "ACCOUNT ID", "ACCOUNT TYPE", "USER NAME", "PAYMENT INFO TYPE");
+			System.out
+					.println("________________________________________________________________________________________________________________");
+			for (Account account : accounts) {
+				String user_name = account.getFirstName()+" "+account.getLastName();
+				String payment_type = "";
+				for(PaymentInfo p_info : account.getPaymentInfo())
+					payment_type = payment_type+p_info.getPaymentType()+" , ";
+				
+				System.out.format(format, account.getAccountId(), account.getAccountType(),user_name, payment_type);
+			}
+			System.out
+					.println("________________________________________________________________________________________________________________");
+
+		}
+		
+		else
+			System.out.println("You are not authorized to view all the accounts ");
+	}
 	
 }

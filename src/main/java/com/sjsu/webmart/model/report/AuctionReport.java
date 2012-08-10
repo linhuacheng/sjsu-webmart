@@ -5,12 +5,8 @@ import java.util.List;
 
 import com.sjsu.webmart.model.auction.AuctionFilter;
 import com.sjsu.webmart.model.auction.AuctionInfo;
-import com.sjsu.webmart.model.order.Order;
-import com.sjsu.webmart.model.order.OrderFilter;
 import com.sjsu.webmart.service.AuctionService;
-import com.sjsu.webmart.service.OrderService;
 import com.sjsu.webmart.service.impl.AuctionServiceImpl;
-import com.sjsu.webmart.service.impl.OrderServiceImpl;
 
 public class AuctionReport extends Report{
 
