@@ -62,12 +62,15 @@ public class AuctionConsoleHandler {
         while (true) {
             printOptions(out, option, auctionOptions);
             option = getOption(reader);
+
             switch (option) {
                 case OPTION_ONE:
                     //view auction
                     printEnteredOption(out, auctionOptions, option);
                     Collection<AuctionInfo> auctions = auctionService.getAllAuctions();
+
                     printAuctionInfo(out, auctions);
+
                     //printAuction(null);
                     break;
                 case OPTION_TWO:
@@ -96,7 +99,7 @@ public class AuctionConsoleHandler {
                     handlePrintWinner();
                     break;
                 case OPTION_EXIT:
-                    printText(out, "Enter -1 to return to main menu", false);
+                    printText(out, "Enter -1 , Returning to Main Menu", false);
                     //printEnteredOption(auctionOptions, secondOption);
                     return;
                 default:
@@ -321,6 +324,7 @@ public class AuctionConsoleHandler {
         ConsoleOption placeBid = new ConsoleOption("Place Bid", OptionNum.OPTION_FOUR, null);
         ConsoleOption closeAuction = new ConsoleOption("Close Auction", OptionNum.OPTION_FIVE, null);
         ConsoleOption printWinner = new ConsoleOption("List Winner", OptionNum.OPTION_SIX, null);
+        ConsoleOption mainMenu = new ConsoleOption("Return to Main Menu", OptionNum.OPTION_EXIT, null);
         auctionOptions = new ArrayList<ConsoleOption>();
         auctionOptions.add(viewAuction);
         auctionOptions.add(scheduleAuction);
@@ -328,6 +332,7 @@ public class AuctionConsoleHandler {
         auctionOptions.add(placeBid);
         auctionOptions.add(closeAuction);
         auctionOptions.add(printWinner);
+        auctionOptions.add(mainMenu);
     }
 
 

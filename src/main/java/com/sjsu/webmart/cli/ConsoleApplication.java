@@ -27,6 +27,8 @@ import com.sjsu.webmart.service.impl.AuctionServiceImpl;
 import com.sjsu.webmart.service.impl.InventoryServiceImpl;
 import com.sjsu.webmart.service.impl.ReportServiceImpl;
 import com.sjsu.webmart.test.ItemData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Console application
@@ -36,7 +38,7 @@ import com.sjsu.webmart.test.ItemData;
  * To change this template use File | Settings | File Templates.
  */
 public class ConsoleApplication {
-
+    private Log log = LogFactory.getLog(ConsoleApplication.class);
     private PrintWriter out;
     private BufferedReader reader;
     private List<ConsoleOption> mainOptions;
@@ -91,38 +93,42 @@ public class ConsoleApplication {
 
         while (true) {
 
-            printOptions(out, optionNum, mainOptions);
-            optionNum = getOption(reader);
+            try {
+                printOptions(out, optionNum, mainOptions);
+                optionNum = getOption(reader);
 
-            switch (optionNum) {
-                case OPTION_ONE:
-                    printEnteredOption(out,mainOptions, optionNum);
-                    accountConsoleHandler.handleAccountOptions();
-                    break;
-                case OPTION_TWO:
-                    printEnteredOption(out,mainOptions, optionNum);
-                    //write itemconsolehandler code from here
-                    itemConsoleHandler.handleItemOptions();
-                    break;
-                case OPTION_THREE:
-                    printEnteredOption(out,mainOptions, optionNum);
-                    orderConsoleHandler.handleOrderOptions();
-                    break;
-                case OPTION_FOUR:
-                    printEnteredOption(out,mainOptions, optionNum);
-                    auctionConsoleHandler.handleAuctionOptions();
-                    break;
-                case OPTION_FIVE:
-                    printEnteredOption(out,mainOptions, optionNum);
-                    reportConsoleHandler.handleReportOptions();
-                    break;
-                case OPTION_EXIT:
-                    //printEnteredOption(out,mainOptions, optionNum);
-                    return;
-                default:
-                    out.println("Invalid Option");
-                    optionNum = OptionNum.OPTION_NONE;
-                    break;
+                switch (optionNum) {
+                    case OPTION_ONE:
+                        printEnteredOption(out,mainOptions, optionNum);
+                        accountConsoleHandler.handleAccountOptions();
+                        break;
+                    case OPTION_TWO:
+                        printEnteredOption(out,mainOptions, optionNum);
+                        //write itemconsolehandler code from here
+                        itemConsoleHandler.handleItemOptions();
+                        break;
+                    case OPTION_THREE:
+                        printEnteredOption(out,mainOptions, optionNum);
+                        orderConsoleHandler.handleOrderOptions();
+                        break;
+                    case OPTION_FOUR:
+                        printEnteredOption(out,mainOptions, optionNum);
+                        auctionConsoleHandler.handleAuctionOptions();
+                        break;
+                    case OPTION_FIVE:
+                        printEnteredOption(out,mainOptions, optionNum);
+                        reportConsoleHandler.handleReportOptions();
+                        break;
+                    case OPTION_EXIT:
+                        //printEnteredOption(out,mainOptions, optionNum);
+                        return;
+                    default:
+                        out.println("Invalid Option");
+                        optionNum = OptionNum.OPTION_NONE;
+                        break;
+                }
+            } catch (IOException e) {
+                 log.error("Unexpected Error:"+e.getMessage());
             }
         }
     }
