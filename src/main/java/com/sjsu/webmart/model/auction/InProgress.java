@@ -31,20 +31,22 @@ public class InProgress implements AuctionState {
 
     @Override
     public Bid endAuction() {
-        log.info("Auction InProgress, Ending Auction");
+        log.info("--------Auction InProgress, Ending Auction-----");
         auctionInfo.setAuctionState(new Closed(auctionInfo));
         auctionInfo.setAuctionEndTime(new Date());
-        return auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
-
+        Bid winner = auctionInfo.getAuctionStrategy().computeWinner(auctionInfo.getBidList());
+        auctionInfo.getAuctionStrategy().sendNotification(auctionInfo.getBidList(), auctionInfo);
+        log.info("--------Auction InProgress, Ending Auction-----");
+        return winner;
     }
 
     @Override
     public AuctionResponse placeBid(Bid bid) {
         List<Bid> bids = auctionInfo.getBidList();
-        Bid currentMaxBid = auctionInfo.getCurrentActiveBid();
+        Bid activeBid = auctionInfo.getCurrentActiveBid();
         log.info("Auction Inprogress, accept bid");
-        float minBidPrice = currentMaxBid != null ? currentMaxBid.getBidPrice() : auctionInfo.getStartBidPrice();
-        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, minBidPrice);
+
+        return auctionInfo.getAuctionStrategy().acceptBid(bids, bid, activeBid, auctionInfo.getStartBidPrice());
     }
 
     @Override

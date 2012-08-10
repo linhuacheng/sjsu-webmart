@@ -7,6 +7,8 @@ import java.util.List;
 import com.sjsu.webmart.common.AuctionResponse;
 import com.sjsu.webmart.common.AuctionType;
 import com.sjsu.webmart.model.item.Item;
+import com.sjsu.webmart.model.notification.AbstractMessageObservable;
+import com.sjsu.webmart.service.impl.NotificationServiceImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
  * Time: 10:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class AuctionInfo implements AuctionInterface{
+public class AuctionInfo extends AbstractMessageObservable implements AuctionInterface {
     Log log = LogFactory.getLog(AuctionInfo.class);
 
     int auctionId;
@@ -52,6 +54,8 @@ public class AuctionInfo implements AuctionInterface{
         this.item = item;
         this.startBidPrice = startBidPrice;
         auctionState = new Scheduled(this);
+        //add observer
+        addObserver(NotificationServiceImpl.getInstance());
     }
 
     public String getItemTitle() {
@@ -109,12 +113,12 @@ public class AuctionInfo implements AuctionInterface{
 
 
     public Bid viewMaxBid(){
-        return auctionStrategy.viewMaxBid(bidList);
+        return auctionStrategy.getMaxBid(bidList);
     }
 
-    public void sendNotification(){
-        auctionStrategy.sendNotification();
-    }
+//    public void sendNotification(){
+//        auctionStrategy.sendNotification();
+//    }
 
     public Bid getWinner(){
         return auctionStrategy.computeWinner(bidList);

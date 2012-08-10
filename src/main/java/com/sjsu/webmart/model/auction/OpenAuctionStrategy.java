@@ -2,6 +2,7 @@ package com.sjsu.webmart.model.auction;
 
 import com.sjsu.webmart.common.AuctionResponse;
 import com.sjsu.webmart.common.AuctionStateType;
+import com.sjsu.webmart.model.notification.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,21 +20,13 @@ import java.util.List;
 public class OpenAuctionStrategy implements AuctionStrategy {
 
     Log log = LogFactory.getLog(Scheduled.class);
-    private static Comparator<Bid> descSortByBidPrice = new Comparator<Bid>() {
-        @Override
-        public int compare(Bid o1, Bid o2) {
-            if (o1.getBidPrice() > o2.getBidPrice()){
-                return  -1;
-            } else if (o2.getBidPrice() > o1.getBidPrice()){
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    };
-    @Override
-    public AuctionResponse acceptBid(List<Bid> bids, Bid bid, float minBidPrice) {
 
+    @Override
+    public AuctionResponse acceptBid(List<Bid> bids, Bid bid,Bid currentMaxBid, float minBidPrice) {
+
+        if (currentMaxBid != null){
+            minBidPrice = currentMaxBid.getBidPrice();
+        }
         if (bid.getBidPrice() > minBidPrice) {
             log.info("Accepting bid: " + bid);
             bids.add(bid);
@@ -45,8 +38,9 @@ public class OpenAuctionStrategy implements AuctionStrategy {
 
     }
 
+
     @Override
-    public Bid viewMaxBid(List<Bid> bids) {
+    public Bid getMaxBid(List<Bid> bids) {
 
         Collections.sort(bids, descSortByBidPrice);
         Bid maxBid = bids.get(0);
@@ -57,16 +51,27 @@ public class OpenAuctionStrategy implements AuctionStrategy {
     @Override
     public Bid computeWinner(List<Bid> bids) {
         Collections.sort(bids, descSortByBidPrice);
+        Bid winner = null;
+        boolean winnerSet=false;
         for(Bid bid: bids){
-            if (!bid.isOfferRejected()){
-                return bid;
+            if (!winnerSet){
+                winner = bid;
+                winnerSet=true;
+            } else {
+                bid.setOfferRejected(true);
             }
         }
-        return null;
+        return winner;
     }
 
     @Override
-    public void sendNotification() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void sendNotification(List<Bid> bids, AuctionInterface auctionInfo) {
+
+        Bid bid = computeWinner(bids);
+        log.info("Sending Notification to Winner");
+        if (bid != null){
+            Message message = new Message(bid.getBidder().getEmail(), "Bid:" + bid);
+            auctionInfo.notifyObservers(message);
+        }
     }
 }

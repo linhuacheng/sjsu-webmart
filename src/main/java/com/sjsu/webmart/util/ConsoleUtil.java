@@ -9,6 +9,8 @@ import com.sjsu.webmart.model.auction.AuctionInfo;
 import com.sjsu.webmart.model.auction.Bid;
 import com.sjsu.webmart.model.item.Item;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConsoleUtil {
     public static final SimpleDateFormat SDF = new SimpleDateFormat("MM/dd/yyyy");
@@ -163,16 +167,19 @@ public class ConsoleUtil {
             }
         }
         printDataInTableFormat(out
-                , new String[]{"%-15s", "%-40s", "%-15s", "%-15s", "%-40s"}
+                , new String[]{"%-15s", "%-20.20s", "%-15s", "%-15s", "%-40s"}
                 , new String[]{"ITEM ID", "ITEM TITLE", "ITEM TYPE", "ITEM PRICE", "ITEM DESCRIPTION"}, dataRows);
     }
 
     public static void printDataInTableFormat(PrintWriter out, String[] formats, String[] headers, List<List<String>> dataRows) {
 
         String combinedFormat = StringUtils.join(formats, " | ");
-        printText(out, "__________________________________________________________________________________________");
-        printText(out, String.format(combinedFormat, headers));
-        printText(out, "__________________________________________________________________________________________");
+        String formatHeader = String.format(combinedFormat, headers);
+        String line=StringUtils.leftPad("", formatHeader.length(), "_");
+
+        printText(out, line);
+        printText(out, formatHeader);
+        printText(out, line);
         if (CollectionUtils.isNotEmpty(dataRows)) {
             for (List<String> dataRow : dataRows) {
                 printText(out, String.format(combinedFormat, dataRow.toArray()));
@@ -180,6 +187,7 @@ public class ConsoleUtil {
         } else {
             printText(out, "No Data");
         }
+        printText(out, line);
     }
 
     public static void printAccountInfo(PrintWriter out, List<Account> accounts) {
@@ -220,7 +228,7 @@ public class ConsoleUtil {
                 if (AuctionType.open.equals(auctionInfo.getAuctionType())){
                     dataRow.add(auctionInfo.getCurrentActiveBid() != null ? formatFloat(auctionInfo.getCurrentActiveBid().getBidPrice()) : "");
                 } else {
-                    dataRow.add("NOT ACCESSIBLE");
+                    dataRow.add("<NA>");
                 }
 //                Bid wonBid;
 //                if ((wonBid =auctionInfo.getWinner()) != null) {
@@ -248,7 +256,7 @@ public class ConsoleUtil {
             }
         }
         printDataInTableFormat(out
-                , new String[]{"%-12s", "%-40s", "%-13s", "%-18s", "%-18s", "%-12s", "%-12s", "%-20s", "%-12s"}
+                , new String[]{"%-12.12s", "%-20.20s", "%-13.13s", "%-18.18s", "%-18.18s", "%-12.12s", "%-12.12s", "%-20.20s", "%-12s"}
                 , new String[]{"AUCTION ID", "ITEM TITLE", "AUCTION STATE", "START BID PRICE", "AUCTION END TIME", "TOTAL BIDS", "CURRENT BID", "WINNER NAME", "WINNING BID"}
                 , dataRows);
 

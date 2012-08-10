@@ -1,6 +1,7 @@
 package com.sjsu.webmart.model.auction;
 
 import com.sjsu.webmart.common.AuctionType;
+import com.sjsu.webmart.model.notification.MessageObservable;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * Time: 12:59 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface AuctionInterface {
+public interface AuctionInterface extends MessageObservable{
 
     public void setAuctionState(AuctionState auctionState);
 

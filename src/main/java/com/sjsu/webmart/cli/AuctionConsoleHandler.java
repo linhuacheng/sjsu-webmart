@@ -41,6 +41,7 @@ public class AuctionConsoleHandler {
     private AccountService accountService;
     private InventoryService inventoryService;
 
+
     public AuctionConsoleHandler(PrintWriter out, BufferedReader reader) {
         this.out = out;
         this.reader = reader;
@@ -149,6 +150,8 @@ public class AuctionConsoleHandler {
         Item item = null;
         int itemId;
         float price;
+        int atIntValue;
+        AuctionType auctionType;
         AuctionInfo existingAuction;
         AuctionInfo newAuction;
         Date auctionStartTime;
@@ -188,8 +191,17 @@ public class AuctionConsoleHandler {
             printText(out, "Auction end time must be greater than current time");
             return;
         }
+        printText(out, "Enter Auction Type");
+        printText(out, String.format("[%s] %s", AuctionType.open.getValue(), AuctionType.open));
+        printText(out, String.format("[%s] %s", AuctionType.closed.getValue(), AuctionType.closed));
 
-        newAuction = auctionService.setupNewAuction(item, AuctionType.open, price, auctionStartTime, auctionEndTime);
+        atIntValue = getIntValue(reader);
+        auctionType = AuctionType.getFromValue(atIntValue);
+        if (auctionType == null){
+            printText(out, "Invalid Auction Type");
+            return;
+        }
+        newAuction = auctionService.setupNewAuction(item, auctionType, price, auctionStartTime, auctionEndTime);
 
         printText(out, String.format("Successfully Created Auction (%s)", newAuction.getAuctionId()));
 

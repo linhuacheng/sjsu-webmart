@@ -73,7 +73,7 @@ public class Bid {
     @Override
     public String toString() {
         return "Bid{" +
-                "bidder=" + (bidder != null? bidder.getFirstName() +" "+bidder.getLastName(): "") +
+                "bidder=" + (bidder != null? bidder.getName(): "") +
                 ", item=" + item.getItemTitle() +
                 ", bidPrice=" + bidPrice +
                 '}';
