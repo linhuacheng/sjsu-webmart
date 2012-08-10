@@ -151,6 +151,10 @@ public class AuctionConsoleHandler {
             printText(out, "Invalid Item Id");
             return;
         }
+        if (item.getQuantity() <=0) {
+            printText(out, "Item Not Available");
+            return;
+        }
         existingAuction = auctionService.getAuctionByItemId(item.getItemId());
 
         if (existingAuction != null && !AuctionStateType.closed.equals(existingAuction.getAuctionState().getStateType())) {
