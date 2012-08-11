@@ -287,10 +287,17 @@ public class OrderConsoleHandler {
 	}
 	
 	private void handleReturnRentItem(Order oldOrder) {
-		Date returnDate = new Date();
+		Date returnDate = null;
 		try {
-			printText(out, String.format("Enter return date for the item (%s):", SDF.toPattern()), false);
-			returnDate = getDateValue(reader);
+			while (returnDate == null) {
+				printText(out, String.format("Enter return date for the item (%s):", SDF.toPattern()), false);
+				returnDate = getDateValue(reader);
+				
+				if (returnDate.before(oldOrder.getRentPeriod().getBegin())) {
+					printText(out, "Return date must be later than the rent start date.");
+					returnDate = null;
+				}	
+			}
 		} catch (IOException e) {
 			return;
 		}

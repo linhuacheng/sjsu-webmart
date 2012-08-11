@@ -81,16 +81,26 @@ public class RentOrder extends Order {
 		Calendar calendar1 = Calendar.getInstance();
 		Calendar calendar2 = Calendar.getInstance();
 		calendar1.setTime(start);
+		calendar1.set(Calendar.HOUR_OF_DAY, 0);
+		calendar1.set(Calendar.MINUTE, 0);
+		calendar1.set(Calendar.SECOND, 0);
 		calendar2.setTime(end);
+		calendar2.set(Calendar.HOUR_OF_DAY, 0);
+		calendar2.set(Calendar.MINUTE, 0);
+		calendar2.set(Calendar.SECOND, 0);
 		long milliseconds1 = calendar1.getTimeInMillis();
 		long milliseconds2 = calendar2.getTimeInMillis();
 		long diff = milliseconds2 - milliseconds1;
-		long diffDays = diff / (24 * 60 * 60 * 1000);
+		double diffDays = Long.valueOf(diff).doubleValue() / (24 * 60 * 60 * 1000);
 		
 		return (int)Math.ceil(diffDays);
 	}
 	
 	public void returnOrder(Date returnDate) {
+		System.out
+		.println("****************** START PROCESSING ORDER ********************");
+
+		
 		rentPeriod.setEnd(returnDate);
 		
 		OrderParams orderParams = new OrderParams();
@@ -114,6 +124,9 @@ public class RentOrder extends Order {
 			
 			setOrderStatus(OrderStatus.RETURNED);
 		}
+		System.out
+		.println("******************** END PROCESSING ORDER *******************");
+
 	}
 
 }
