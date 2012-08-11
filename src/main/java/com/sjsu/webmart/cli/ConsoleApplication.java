@@ -166,7 +166,7 @@ public class ConsoleApplication {
 		id.initializeInventory();
         item = inventoryService.listItem(ItemType.BIDABLE).get(0);
         auctionService.setupNewAuction(item, AuctionType.open, 200
-                , new Date(System.currentTimeMillis() - 10000), new Date(System.currentTimeMillis() + 10000));
+                , new Date(), new Date(System.currentTimeMillis() + 3600000));
 
         
     }

@@ -169,7 +169,7 @@ public class AuctionConsoleHandler {
         }
         printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()), false);
         auctionEndTime = getDateValue(reader);
-        auctionStartTime = new Date(System.currentTimeMillis() - 10000);
+        auctionStartTime = new Date();
 
         if (auctionEndTime == null || auctionStartTime.after(auctionEndTime)) {
             printText(out, "Auction end time must be greater than current time");
@@ -228,7 +228,7 @@ public class AuctionConsoleHandler {
         }
         printText(out, String.format("Enter Auction End Date (%s):", SDF.toPattern()), false);
         auctionEndTime = getDateValue(reader);
-        auctionStartTime = new Date(System.currentTimeMillis() - 10000);
+        auctionStartTime = new Date();
 
         if (auctionEndTime == null || auctionStartTime.after(auctionEndTime)) {
             printText(out, "Auction end time must be greater than current time");
