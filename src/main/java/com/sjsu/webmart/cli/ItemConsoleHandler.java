@@ -230,11 +230,13 @@ public class ItemConsoleHandler {
 				OptionNum.OPTION_FOUR, null);
 		ConsoleOption viewAllItems = new ConsoleOption("View All Items",
 				OptionNum.OPTION_FIVE, null);
+		ConsoleOption exit = new ConsoleOption("Return to Main Menu", OptionNum.OPTION_EXIT, null);
 		itemOptions = new ArrayList<ConsoleOption>();
 		itemOptions.add(addItem);
 		itemOptions.add(viewItem);
 		itemOptions.add(updateItem);
 		itemOptions.add(deleteItem);
 		itemOptions.add(viewAllItems);
+		itemOptions.add(exit);
 	}
 }

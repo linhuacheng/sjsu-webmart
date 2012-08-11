@@ -112,11 +112,6 @@ public class Account implements MessageObservable{
 		this.paymentInfo = paymentInfo;
 	}
 
-	public boolean isValidAccount(int accountId)
-	{
-		return (Boolean) null;
-	}
-	
 	public void suspendUser()
 	{
 		boolean check = false;
@@ -133,11 +128,6 @@ public class Account implements MessageObservable{
 		check = state.enable(this);
 		if(check)
 		sendNotification("ACTIVATED");
-	}
-
-	public boolean isValidAccount()
-	{
-		return (Boolean) null;
 	}
 
 	@Override

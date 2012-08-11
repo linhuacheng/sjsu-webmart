@@ -38,7 +38,7 @@ public class TestAuctionInfo {
 
     private AuctionInfo getNewAuctionInfo(){
 
-        return new AuctionInfo(AuctionType.open, 300f, new Date(System.currentTimeMillis()-5000),
+        return new AuctionInfo(AuctionType.open, 200f, new Date(System.currentTimeMillis()-5000),
                 new Date(System.currentTimeMillis() + 10000), getItem());
 
     }
@@ -79,7 +79,7 @@ public class TestAuctionInfo {
         Bid bid1 = new Bid();
         bid1.setBidder(getAccount());
         bid1.setBidId(1);
-        bid1.setBidPrice(200f);
+        bid1.setBidPrice(201f);
         bid1.setItem(getItem());
         bid1.setTimeOfBid(new Date());
 
@@ -106,14 +106,7 @@ public class TestAuctionInfo {
 
         AuctionInfo auctionInfo = getNewAuctionInfo();
         auctionInfo.getAuctionState().startAuction();
-        Bid bid1 = new Bid();
-        bid1.setBidder(getAccount());
-        bid1.setBidId(1);
-        bid1.setBidPrice(200f);
-        bid1.setItem(getItem());
-        bid1.setTimeOfBid(new Date());
 
-        Assert.assertEquals(auctionInfo.processBid(bid1), AuctionResponse.accepted, "Bid must be accepted");
 
         Bid bid2 = new Bid();
         bid2.setBidder(getAccount());
@@ -121,7 +114,7 @@ public class TestAuctionInfo {
         bid2.setBidPrice(199f);
         bid2.setItem(getItem());
         bid2.setTimeOfBid(new Date());
-        Assert.assertEquals(auctionInfo.processBid(bid2), AuctionResponse.rejected_invalid_price, "Bid must be accepted");
+        Assert.assertEquals(auctionInfo.processBid(bid2), AuctionResponse.rejected_invalid_price, "Bid must be rejected as price is lower");
     }
 
 
@@ -132,7 +125,7 @@ public class TestAuctionInfo {
         Bid bid1 = new Bid();
         bid1.setBidder(getAccount());
         bid1.setBidId(1);
-        bid1.setBidPrice(200f);
+        bid1.setBidPrice(301f);
         bid1.setItem(getItem());
         bid1.setTimeOfBid(new Date());
 

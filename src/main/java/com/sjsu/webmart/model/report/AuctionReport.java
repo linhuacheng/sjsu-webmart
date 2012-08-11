@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.report;
 
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public void generateContent(){
 				.println("_________________________________________________________________________________________________________________________________________");
 		for (AuctionInfo auction : auctions) {
 			String user_name = auction.getWinner().getBidder().getFirstName()+auction.getWinner().getBidder().getLastName();
-			System.out.format(format, auction.getAuctionId(), auction.getItemTitle(), user_name, auction.getWinner().getBidPrice());
+			System.out.format(format, auction.getAuctionId(), auction.getItemTitle(), user_name, NF.format(auction.getWinner().getBidPrice()));
 		}
 		System.out
 				.println("_________________________________________________________________________________________________________________________________________");
