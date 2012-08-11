@@ -1,5 +1,7 @@
 package com.sjsu.webmart.model.report;
 
+import static com.sjsu.webmart.util.ConsoleUtil.NF;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class OrderReport extends Report{
 				.println("__________________________________________________________________________________________________________");
 		for (Order order : orders) {
 			System.out.format(format, order.getOrderId(), order.getOrderType(),
-					order.getItem().getItemDescription(), order.getCost());
+					order.getItem().getItemDescription(), NF.format(order.getCost()));
 		}
 		System.out
 				.println("__________________________________________________________________________________________________________");

@@ -163,10 +163,10 @@ public class AccountConsoleHandler {
 		if(accountService.isSeller(accountId))
 		{
 			accounts = accountService.getAllAccounts();
-			String format = "|%1$-10s|%2$-20s|%3$-50s|%4$-20s|\n";
+			String format = "|%1$-10s|%2$-20s|%3$-30s|%4$-20s|%5$-25s|\n";
 			System.out
 					.println("________________________________________________________________________________________________________________");
-			System.out.format(format, "ACCOUNT ID", "ACCOUNT TYPE", "USER NAME", "PAYMENT INFO TYPE");
+			System.out.format(format, "ACCOUNT ID", "ACCOUNT TYPE", "USER NAME", "PAYMENT INFO TYPE", "ACCOUNT STATUS");
 			System.out
 					.println("________________________________________________________________________________________________________________");
 			for (Account account : accounts) {
@@ -175,7 +175,7 @@ public class AccountConsoleHandler {
 				for(PaymentInfo p_info : account.getPaymentInfo())
 					payment_type = payment_type+p_info.getPaymentType()+" , ";
 				
-				System.out.format(format, account.getAccountId(), account.getAccountType(),user_name, payment_type);
+				System.out.format(format, account.getAccountId(), account.getAccountType(),user_name, payment_type, account.getState().toString());
 			}
 			System.out
 					.println("________________________________________________________________________________________________________________");
