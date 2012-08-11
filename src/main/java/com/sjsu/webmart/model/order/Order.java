@@ -165,22 +165,10 @@ public abstract class Order implements MessageObservable {
 	public boolean processPayment(OrderParams orderParams) {
 		cost = calculateCost(orderParams);
 
-		PaymentProcessor paymentProcessor = getPaymentProcessor(paymentInfo.getPaymentType());
-		paymentInfo.setPaymentProcessor(paymentProcessor);
-
 		return paymentInfo.processPayment(cost);
 	}
 
-	private PaymentProcessor getPaymentProcessor(PaymentType paymentType) {
-		switch (paymentType) {
-		case CARD:
-			return new CardProcessor();
-		case CHEQUE:
-			return new ChequeProcessor();
-		default:
-			return new CardProcessor();
-		}
-	}
+
 
 	public void fulfillOrder(OrderParams orderParams) {
 		FulfillmentContext context = new FulfillmentContext();
