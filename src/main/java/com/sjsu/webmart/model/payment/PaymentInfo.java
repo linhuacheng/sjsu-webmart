@@ -2,6 +2,8 @@ package com.sjsu.webmart.model.payment;
 
 import java.math.BigDecimal;
 import com.sjsu.webmart.processor.PaymentProcessor;
+import com.sjsu.webmart.processor.impl.CardProcessor;
+import com.sjsu.webmart.processor.impl.ChequeProcessor;
 
 import java.util.Date;
 
@@ -40,6 +42,8 @@ public abstract class PaymentInfo {
 	}
 	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
+		
+		this.paymentProcessor = getPaymentProcessor(paymentType);
 	}
 	public String getCardNumber() {
 		return cardNumber;
@@ -74,5 +78,16 @@ public abstract class PaymentInfo {
 	
 	public static Integer getNextId() {
 		return idSeq++;
+	}
+	
+	private PaymentProcessor getPaymentProcessor(PaymentType paymentType) {
+		switch (paymentType) {
+		case CARD:
+			return new CardProcessor();
+		case CHEQUE:
+			return new ChequeProcessor();
+		default:
+			return new CardProcessor();
+		}
 	}
 }
