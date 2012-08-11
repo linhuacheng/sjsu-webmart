@@ -146,6 +146,7 @@ public class AccountConsoleHandler {
 				OptionNum.OPTION_SIX, null);
 		ConsoleOption viewAllAccount = new ConsoleOption("View All Accounts",
 				OptionNum.OPTION_SEVEN, null);
+		ConsoleOption exit = new ConsoleOption("Return to Main Menu", OptionNum.OPTION_EXIT, null);
 		accountOptions = new ArrayList<ConsoleOption>();
 		accountOptions.add(createAccount);
 		accountOptions.add(viewAccount);
@@ -154,6 +155,7 @@ public class AccountConsoleHandler {
 		accountOptions.add(suspendAccount);
 		accountOptions.add(activateAccount);
 		accountOptions.add(viewAllAccount);
+		accountOptions.add(exit);
 	}
 
 	public void handleViewAllAccounts(int accountId)

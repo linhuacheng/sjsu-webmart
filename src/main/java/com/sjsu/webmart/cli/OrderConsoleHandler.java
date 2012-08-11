@@ -698,12 +698,14 @@ public class OrderConsoleHandler {
 				OptionNum.OPTION_FOUR, null);
 		ConsoleOption returnItem = new ConsoleOption("Return Item",
 				OptionNum.OPTION_FIVE, null);
+		ConsoleOption exit = new ConsoleOption("Return to Main Menu", OptionNum.OPTION_EXIT, null);
 		orderOptions = new ArrayList<ConsoleOption>();
 		orderOptions.add(viewOrder);
 		orderOptions.add(buyItem);
 		orderOptions.add(rentItem);
 		orderOptions.add(buyauctionItem);
 		orderOptions.add(returnItem);
+		orderOptions.add(exit);
 	}
 
 }
