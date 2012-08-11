@@ -168,7 +168,6 @@ public class AccountServiceImpl implements AccountService{
 					System.out.println("Incorrect input");
 					continue;
 				}
-				System.out.println("Before adding p_info to payment_details");
 				payment_details.add(p_info);
 				System.out.println("Do you want to add one more payment info? (Y/N) : ");
 				if(br.readLine().startsWith("n"))
@@ -398,7 +397,7 @@ public class AccountServiceImpl implements AccountService{
 				return ac;
 		}
 		
-		System.out.println("User not found...");
+		System.out.println("Invalid User Id");
 		return null;
 	}
 
