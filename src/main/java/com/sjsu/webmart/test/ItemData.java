@@ -19,7 +19,7 @@ public class ItemData {
 		citem1.setItemTitle("Sony Cyber-shot Digital Camera W330");
 		//citem1.setSellerName("Priyanka");
 		
-		citem1.setSellerName(as.getFirstNameLastName(1));
+		citem1.setSellerName(as.getFirstNameLastName(5));
 		citem1.setItemId(1);
 		citem1.setItemDescription("Refurbished");
 		citem1.setPrice(98.9f);
@@ -33,7 +33,7 @@ public class ItemData {
 		ConsumerItem citem2 = new ConsumerItem("", "");
 		citem2.setItemTitle("Apple MacBook Pro ");
 		//citem2.setSellerName("Priyanka");
-		citem2.setSellerName(as.getFirstNameLastName(1));
+		citem2.setSellerName(as.getFirstNameLastName(5));
 		citem2.setItemId(2);
 		citem2.setItemDescription("15.4in. Laptop - MD103LL/A (Latest Model)");
 		citem2.setPrice(1688.00f);
@@ -47,7 +47,7 @@ public class ItemData {
 		ConsumerItem citem3 = new ConsumerItem("", "");
 		citem3.setItemTitle("Garmin n�vi 1450LTM Automotive GPS Receiver");
 //		citem3.setSellerName("Priyanka");
-		citem3.setSellerName(as.getFirstNameLastName(1));
+		citem3.setSellerName(as.getFirstNameLastName(5));
 		citem3.setItemId(3);
 		citem3.setItemDescription("5.0-inch WQVGA TFT touchscreen display");
 		citem3.setPrice(151.95f);

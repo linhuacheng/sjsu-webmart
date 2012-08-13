@@ -1,6 +1,6 @@
 package com.sjsu.webmart.model.item;
 
-public class ItemDecorator extends Item {
+public abstract class ItemDecorator extends Item {
 
 	protected Item item;
 	
