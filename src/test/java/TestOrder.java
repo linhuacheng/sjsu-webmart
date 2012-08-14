@@ -157,7 +157,7 @@ public class TestOrder {
 				"Calculated buy now cost must be 20.");
 
 	}
-
+    @Test(enabled = false)
 	public void testRentOrder() {
 		log.debug("Test Rent Order");
 
